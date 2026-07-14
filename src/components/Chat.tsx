@@ -30,6 +30,7 @@ export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   function updateLast(patch: (m: ChatMessage) => ChatMessage) {
     setMessages((prev) => {
@@ -45,7 +46,7 @@ export function Chat() {
       await fetch("/api/feedback", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ rating }),
+        body: JSON.stringify({ rating, conversationId }),
       });
     } catch {
       /* best-effort */
@@ -69,7 +70,7 @@ export function Chat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message: question, locale }),
+        body: JSON.stringify({ message: question, locale, conversationId }),
       });
       if (!res.ok || !res.body) throw new Error("request failed");
 
@@ -89,6 +90,7 @@ export function Chat() {
           if (evt.type === "text") {
             updateLast((m) => ({ ...m, text: m.text + evt.text }));
           } else if (evt.type === "done") {
+            if (evt.conversationId) setConversationId(evt.conversationId);
             updateLast((m) => ({
               ...m,
               citations: evt.citations,

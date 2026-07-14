@@ -6,6 +6,9 @@ import { streamAnswer } from "@/lib/rag/answer";
 import { referralTargets } from "@/lib/referral/route";
 import { rateLimit, clientKey } from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
+import { getDb } from "@/lib/db";
+import { conversations, messages } from "@/lib/db/schema";
+import { randomUUID } from "node:crypto";
 
 export const runtime = "nodejs";
 
@@ -40,13 +43,23 @@ export async function POST(req: NextRequest) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const raw = body as { message?: unknown; locale?: unknown };
+  const raw = body as {
+    message?: unknown;
+    locale?: unknown;
+    conversationId?: unknown;
+  };
   const message = typeof raw.message === "string" ? raw.message.trim() : "";
   const locale = hasLocale(routing.locales, raw.locale)
     ? raw.locale
     : routing.defaultLocale;
+  const conversationId =
+    typeof raw.conversationId === "string" ? raw.conversationId : undefined;
 
   if (!message) return new Response("Empty message", { status: 400 });
+
+  // Anonymous, opaque session id (HttpOnly cookie) — no worker PII.
+  const existingSid = req.cookies.get("maid_sid")?.value;
+  const sid = existingSid ?? randomUUID();
 
   const encoder = new TextEncoder();
   const write = (obj: unknown) => encoder.encode(JSON.stringify(obj) + "\n");
@@ -65,16 +78,44 @@ export async function POST(req: NextRequest) {
           result.escalated && result.issueType
             ? referralTargets(result.issueType)
             : [];
+
+        // Persist the anonymised conversation + turn (best-effort — no DB in dev).
+        let cid = conversationId;
+        try {
+          const db = getDb();
+          if (!cid) {
+            const [c] = await db
+              .insert(conversations)
+              .values({ anonSessionId: sid, lang: locale })
+              .returning({ id: conversations.id });
+            cid = c.id;
+            track({ type: "conversation_started", locale });
+          }
+          await db.insert(messages).values([
+            { conversationId: cid, role: "user", text: message },
+            {
+              conversationId: cid,
+              role: "assistant",
+              text: result.text,
+              citations: result.citations,
+              model: result.model,
+              escalated: result.escalated,
+            },
+          ]);
+        } catch {
+          // No database configured — skip persistence, still answer the worker.
+        }
+
         controller.enqueue(
           write({
             type: "done",
+            conversationId: cid ?? null,
             citations: result.citations,
             escalated: result.escalated,
             referrals,
           }),
         );
         track({ type: "message_sent", locale, escalated: result.escalated });
-        // TODO(M6): persist the anonymised conversation + message for KPI analytics.
       } catch (err) {
         controller.enqueue(
           write({ type: "error", message: (err as Error).message }),
@@ -85,10 +126,13 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return new Response(stream, {
-    headers: {
-      "content-type": "application/x-ndjson; charset=utf-8",
-      "cache-control": "no-store",
-    },
-  });
+  const headers: Record<string, string> = {
+    "content-type": "application/x-ndjson; charset=utf-8",
+    "cache-control": "no-store",
+  };
+  if (!existingSid) {
+    headers["set-cookie"] =
+      `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`;
+  }
+  return new Response(stream, { headers });
 }

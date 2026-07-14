@@ -55,7 +55,10 @@ function buildMessages(opts: AnswerOptions): Anthropic.MessageParam[] {
   return [{ role: "user", content: [...docs, { type: "text", text: opts.query }] }];
 }
 
-function parseMessage(msg: Anthropic.Message, chunks: RetrievedChunk[]): RagAnswer {
+export function parseMessage(
+  msg: Anthropic.Message,
+  chunks: RetrievedChunk[],
+): RagAnswer {
   let text = "";
   const citations: Citation[] = [];
   let escalated = false;
