@@ -21,6 +21,7 @@ interface ChatMessage {
   citations?: Citation[];
   escalated?: boolean;
   referrals?: Referral[];
+  rated?: boolean;
 }
 
 export function Chat() {
@@ -36,6 +37,19 @@ export function Chat() {
       copy[copy.length - 1] = patch(copy[copy.length - 1]);
       return copy;
     });
+  }
+
+  async function sendFeedback(rating: number) {
+    updateLast((m) => ({ ...m, rated: true }));
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ rating }),
+      });
+    } catch {
+      /* best-effort */
+    }
   }
 
   async function send(e: React.FormEvent) {
@@ -145,6 +159,23 @@ export function Chat() {
                 ))}
               </div>
             )}
+            {m.role === "assistant" &&
+              m.text &&
+              i === messages.length - 1 &&
+              !busy &&
+              (m.rated ? (
+                <p className="mt-2 text-xs text-neutral-500">{t("thanks")}</p>
+              ) : (
+                <div className="mt-2 flex items-center gap-3 text-sm">
+                  <span className="text-neutral-500">{t("helpful")}</span>
+                  <button onClick={() => sendFeedback(5)} aria-label="yes">
+                    👍
+                  </button>
+                  <button onClick={() => sendFeedback(1)} aria-label="no">
+                    👎
+                  </button>
+                </div>
+              ))}
           </div>
         ))}
       </div>

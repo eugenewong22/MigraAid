@@ -15,7 +15,9 @@
     "sources": "Sources",
     "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
     "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "referral": "Who can help",
+    "helpful": "Was this helpful?",
+    "thanks": "Thanks for your feedback."
   },
   "emergency": {
     "title": "Emergency contacts",
