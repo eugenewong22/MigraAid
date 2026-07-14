@@ -11,7 +11,19 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#2563eb",
-    // TODO(M6): add 192px and 512px maskable icons + offline service worker.
-    icons: [],
+    icons: [
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
   };
 }

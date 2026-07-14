@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { retrieve } from "@/lib/rag/retrieve";
 import { streamAnswer } from "@/lib/rag/answer";
 import { referralTargets } from "@/lib/referral/route";
+import { rateLimit, clientKey } from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
 
 export const runtime = "nodejs";
@@ -17,6 +18,21 @@ export const runtime = "nodejs";
  *   {"type":"error","message":"..."}                    (on failure)
  */
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`chat:${clientKey(req.headers)}`, {
+    limit: 20,
+    windowMs: 60_000,
+  });
+  if (!rl.ok) {
+    return new Response("Too many requests", {
+      status: 429,
+      headers: {
+        "retry-after": String(
+          Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000)),
+        ),
+      },
+    });
+  }
+
   let body: unknown;
   try {
     body = await req.json();

@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import { requireAdmin } from "@/lib/content/auth";
 import { listContent } from "@/lib/content/cms";
 import { publishAction, reviewAction } from "./actions";
@@ -29,6 +30,9 @@ export default async function AdminPage() {
         Draft → review → publish. Publishing re-embeds the content so search stays
         in sync with what reviewers approved.
       </p>
+      <Link href="/admin/kpi" className="text-sm text-blue-600 underline">
+        View impact (KPIs) →
+      </Link>
 
       {dbError ? (
         <p className="rounded-lg bg-amber-50 p-3 text-amber-800">
