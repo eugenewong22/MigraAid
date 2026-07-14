@@ -39,3 +39,10 @@ export interface RetrieveOptions {
   domain?: Domain;
   limit?: number;
 }
+
+export interface AnswerOptions {
+  query: string;
+  locale: string;
+  /** Retrieved sources, in the order they are passed to the model (document_index order). */
+  chunks: RetrievedChunk[];
+}

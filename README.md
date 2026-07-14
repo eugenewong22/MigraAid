@@ -29,7 +29,7 @@ Vercel. See `ARCHITECTURE` notes inline in `src/lib/*`.
 | Milestone | Status | Scope |
 |---|---|---|
 | **M0** Scaffold & infra | ✅ done | App, data model, module boundaries, i18n, tests, CI |
-| **M1** RAG core (English) | next | Ingestion, pgvector retrieval, streamed **cited** answers, safety policy, eval |
+| **M1** RAG core (English) | ✅ code (add keys to run) | Ingestion, pgvector retrieval, streamed **cited** answers, safety policy, eval |
 | **M2** Multilingual (8 langs) | | UI catalogs + cross-lingual retrieval + native-speaker QA |
 | **M3** Contract explainer | | Claude vision → flagged clauses (ephemeral, no image stored) |
 | **M4** Referrals + emergency | | Data-driven routing + offline emergency directory + PWA |

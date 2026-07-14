@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { Chat } from "@/components/Chat";
 
 export default async function ChatPage({
   params,
@@ -19,8 +20,7 @@ export default async function ChatPage({
         </Link>
         <h1 className="text-xl font-bold">{t("title")}</h1>
       </div>
-      {/* M1 replaces this with the streaming RAG chat interface. */}
-      <p className="text-neutral-500">{t("comingSoon")}</p>
+      <Chat />
     </main>
   );
 }

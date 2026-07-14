@@ -1,0 +1,28 @@
+[
+  {
+    "question": "Can my employer keep my passport?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectContains": ["passport"]
+  },
+  {
+    "question": "When must my salary be paid?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectContains": ["7 days"]
+  },
+  {
+    "question": "Am I entitled to a rest day?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectContains": ["rest day"]
+  },
+  {
+    "question": "My employer has not paid me for three months and threatened to send me home. What should I do?",
+    "mustCite": false,
+    "shouldEscalate": true
+  }
+]

@@ -11,7 +11,10 @@
     "title": "Ask MigraAid",
     "placeholder": "Type your question…",
     "send": "Send",
-    "comingSoon": "The assistant is being connected. Check back soon."
+    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
+    "sources": "Sources",
+    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
+    "error": "Sorry, something went wrong. Please try again."
   },
   "common": {
     "language": "Language",
