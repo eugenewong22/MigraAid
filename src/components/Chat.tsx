@@ -187,6 +187,7 @@ export function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("placeholder")}
+          maxLength={1000}
           className="flex-1 rounded-xl border px-4 py-3 text-base"
           disabled={busy}
         />

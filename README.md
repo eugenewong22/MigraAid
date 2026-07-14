@@ -34,7 +34,7 @@ Vercel. See `ARCHITECTURE` notes inline in `src/lib/*`.
 | **M3** Contract explainer | ✅ code (add keys to run) | Claude vision → flagged clauses (ephemeral, no image stored) |
 | **M4** Referrals + emergency | ✅ done | Data-driven routing + emergency directory + installable PWA |
 | **M5** Admin CMS | ✅ code (add DB+auth) | Draft→review→publish→re-embed governance + audit log |
-| **M6** Hardening + launch | ⏳ partial | ✅ rate limiting, KPI shell, PWA icons, offline SW · remaining: red-team, PostHog, load test, public beta |
+| **M6** Hardening + launch | ⏳ partial | ✅ rate limiting, input caps, KPI capture+dashboard, PWA icons, offline SW · remaining: red-team, PostHog, load test, public beta |
 
 ## Quick start
 

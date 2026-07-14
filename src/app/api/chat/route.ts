@@ -60,6 +60,9 @@ export async function POST(req: NextRequest) {
     typeof raw.conversationId === "string" ? raw.conversationId : undefined;
 
   if (!message) return new Response("Empty message", { status: 400 });
+  if (message.length > 2000) {
+    return new Response("Message too long", { status: 413 });
+  }
 
   // Anonymous, opaque session id (HttpOnly cookie) — no worker PII.
   const existingSid = req.cookies.get("maid_sid")?.value;
