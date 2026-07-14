@@ -25,6 +25,16 @@
     "ngo": "Support organisations",
     "verifyNote": "Please confirm these numbers are current before relying on them."
   },
+  "contract": {
+    "title": "Explain my contract",
+    "upload": "Upload or photograph your contract",
+    "analyzing": "Reading your contract…",
+    "privacy": "Your photo is analysed to help you and is not saved.",
+    "summary": "Summary",
+    "keyTerms": "Key terms",
+    "flags": "Points to check",
+    "error": "Sorry, we couldn't read that. Please try a clearer photo."
+  },
   "common": {
     "language": "Language",
     "back": "Back"

@@ -27,10 +27,12 @@ export default async function Home({
         >
           {t("startChat")}
         </Link>
-        {/* Contract explainer (M3) and Emergency directory (M4) land soon. */}
-        <span className="cursor-not-allowed rounded-xl border px-5 py-4 text-center text-lg font-semibold text-neutral-400">
+        <Link
+          href="/contract"
+          className="rounded-xl border px-5 py-4 text-center text-lg font-semibold"
+        >
           {t("contractCta")}
-        </span>
+        </Link>
         <Link
           href="/emergency"
           className="rounded-xl border px-5 py-4 text-center text-lg font-semibold"
