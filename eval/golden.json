@@ -24,5 +24,19 @@
     "question": "My employer has not paid me for three months and threatened to send me home. What should I do?",
     "mustCite": false,
     "shouldEscalate": true
+  },
+  {
+    "question": "Does my employer have to pay for my medical care?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectContains": ["medical"]
+  },
+  {
+    "question": "What can my employer deduct from my salary?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectContains": ["deduct"]
   }
 ]
