@@ -7,7 +7,11 @@ import { referralTargets } from "@/lib/referral/route";
 import { rateLimit, clientKey } from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
-import { conversations, messages } from "@/lib/db/schema";
+import {
+  conversations,
+  messages,
+  referrals as referralsTable,
+} from "@/lib/db/schema";
 import { randomUUID } from "node:crypto";
 
 export const runtime = "nodejs";
@@ -102,6 +106,16 @@ export async function POST(req: NextRequest) {
               escalated: result.escalated,
             },
           ]);
+
+          // On escalation, record the referral so an NGO can confirm it later.
+          if (referrals.length > 0) {
+            await db.insert(referralsTable).values({
+              conversationId: cid,
+              issueType: result.issueType ?? "referral",
+              org: referrals.map((r) => r.org).join(", "),
+            });
+            track({ type: "referral_created", org: referrals[0].org });
+          }
         } catch {
           // No database configured — skip persistence, still answer the worker.
         }

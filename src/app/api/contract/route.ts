@@ -4,6 +4,9 @@ import { routing } from "@/i18n/routing";
 import { analyzeContract, isSupportedImageType } from "@/lib/contract/analyze";
 import { rateLimit, clientKey } from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
+import { getDb } from "@/lib/db";
+import { contractReviews } from "@/lib/db/schema";
+import { randomUUID } from "node:crypto";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -35,6 +38,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const existingSid = req.cookies.get("maid_sid")?.value;
+  const sid = existingSid ?? randomUUID();
+
   const form = await req.formData();
   const file = form.get("file");
   const localeRaw = form.get("locale");
@@ -61,8 +67,26 @@ export async function POST(req: NextRequest) {
       locale,
     });
     track({ type: "contract_explained", locale });
-    // base64 + file bytes go out of scope here; nothing is persisted.
-    return Response.json(analysis);
+
+    // Persist the derived analysis ONLY — never the image or its raw text.
+    try {
+      await getDb().insert(contractReviews).values({
+        anonSessionId: sid,
+        lang: locale,
+        summary: analysis.summary,
+        flaggedClauses: analysis.flaggedClauses,
+      });
+    } catch {
+      // No database configured — skip persistence.
+    }
+
+    const headers: Record<string, string> = {};
+    if (!existingSid) {
+      headers["set-cookie"] =
+        `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`;
+    }
+    // The image base64 goes out of scope here; only the analysis is stored.
+    return Response.json(analysis, { headers });
   } catch (err) {
     return Response.json({ error: (err as Error).message }, { status: 500 });
   }

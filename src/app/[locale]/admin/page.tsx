@@ -30,9 +30,14 @@ export default async function AdminPage() {
         Draft → review → publish. Publishing re-embeds the content so search stays
         in sync with what reviewers approved.
       </p>
-      <Link href="/admin/kpi" className="text-sm text-blue-600 underline">
-        View impact (KPIs) →
-      </Link>
+      <div className="flex gap-4">
+        <Link href="/admin/kpi" className="text-sm text-blue-600 underline">
+          View impact (KPIs) →
+        </Link>
+        <Link href="/admin/referrals" className="text-sm text-blue-600 underline">
+          Referrals →
+        </Link>
+      </div>
 
       {dbError ? (
         <p className="rounded-lg bg-amber-50 p-3 text-amber-800">
