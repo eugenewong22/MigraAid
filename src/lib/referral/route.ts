@@ -1,8 +1,10 @@
 /**
  * Referral engine — data-driven routing from an issue type to the right
- * organisation, agency, or embassy. Full implementation (DB-backed org lookup +
- * a `create_referral` tool the chatbot can call) lands in M4; the type contract
- * and the static issue→org map live here now.
+ * organisation. Static config for M4; in M5 the admin CMS lets partner NGOs
+ * maintain the org list (and this reads from the `orgs` table).
+ *
+ * `referralTargets` is pure and unit-tested; `routeReferral` keeps the async
+ * signature so a DB-backed implementation can drop in without changing callers.
  */
 import type { Domain } from "@/lib/rag/types";
 
@@ -18,24 +20,55 @@ export interface ReferralRequest {
   locale: string;
 }
 
-/**
- * Baseline static routing table. In M4 this is replaced/augmented by the `orgs`
- * table so partner NGOs can maintain it via the admin CMS.
- */
-export const ISSUE_TO_ORG: Record<string, string> = {
-  unpaid_salary: "TADM (Tripartite Alliance for Dispute Management)",
-  workplace_injury: "MOM (WICA) / HOME",
-  wrongful_dismissal: "TADM / HOME",
-  contract_dispute: "MOM / TWC2",
-  abuse_or_threats: "Police (999) / HOME",
-  housing: "MOM / HOME",
-  healthcare: "HealthServe",
-  financial: "TWC2 / HOME",
+interface OrgInfo {
+  name: string;
+  contact: string;
+}
+
+/** Referral targets. Numbers are best-effort and must be verified before launch. */
+const ORGS: Record<string, OrgInfo> = {
+  tadm: {
+    name: "TADM — Tripartite Alliance for Dispute Management",
+    contact: "1800 342 1800",
+  },
+  mom: { name: "MOM — Ministry of Manpower", contact: "1800 339 5505" },
+  home: {
+    name: "HOME — Humanitarian Organisation for Migration Economics",
+    contact: "1800 797 7977",
+  },
+  twc2: { name: "TWC2 — Transient Workers Count Too", contact: "+65 6297 7564" },
+  healthserve: { name: "HealthServe", contact: "+65 3138 4443" },
+  police: { name: "Police (emergency)", contact: "999" },
 };
 
-/** Placeholder resolver — real DB-backed routing arrives in M4. */
+const ISSUE_TO_ORGS: Record<string, string[]> = {
+  unpaid_salary: ["tadm", "home"],
+  workplace_injury: ["mom", "home"],
+  wrongful_dismissal: ["tadm", "home"],
+  contract_dispute: ["mom", "twc2"],
+  abuse_or_threats: ["police", "home"],
+  housing: ["mom", "home"],
+  healthcare: ["healthserve"],
+  financial: ["twc2", "home"],
+  immigration_status: ["mom", "home"],
+  repatriation: ["mom", "home"],
+};
+
+/** Pure resolver: issue type → ordered list of referral targets (defaults to HOME). */
+export function referralTargets(issueType: string): ReferralTarget[] {
+  const keys = ISSUE_TO_ORGS[issueType] ?? ["home"];
+  return keys.map((key) => {
+    const org = ORGS[key];
+    return {
+      org: org.name,
+      contact: org.contact,
+      reason: `Support for ${issueType.replace(/_/g, " ")}`,
+    };
+  });
+}
+
 export async function routeReferral(
-  _req: ReferralRequest,
+  req: ReferralRequest,
 ): Promise<ReferralTarget[]> {
-  throw new Error("routeReferral is implemented in M4 (referral engine)");
+  return referralTargets(req.issueType);
 }

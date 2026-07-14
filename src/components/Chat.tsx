@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { telHref } from "@/lib/referral/emergency";
 
 interface Citation {
   sourceRef: string;
   quote?: string;
+}
+
+interface Referral {
+  org: string;
+  contact: string;
+  reason: string;
 }
 
 interface ChatMessage {
@@ -13,6 +20,7 @@ interface ChatMessage {
   text: string;
   citations?: Citation[];
   escalated?: boolean;
+  referrals?: Referral[];
 }
 
 export function Chat() {
@@ -71,6 +79,7 @@ export function Chat() {
               ...m,
               citations: evt.citations,
               escalated: evt.escalated,
+              referrals: evt.referrals,
             }));
           } else if (evt.type === "error") {
             updateLast((m) => ({ ...m, text: t("error") }));
@@ -106,6 +115,24 @@ export function Chat() {
               <p className="mt-2 rounded-lg bg-amber-100 p-2 text-sm text-amber-900">
                 {t("escalatedNotice")}
               </p>
+            )}
+            {m.referrals && m.referrals.length > 0 && (
+              <div className="mt-2 rounded-lg border border-amber-200 p-2 text-sm">
+                <p className="font-semibold">{t("referral")}</p>
+                <ul className="mt-1 space-y-1">
+                  {m.referrals.map((r, k) => (
+                    <li key={k}>
+                      {r.org} —{" "}
+                      <a
+                        href={telHref(r.contact)}
+                        className="text-blue-600 underline"
+                      >
+                        {r.contact}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
             {m.citations && m.citations.length > 0 && (
               <div className="mt-2 text-xs text-neutral-500">

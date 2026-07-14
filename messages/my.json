@@ -14,7 +14,16 @@
     "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
     "sources": "Sources",
     "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again."
+    "error": "Sorry, something went wrong. Please try again.",
+    "referral": "Who can help"
+  },
+  "emergency": {
+    "title": "Emergency contacts",
+    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
+    "urgent": "Emergency",
+    "government": "Government",
+    "ngo": "Support organisations",
+    "verifyNote": "Please confirm these numbers are current before relying on them."
   },
   "common": {
     "language": "Language",

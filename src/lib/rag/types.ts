@@ -30,6 +30,8 @@ export interface RagAnswer {
   text: string;
   citations: Citation[];
   escalated: boolean;
+  /** Issue slug the model flagged when it escalated (drives referral routing). */
+  issueType?: string;
   model: string;
 }
 

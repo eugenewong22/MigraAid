@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { retrieve } from "@/lib/rag/retrieve";
 import { streamAnswer } from "@/lib/rag/answer";
+import { referralTargets } from "@/lib/referral/route";
 import { track } from "@/lib/analytics";
 
 export const runtime = "nodejs";
@@ -44,11 +45,16 @@ export async function POST(req: NextRequest) {
           controller.enqueue(write({ type: "text", text: delta }));
         }
         const result = await final();
+        const referrals =
+          result.escalated && result.issueType
+            ? referralTargets(result.issueType)
+            : [];
         controller.enqueue(
           write({
             type: "done",
             citations: result.citations,
             escalated: result.escalated,
+            referrals,
           }),
         );
         track({ type: "message_sent", locale, escalated: result.escalated });

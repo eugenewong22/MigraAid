@@ -31,9 +31,12 @@ export default async function Home({
         <span className="cursor-not-allowed rounded-xl border px-5 py-4 text-center text-lg font-semibold text-neutral-400">
           {t("contractCta")}
         </span>
-        <span className="cursor-not-allowed rounded-xl border px-5 py-4 text-center text-lg font-semibold text-neutral-400">
+        <Link
+          href="/emergency"
+          className="rounded-xl border px-5 py-4 text-center text-lg font-semibold"
+        >
           {t("emergencyCta")}
-        </span>
+        </Link>
       </nav>
 
       <p className="mt-auto text-sm text-neutral-500">{t("disclaimer")}</p>

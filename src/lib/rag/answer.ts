@@ -59,6 +59,7 @@ function parseMessage(msg: Anthropic.Message, chunks: RetrievedChunk[]): RagAnsw
   let text = "";
   const citations: Citation[] = [];
   let escalated = false;
+  let issueType: string | undefined;
 
   for (const block of msg.content) {
     if (block.type === "text") {
@@ -75,10 +76,12 @@ function parseMessage(msg: Anthropic.Message, chunks: RetrievedChunk[]): RagAnsw
       }
     } else if (block.type === "tool_use" && block.name === "refer_to_human") {
       escalated = true;
+      const input = block.input as { issue_type?: string };
+      if (input?.issue_type) issueType = input.issue_type;
     }
   }
 
-  return { text, citations, escalated, model: MODEL };
+  return { text, citations, escalated, issueType, model: MODEL };
 }
 
 /** Non-streaming answer (used by the eval harness and server-side callers). */
