@@ -1,32 +1,32 @@
 {
   "home": {
     "title": "MigraAid",
-    "tagline": "Understand your rights in Singapore — in your language.",
-    "startChat": "Ask a question",
-    "contractCta": "Explain my contract",
-    "emergencyCta": "Emergency contacts",
-    "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
+    "tagline": "စင်္ကာပူတွင် သင့်အခွင့်အရေးများကို — သင့်ဘာသာစကားဖြင့် — နားလည်ပါ။",
+    "startChat": "မေးခွန်းတစ်ခု မေးပါ",
+    "contractCta": "ကျွန်ုပ်၏ စာချုပ်ကို ရှင်းပြပါ",
+    "emergencyCta": "အရေးပေါ် ဆက်သွယ်ရန်",
+    "disclaimer": "MigraAid သည် ယေဘုယျ အချက်အလက်များကို ပေးသည်၊ ဥပဒေအကြံဉာဏ် မဟုတ်ပါ။ သင့်အခြေအနေအတွက် မိတ်ဖက်အဖွဲ့အစည်းမှ အမှုဆောင်ဝန်ထမ်းတစ်ဦးကို ဆက်သွယ်ပါ။ အရေးပေါ်အခြေအနေတွင် အရေးပေါ်ဆက်သွယ်ရန် စာမျက်နှာကို အသုံးပြုပါ။"
   },
   "chat": {
-    "title": "Ask MigraAid",
-    "placeholder": "Type your question…",
-    "send": "Send",
-    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
-    "sources": "Sources",
-    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "title": "MigraAid ကို မေးပါ",
+    "placeholder": "သင့်မေးခွန်းကို ရိုက်ထည့်ပါ…",
+    "send": "ပို့ရန်",
+    "empty": "သင့်အခွင့်အရေး၊ လုပ်ခ၊ နေထိုင်ရေး၊ ကျန်းမာရေး သို့မဟုတ် စာရွက်စာတမ်းများအကြောင်း မေးပါ။",
+    "sources": "အရင်းအမြစ်များ",
+    "escalatedNotice": "ဤအရာသည် အလေးအနက်ဖြစ်ပုံရသည်။ ကျေးဇူးပြု၍ မိတ်ဖက်အဖွဲ့အစည်းမှ အမှုဆောင်ဝန်ထမ်းတစ်ဦးကို ဆက်သွယ်ပါ။",
+    "error": "တောင်းပန်ပါသည်၊ တစ်စုံတစ်ခု မှားယွင်းသွားပါသည်။ ထပ်မံကြိုးစားပါ။",
+    "referral": "မည်သူ ကူညီနိုင်သနည်း"
   },
   "emergency": {
-    "title": "Emergency contacts",
-    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
-    "urgent": "Emergency",
-    "government": "Government",
-    "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "title": "အရေးပေါ် ဆက်သွယ်ရန်",
+    "intro": "သင် အန္တရာယ်ရှိပါက ယခုပင် 999 (ရဲ) သို့မဟုတ် 995 (လူနာတင်ကား/မီးသတ်) ကို ခေါ်ဆိုပါ။",
+    "urgent": "အရေးပေါ်",
+    "government": "အစိုးရ",
+    "ngo": "အထောက်အပံ့ အဖွဲ့အစည်းများ",
+    "verifyNote": "ဤဖုန်းနံပါတ်များကို အားမကိုးမီ လက်ရှိဖြစ်ကြောင်း အတည်ပြုပါ။"
   },
   "common": {
-    "language": "Language",
-    "back": "Back"
+    "language": "ဘာသာစကား",
+    "back": "နောက်သို့"
   }
 }

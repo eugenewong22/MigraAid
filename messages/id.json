@@ -1,32 +1,32 @@
 {
   "home": {
     "title": "MigraAid",
-    "tagline": "Understand your rights in Singapore — in your language.",
-    "startChat": "Ask a question",
-    "contractCta": "Explain my contract",
-    "emergencyCta": "Emergency contacts",
-    "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
+    "tagline": "Pahami hak Anda di Singapura — dalam bahasa Anda.",
+    "startChat": "Ajukan pertanyaan",
+    "contractCta": "Jelaskan kontrak saya",
+    "emergencyCta": "Kontak darurat",
+    "disclaimer": "MigraAid memberikan informasi umum, bukan nasihat hukum. Untuk situasi khusus Anda, hubungi petugas kasus di organisasi mitra. Dalam keadaan darurat, gunakan halaman Kontak Darurat."
   },
   "chat": {
-    "title": "Ask MigraAid",
-    "placeholder": "Type your question…",
-    "send": "Send",
-    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
-    "sources": "Sources",
-    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "title": "Tanya MigraAid",
+    "placeholder": "Ketik pertanyaan Anda…",
+    "send": "Kirim",
+    "empty": "Tanyakan tentang hak, gaji, tempat tinggal, layanan kesehatan, atau dokumen Anda.",
+    "sources": "Sumber",
+    "escalatedNotice": "Ini terlihat serius. Silakan hubungi petugas kasus di organisasi mitra.",
+    "error": "Maaf, terjadi kesalahan. Silakan coba lagi.",
+    "referral": "Siapa yang bisa membantu"
   },
   "emergency": {
-    "title": "Emergency contacts",
-    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
-    "urgent": "Emergency",
-    "government": "Government",
-    "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "title": "Kontak darurat",
+    "intro": "Jika Anda dalam bahaya, hubungi 999 (Polisi) atau 995 (Ambulans/Pemadam) sekarang.",
+    "urgent": "Darurat",
+    "government": "Pemerintah",
+    "ngo": "Organisasi bantuan",
+    "verifyNote": "Harap pastikan nomor-nomor ini masih berlaku sebelum mengandalkannya."
   },
   "common": {
-    "language": "Language",
-    "back": "Back"
+    "language": "Bahasa",
+    "back": "Kembali"
   }
 }

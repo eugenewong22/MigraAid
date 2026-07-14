@@ -1,32 +1,32 @@
 {
   "home": {
     "title": "MigraAid",
-    "tagline": "Understand your rights in Singapore — in your language.",
-    "startChat": "Ask a question",
-    "contractCta": "Explain my contract",
-    "emergencyCta": "Emergency contacts",
-    "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
+    "tagline": "சிங்கப்பூரில் உங்கள் உரிமைகளை — உங்கள் மொழியில் — புரிந்துகொள்ளுங்கள்.",
+    "startChat": "ஒரு கேள்வி கேளுங்கள்",
+    "contractCta": "என் ஒப்பந்தத்தை விளக்குங்கள்",
+    "emergencyCta": "அவசர தொடர்புகள்",
+    "disclaimer": "MigraAid பொது தகவலை வழங்குகிறது, சட்ட ஆலோசனை அல்ல. உங்கள் குறிப்பிட்ட சூழ்நிலைக்கு, ஒரு கூட்டாளர் அமைப்பின் வழக்கு பணியாளரைத் தொடர்பு கொள்ளுங்கள். அவசரநிலையில், அவசர தொடர்புகள் பக்கத்தைப் பயன்படுத்துங்கள்."
   },
   "chat": {
-    "title": "Ask MigraAid",
-    "placeholder": "Type your question…",
-    "send": "Send",
-    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
-    "sources": "Sources",
-    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "title": "MigraAid-இடம் கேளுங்கள்",
+    "placeholder": "உங்கள் கேள்வியை எழுதுங்கள்…",
+    "send": "அனுப்பு",
+    "empty": "உங்கள் உரிமைகள், சம்பளம், வீட்டுவசதி, சுகாதாரம் அல்லது ஆவணங்கள் பற்றி கேளுங்கள்.",
+    "sources": "ஆதாரங்கள்",
+    "escalatedNotice": "இது தீவிரமாகத் தெரிகிறது. தயவுசெய்து ஒரு கூட்டாளர் அமைப்பின் வழக்கு பணியாளரைத் தொடர்பு கொள்ளுங்கள்.",
+    "error": "மன்னிக்கவும், ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.",
+    "referral": "யார் உதவ முடியும்"
   },
   "emergency": {
-    "title": "Emergency contacts",
-    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
-    "urgent": "Emergency",
-    "government": "Government",
-    "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "title": "அவசர தொடர்புகள்",
+    "intro": "நீங்கள் ஆபத்தில் இருந்தால், இப்போதே 999 (காவல்துறை) அல்லது 995 (ஆம்புலன்ஸ்/தீயணைப்பு) என்ற எண்ணை அழைக்கவும்.",
+    "urgent": "அவசரம்",
+    "government": "அரசு",
+    "ngo": "உதவி அமைப்புகள்",
+    "verifyNote": "இந்த எண்களை நம்புவதற்கு முன், அவை தற்போதையவை என்பதை உறுதிப்படுத்தவும்."
   },
   "common": {
-    "language": "Language",
-    "back": "Back"
+    "language": "மொழி",
+    "back": "பின்செல்"
   }
 }

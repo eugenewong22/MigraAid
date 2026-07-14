@@ -1,32 +1,32 @@
 {
   "home": {
     "title": "MigraAid",
-    "tagline": "Understand your rights in Singapore — in your language.",
-    "startChat": "Ask a question",
-    "contractCta": "Explain my contract",
-    "emergencyCta": "Emergency contacts",
-    "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
+    "tagline": "用您的语言，了解您在新加坡的权利。",
+    "startChat": "提出问题",
+    "contractCta": "解释我的合同",
+    "emergencyCta": "紧急联系方式",
+    "disclaimer": "MigraAid 提供一般信息，而非法律建议。针对您的具体情况，请联系合作机构的个案工作者。如遇紧急情况，请使用紧急联系方式页面。"
   },
   "chat": {
-    "title": "Ask MigraAid",
-    "placeholder": "Type your question…",
-    "send": "Send",
-    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
-    "sources": "Sources",
-    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "title": "向 MigraAid 提问",
+    "placeholder": "输入您的问题…",
+    "send": "发送",
+    "empty": "咨询有关您的权利、工资、住房、医疗或证件的问题。",
+    "sources": "来源",
+    "escalatedNotice": "这看起来很严重。请联系合作机构的个案工作者。",
+    "error": "抱歉，出了点问题。请重试。",
+    "referral": "谁能帮您"
   },
   "emergency": {
-    "title": "Emergency contacts",
-    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
-    "urgent": "Emergency",
-    "government": "Government",
-    "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "title": "紧急联系方式",
+    "intro": "如果您有危险，请立即拨打 999（警察）或 995（救护车/消防）。",
+    "urgent": "紧急",
+    "government": "政府",
+    "ngo": "支援机构",
+    "verifyNote": "在依赖这些号码之前，请确认它们是最新的。"
   },
   "common": {
-    "language": "Language",
-    "back": "Back"
+    "language": "语言",
+    "back": "返回"
   }
 }

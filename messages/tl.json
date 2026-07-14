@@ -1,32 +1,32 @@
 {
   "home": {
     "title": "MigraAid",
-    "tagline": "Understand your rights in Singapore — in your language.",
-    "startChat": "Ask a question",
-    "contractCta": "Explain my contract",
-    "emergencyCta": "Emergency contacts",
-    "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
+    "tagline": "Unawain ang iyong mga karapatan sa Singapore — sa iyong wika.",
+    "startChat": "Magtanong",
+    "contractCta": "Ipaliwanag ang aking kontrata",
+    "emergencyCta": "Mga emergency contact",
+    "disclaimer": "Nagbibigay ang MigraAid ng pangkalahatang impormasyon, hindi legal na payo. Para sa iyong partikular na sitwasyon, makipag-ugnayan sa isang caseworker sa isang partner na organisasyon. Sa emergency, gamitin ang pahina ng Mga Emergency Contact."
   },
   "chat": {
-    "title": "Ask MigraAid",
-    "placeholder": "Type your question…",
-    "send": "Send",
-    "empty": "Ask about your rights, pay, housing, healthcare, or paperwork.",
-    "sources": "Sources",
-    "escalatedNotice": "This looks serious. Please contact a caseworker at a partner organisation.",
-    "error": "Sorry, something went wrong. Please try again.",
-    "referral": "Who can help"
+    "title": "Magtanong sa MigraAid",
+    "placeholder": "I-type ang iyong tanong…",
+    "send": "Ipadala",
+    "empty": "Magtanong tungkol sa iyong mga karapatan, sahod, tirahan, kalusugan, o mga dokumento.",
+    "sources": "Mga pinagmulan",
+    "escalatedNotice": "Mukhang seryoso ito. Mangyaring makipag-ugnayan sa isang caseworker sa isang partner na organisasyon.",
+    "error": "Paumanhin, may nangyaring mali. Pakisubukang muli.",
+    "referral": "Sino ang makakatulong"
   },
   "emergency": {
-    "title": "Emergency contacts",
-    "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
+    "title": "Mga emergency contact",
+    "intro": "Kung nasa panganib ka, tumawag sa 999 (Pulisya) o 995 (Ambulansya/Bumbero) ngayon.",
     "urgent": "Emergency",
-    "government": "Government",
-    "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "government": "Pamahalaan",
+    "ngo": "Mga organisasyong tumutulong",
+    "verifyNote": "Pakikumpirma na napapanahon ang mga numerong ito bago umasa sa mga ito."
   },
   "common": {
-    "language": "Language",
-    "back": "Back"
+    "language": "Wika",
+    "back": "Bumalik"
   }
 }
