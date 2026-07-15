@@ -38,6 +38,12 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
+  // A JSON `null` or primitive parses successfully but is not a valid body;
+  // reject it as 400 rather than crashing on property access below.
+  if (typeof body !== "object" || body === null) {
+    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
   const rating = Number(body.rating);
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
     return Response.json({ error: "Invalid rating" }, { status: 400 });

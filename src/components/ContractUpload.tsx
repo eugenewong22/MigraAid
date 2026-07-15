@@ -87,7 +87,6 @@ export function ContractUpload() {
         id="contract-file"
         type="file"
         accept={CONTRACT_UPLOAD_IMAGE_TYPES.join(",")}
-        capture="environment"
         onChange={onFile}
         className="peer sr-only"
         disabled={busy}

@@ -36,6 +36,7 @@ describe("telHref", () => {
   it("uses an explicit SMS link when supplied", () => {
     expect(
       contactHref({
+        id: "policeSms",
         name: "Police emergency SMS",
         number: "70999",
         href: "sms:70999",

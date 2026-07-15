@@ -19,9 +19,13 @@ export type ImpactMetric =
 
 type MetricDatabase = Pick<ReturnType<typeof getDb>, "insert">;
 
-/** UTC date used for a privacy-safe daily aggregate bucket. */
+/**
+ * Singapore-day (UTC+8) date for a privacy-safe daily aggregate bucket, so a
+ * Singapore-only program's impact is attributed to the correct local day
+ * rather than being split across a UTC midnight boundary.
+ */
 export function metricDay(now = new Date()): string {
-  return now.toISOString().slice(0, 10);
+  return new Date(now.getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
 }
 
 /**

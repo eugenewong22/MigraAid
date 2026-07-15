@@ -2,7 +2,10 @@ import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { routing } from "./routing";
 
-type Messages = Record<string, Record<string, string>>;
+// Catalogs are section → key → (string | nested object of strings). Fallback
+// merges at the section level, so every locale ships the full nested set.
+type MessageValue = string | { [key: string]: MessageValue };
+type Messages = Record<string, Record<string, MessageValue>>;
 
 /**
  * Shallow-merge a locale's messages over the English defaults, so any key that

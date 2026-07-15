@@ -13,7 +13,7 @@ import {
   referrals as referralsTable,
 } from "@/lib/db/schema";
 import { randomUUID } from "node:crypto";
-import { and, eq } from "drizzle-orm";
+import { and, eq, gt } from "drizzle-orm";
 import { detectHighStakesIssue } from "@/lib/safety/policy";
 import { scrubPii } from "@/lib/safety/pii";
 import { reportError } from "@/lib/observability/sentry";
@@ -203,17 +203,33 @@ export async function POST(req: NextRequest) {
               | { code: string; expiresAt: Date }
               | undefined;
             if (referrals.length > 0) {
-              const code = generateHandoffCode();
-              const expiresAt = handoffCodeExpiry();
-              await tx.insert(referralsTable).values({
-                conversationId: activeConversationId,
-                issueType: result.issueType ?? "referral",
-                org: referrals.map((referral) => referral.org).join(", "),
-                outcome: "surfaced",
-                handoffCodeHash: hashHandoffCode(code),
-                expiresAt,
-              });
-              handoff = { code, expiresAt };
+              // Mint only one active referral + handoff code per conversation;
+              // later escalated turns reuse the code the worker already holds
+              // (avoids KPI inflation and multiple confusing codes).
+              const [existingActive] = await tx
+                .select({ id: referralsTable.id })
+                .from(referralsTable)
+                .where(
+                  and(
+                    eq(referralsTable.conversationId, activeConversationId),
+                    eq(referralsTable.confirmedByNgo, false),
+                    gt(referralsTable.expiresAt, new Date()),
+                  ),
+                )
+                .limit(1);
+              if (!existingActive) {
+                const code = generateHandoffCode();
+                const expiresAt = handoffCodeExpiry();
+                await tx.insert(referralsTable).values({
+                  conversationId: activeConversationId,
+                  issueType: result.issueType ?? "referral",
+                  org: referrals.map((referral) => referral.org).join(", "),
+                  outcome: "surfaced",
+                  handoffCodeHash: hashHandoffCode(code),
+                  expiresAt,
+                });
+                handoff = { code, expiresAt };
+              }
             }
 
             return {

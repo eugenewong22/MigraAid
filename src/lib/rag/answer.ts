@@ -349,8 +349,12 @@ export async function answer(opts: AnswerOptions): Promise<RagAnswer> {
         totalTokens: completion.usage.total_tokens,
       }
     : undefined;
+  // A well-formed provider response always has a choice, but guard against an
+  // anomaly rather than throwing — fail closed to the ungrounded refusal.
+  const choice = completion.choices[0]?.message;
+  if (!choice) return ungroundedAnswer(opts.locale);
   return enforceAnswerSafety(
-    { ...parseCompletion(completion.choices[0].message, opts.chunks), usage },
+    { ...parseCompletion(choice, opts.chunks), usage },
     opts.locale,
     opts.chunks.length,
   );

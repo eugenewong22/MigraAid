@@ -9,7 +9,14 @@ export default async function AuditPage({
 }) {
   const { locale } = await params;
   await requireAdminPage(locale, "reviewer");
-  const entries = await listAudit();
+
+  let entries: Awaited<ReturnType<typeof listAudit>> = [];
+  let dbError = false;
+  try {
+    entries = await listAudit();
+  } catch {
+    dbError = true;
+  }
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 p-6">
@@ -17,7 +24,11 @@ export default async function AuditPage({
         <Link href="/admin" className="text-sm text-blue-600">← Admin</Link>
         <h1 className="text-2xl font-bold">Audit log</h1>
       </div>
-      {entries.length === 0 ? (
+      {dbError ? (
+        <p className="rounded-lg bg-amber-50 p-3 text-amber-800">
+          Connect a database (set <code>DATABASE_URL</code>) to view the audit log.
+        </p>
+      ) : entries.length === 0 ? (
         <p className="text-neutral-500">No governance activity recorded yet.</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border">

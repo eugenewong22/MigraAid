@@ -34,8 +34,23 @@ function requireDistributedLimiter(source: "redis" | "memory") {
 }
 
 export async function POST(req: NextRequest) {
+  // CSRF: require a same-origin Origin (or Referer fallback) on this
+  // state-changing POST — a missing Origin header must NOT bypass the check.
+  const expectedOrigin = new URL(req.url).origin;
   const requestOrigin = req.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(req.url).origin) {
+  let refererOrigin: string | null = null;
+  const referer = req.headers.get("referer");
+  if (referer) {
+    try {
+      refererOrigin = new URL(referer).origin;
+    } catch {
+      refererOrigin = null;
+    }
+  }
+  const sameOrigin = requestOrigin
+    ? requestOrigin === expectedOrigin
+    : refererOrigin === expectedOrigin;
+  if (!sameOrigin) {
     return new Response("Cross-origin form submission rejected", { status: 403 });
   }
   const limited = await rateLimit(`admin-login:${clientKey(req.headers)}`, {

@@ -154,7 +154,10 @@ export async function POST(req: NextRequest) {
     }
 
     const headers: Record<string, string> = {};
-    if (!existingSid) {
+    // Only plant a durable session cookie when the worker opted to save the
+    // analysis (so it can later be deleted). A one-off, no-consent analysis
+    // leaves no session identifier behind.
+    if (!existingSid && saveAnalysis) {
       headers["set-cookie"] =
         `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${
           process.env.NODE_ENV === "production" ? "; Secure" : ""

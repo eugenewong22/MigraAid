@@ -1,5 +1,6 @@
 /** Privacy-safe, server-side product analytics. No message text or worker PII. */
 import { randomUUID } from "node:crypto";
+import { getDb } from "@/lib/db";
 import { IMPACT_METRICS, incrementMetric } from "./metrics";
 
 export type AnalyticsEvent =
@@ -50,13 +51,20 @@ export async function track(
         await incrementMetric(IMPACT_METRICS.referralsShown);
         break;
       case "feedback_submitted":
-        await incrementMetric(IMPACT_METRICS.feedbackCount);
-        await incrementMetric(IMPACT_METRICS.feedbackRatingSum, {
-          amount: event.rating,
+        // All three satisfaction counters must move together, or the average
+        // and satisfaction-rate KPIs drift permanently. One transaction = atomic.
+        await getDb().transaction(async (tx) => {
+          await incrementMetric(IMPACT_METRICS.feedbackCount, { database: tx });
+          await incrementMetric(IMPACT_METRICS.feedbackRatingSum, {
+            amount: event.rating,
+            database: tx,
+          });
+          if (event.rating >= 4) {
+            await incrementMetric(IMPACT_METRICS.feedbackSatisfied, {
+              database: tx,
+            });
+          }
         });
-        if (event.rating >= 4) {
-          await incrementMetric(IMPACT_METRICS.feedbackSatisfied);
-        }
         break;
       case "message_sent":
         if (event.tokens) {
