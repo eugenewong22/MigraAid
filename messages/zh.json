@@ -5,7 +5,21 @@
     "startChat": "提出问题",
     "contractCta": "解释我的合同",
     "emergencyCta": "紧急联系方式",
+    "eyebrow": "免费 · 匿名 · 8 种语言",
+    "heroLede": "关于工资、准证、住房和医疗的解答，依据新加坡法律，并由 NGO 个案工作者核实。",
+    "chooseLanguage": "选择您的语言",
+    "cardLawTitle": "依据法律",
+    "cardLawBody": "每个回答都会注明其依据的《雇佣法》、WICA 或人力部指南。",
+    "cardPrivacyTitle": "默认保护隐私",
+    "cardPrivacyBody": "无需登录，无需姓名。合同照片仅供分析，绝不存储。",
+    "cardDangerTitle": "现在有危险？",
+    "cardDangerBody": "拨打 999（警察）或 995（救护车/消防），或打开<link>紧急联系方式</link>。",
     "disclaimer": "MigraAid 提供一般信息，而非法律建议。针对您的具体情况，请联系合作机构的个案工作者。如遇紧急情况，请使用紧急联系方式页面。"
+  },
+  "nav": {
+    "ask": "提问",
+    "contract": "我的合同",
+    "emergency": "紧急"
   },
   "chat": {
     "title": "向 MigraAid 提问",

@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { Chat } from "@/components/Chat";
-import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export default async function ChatPage({
   params,
@@ -11,25 +10,18 @@ export default async function ChatPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("chat");
-  const tc = await getTranslations("common");
   const th = await getTranslations("home");
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-4 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center text-sm text-blue-600"
-          >
-            ← {tc("back")}
-          </Link>
-          <h1 className="text-xl font-bold">{t("title")}</h1>
-        </div>
-        <LocaleSwitcher />
+    <main className="flex min-h-full flex-1 flex-col">
+      <SiteHeader active="chat" breadcrumb={th("startChat")} />
+      <h1 className="sr-only">{t("title")}</h1>
+      <div className="flex flex-1 flex-col px-6 md:px-12">
+        <Chat />
       </div>
-      <Chat />
-      <p className="text-sm text-neutral-500">{th("disclaimer")}</p>
+      <p className="px-6 pb-6 text-[13px] leading-[1.5] text-muted md:px-12">
+        {th("disclaimer")}
+      </p>
     </main>
   );
 }

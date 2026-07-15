@@ -23,10 +23,18 @@ interface Analysis {
   saved?: boolean | null;
 }
 
-const SEVERITY_STYLES: Record<FlaggedClause["severity"], string> = {
-  info: "bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100",
-  warning: "bg-amber-100 text-amber-900",
-  serious: "bg-red-100 text-red-900",
+/** Card surface (border + background) per severity, per the design tokens. */
+const SEVERITY_CARD: Record<FlaggedClause["severity"], string> = {
+  info: "border-hairline bg-surface",
+  warning: "border-warn-border bg-warn-bg",
+  serious: "border-serious-border bg-serious-bg",
+};
+
+/** Severity chip text colour. */
+const SEVERITY_CHIP: Record<FlaggedClause["severity"], string> = {
+  info: "text-body",
+  warning: "text-warn-text",
+  serious: "text-emergency",
 };
 
 const SEVERITY_LABELS = {
@@ -34,6 +42,9 @@ const SEVERITY_LABELS = {
   warning: "severityWarning",
   serious: "severitySerious",
 } as const;
+
+const SECTION_LABEL =
+  "text-[15px] font-bold uppercase tracking-[0.06em] text-muted";
 
 export function ContractUpload() {
   const t = useTranslations("contract");
@@ -82,138 +93,168 @@ export function ContractUpload() {
   );
 
   return (
-    <div className="flex flex-col gap-4" aria-busy={busy}>
-      <input
-        id="contract-file"
-        type="file"
-        accept={CONTRACT_UPLOAD_IMAGE_TYPES.join(",")}
-        onChange={onFile}
-        className="peer sr-only"
-        disabled={busy}
-        aria-describedby="contract-privacy contract-save-analysis"
-      />
-      <p id="contract-privacy" className="text-xs text-neutral-500">
-        {t("privacy")}
-      </p>
-      <label
-        htmlFor="contract-file"
-        className="cursor-pointer rounded-xl bg-blue-600 px-5 py-4 text-center text-lg font-semibold text-white outline-none peer-focus-visible:ring-4 peer-focus-visible:ring-blue-300 peer-focus-visible:ring-offset-2"
+    <div aria-busy={busy} className="w-full py-10">
+      <div
+        className={
+          analysis
+            ? "grid grid-cols-1 gap-10 lg:grid-cols-[420px_1fr]"
+            : "mx-auto w-full max-w-xl"
+        }
       >
-        {busy ? t("analyzing") : t("upload")}
-      </label>
-      <label
-        id="contract-save-analysis"
-        className="flex min-h-11 cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm"
-      >
-        <input
-          type="checkbox"
-          name="saveAnalysis"
-          checked={saveAnalysis}
-          onChange={(event) => setSaveAnalysis(event.target.checked)}
-          className="mt-0.5 h-5 w-5 shrink-0 accent-blue-600"
-          disabled={busy}
-        />
-        <span>{t("saveAnalysis")}</span>
-      </label>
-      {busy && (
-        <p className="sr-only" role="status">
-          {t("analyzing")}
-        </p>
-      )}
-      {error && (
-        <p className="text-red-600" role="alert">
-          {error}
-        </p>
-      )}
-
-      {analysis && (
-        <div
-          className="flex flex-col gap-4"
-          role="region"
-          aria-labelledby="contract-summary-heading"
-          aria-live="polite"
-        >
-          {analysis.saved === true && (
-            <p
-              className="rounded-lg bg-green-100 p-3 text-sm text-green-900"
-              role="status"
-            >
-              {t("savedConfirmation")}
+        {/* Left: upload controls */}
+        <div className="flex flex-col gap-4">
+          <h1 className="text-[26px] font-[750] tracking-[-0.01em] text-ink">
+            {t("title")}
+          </h1>
+          <p id="contract-privacy" className="text-[13.5px] leading-[1.5] text-muted">
+            {t("privacy")}
+          </p>
+          <input
+            id="contract-file"
+            type="file"
+            accept={CONTRACT_UPLOAD_IMAGE_TYPES.join(",")}
+            onChange={onFile}
+            className="peer sr-only"
+            disabled={busy}
+            aria-describedby="contract-privacy contract-save-analysis"
+          />
+          <label
+            htmlFor="contract-file"
+            className="flex min-h-[64px] cursor-pointer items-center justify-center gap-2.5 rounded-[12px] bg-navy px-4 text-center text-[18px] font-bold text-white transition-colors hover:bg-navy-hover peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-sky peer-focus-visible:ring-offset-2"
+          >
+            <span aria-hidden="true">📷</span>
+            {busy ? t("analyzing") : t("upload")}
+          </label>
+          <label
+            id="contract-save-analysis"
+            className="flex min-h-11 cursor-pointer items-start gap-3 rounded-[12px] border border-hairline p-4 text-[14px] leading-[1.5] text-body"
+          >
+            <input
+              type="checkbox"
+              name="saveAnalysis"
+              checked={saveAnalysis}
+              onChange={(event) => setSaveAnalysis(event.target.checked)}
+              className="mt-0.5 h-5 w-5 shrink-0 accent-navy"
+              disabled={busy}
+            />
+            <span>{t("saveAnalysis")}</span>
+          </label>
+          {busy && (
+            <p className="sr-only" role="status">
+              {t("analyzing")}
             </p>
           )}
-          {analysis.saved === false && (
-            <p
-              className="rounded-lg bg-amber-100 p-3 text-sm text-amber-900"
-              role="alert"
-            >
-              {t("saveFailed")}
+          {error && (
+            <p className="text-[14px] text-emergency" role="alert">
+              {error}
             </p>
-          )}
-
-          <section aria-labelledby="contract-summary-heading">
-            <h2 id="contract-summary-heading" className="mb-1 font-semibold">
-              {t("summary")}
-            </h2>
-            <p className="whitespace-pre-wrap text-sm">{analysis.summary}</p>
-          </section>
-
-          {analysis.keyTerms.length > 0 && (
-            <section aria-labelledby="contract-key-terms-heading">
-              <h2
-                id="contract-key-terms-heading"
-                className="mb-1 font-semibold"
-              >
-                {t("keyTerms")}
-              </h2>
-              <ul className="text-sm">
-                {analysis.keyTerms.map((k, i) => (
-                  <li key={i}>
-                    <span className="font-medium">{k.label}:</span> {k.value}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          <section aria-labelledby="contract-flags-heading">
-            <h2 id="contract-flags-heading" className="mb-1 font-semibold">
-              {t("flags")}
-            </h2>
-            {analysis.flaggedClauses.length > 0 ? (
-              <ul className="flex flex-col gap-2">
-                {analysis.flaggedClauses.map((c, i) => (
-                  <li
-                    key={i}
-                    className={`rounded-lg p-2 text-sm ${SEVERITY_STYLES[c.severity]}`}
-                  >
-                    <p className="text-xs font-semibold uppercase">
-                      {t("severity")}: {t(SEVERITY_LABELS[c.severity])}
-                    </p>
-                    <p className="font-medium">{c.clause}</p>
-                    <p>{c.concern}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="rounded-lg bg-neutral-100 p-3 text-sm text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100">
-                {t("noFlags")}
-              </p>
-            )}
-            <p className="mt-2 text-xs text-neutral-500">
-              {t("analysisCaveat")}
-            </p>
-          </section>
-
-          {hasSeriousConcern && (
-            <Link
-              href="/emergency"
-              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-red-700 px-4 py-3 text-center font-semibold text-white"
-            >
-              {t("seriousCta")}
-            </Link>
           )}
         </div>
-      )}
+
+        {/* Right: results */}
+        {analysis && (
+          <div
+            className="flex flex-col gap-[22px] lg:border-l lg:border-hairline lg:pl-10"
+            role="region"
+            aria-labelledby="contract-summary-heading"
+            aria-live="polite"
+          >
+            {analysis.saved === true && (
+              <p
+                className="rounded-[10px] bg-saved-bg px-4 py-3 text-[14px] text-saved-text"
+                role="status"
+              >
+                {t("savedConfirmation")}
+              </p>
+            )}
+            {analysis.saved === false && (
+              <p
+                className="rounded-[10px] bg-warn-bg px-4 py-3 text-[14px] text-warn-text"
+                role="alert"
+              >
+                {t("saveFailed")}
+              </p>
+            )}
+
+            <section
+              aria-labelledby="contract-summary-heading"
+              className="flex flex-col gap-2"
+            >
+              <h2 id="contract-summary-heading" className={SECTION_LABEL}>
+                {t("summary")}
+              </h2>
+              <p className="whitespace-pre-wrap text-[16.5px] leading-[1.55] text-ink">
+                {analysis.summary}
+              </p>
+            </section>
+
+            {analysis.keyTerms.length > 0 && (
+              <section
+                aria-labelledby="contract-key-terms-heading"
+                className="flex flex-col gap-2"
+              >
+                <h2 id="contract-key-terms-heading" className={SECTION_LABEL}>
+                  {t("keyTerms")}
+                </h2>
+                <ul className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
+                  {analysis.keyTerms.map((k, i) => (
+                    <li key={i} className="text-[16px] text-body">
+                      <strong className="font-[650] text-ink">{k.label}:</strong>{" "}
+                      {k.value}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <section
+              aria-labelledby="contract-flags-heading"
+              className="flex flex-col gap-2.5"
+            >
+              <h2 id="contract-flags-heading" className={SECTION_LABEL}>
+                {t("flags")}
+              </h2>
+              {analysis.flaggedClauses.length > 0 ? (
+                <ul className="flex flex-col gap-2.5">
+                  {analysis.flaggedClauses.map((c, i) => (
+                    <li
+                      key={i}
+                      className={`flex flex-col gap-1 rounded-[12px] border p-4 ${SEVERITY_CARD[c.severity]}`}
+                    >
+                      <span
+                        className={`text-[12.5px] font-extrabold uppercase tracking-[0.06em] ${SEVERITY_CHIP[c.severity]}`}
+                      >
+                        <span className="sr-only">{t("severity")}: </span>
+                        {t(SEVERITY_LABELS[c.severity])}
+                      </span>
+                      <p className="text-[16px] font-[650] text-ink">{c.clause}</p>
+                      <p className="text-[15px] leading-[1.5] text-body">
+                        {c.concern}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="rounded-[12px] bg-surface p-4 text-[15px] text-body">
+                  {t("noFlags")}
+                </p>
+              )}
+              <p className="text-[13.5px] leading-[1.5] text-muted">
+                {t("analysisCaveat")}
+              </p>
+
+              {hasSeriousConcern && (
+                <Link
+                  href="/emergency"
+                  className="inline-flex min-h-12 items-center justify-center self-start rounded-[10px] bg-emergency px-[22px] text-[16px] font-bold text-white transition-colors hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emergency focus-visible:ring-offset-2"
+                >
+                  {t("seriousCta")}
+                </Link>
+              )}
+            </section>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
