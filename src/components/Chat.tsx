@@ -159,17 +159,17 @@ export function Chat() {
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-4">
+    <div className="flex flex-1 flex-col gap-6 py-9">
       <div
         ref={logRef}
-        className="flex min-h-64 max-h-[60dvh] flex-1 flex-col gap-4 overflow-y-auto overscroll-contain pr-1"
+        className="mx-auto flex w-full max-w-[860px] flex-1 flex-col gap-5"
         role="log"
         aria-live="polite"
         aria-relevant="additions text"
         aria-busy={busy}
       >
         {messages.length === 0 && (
-          <p className="text-neutral-500">{t("empty")}</p>
+          <p className="text-[16.5px] text-muted">{t("empty")}</p>
         )}
         {messages.map((m, i) => (
           <div
@@ -180,12 +180,16 @@ export function Chat() {
             }
             className={
               m.role === "user"
-                ? "self-end rounded-2xl bg-blue-600 px-4 py-2 text-white"
-                : "self-start rounded-2xl bg-neutral-100 px-4 py-2 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
+                ? "max-w-[70%] self-end rounded-[18px_18px_4px_18px] bg-navy px-5 py-3.5 text-[17px] leading-[1.5] text-white"
+                : "flex max-w-[82%] flex-col gap-3.5 self-start rounded-[18px_18px_18px_4px] bg-surface px-[22px] py-[18px]"
             }
           >
             <p
-              className="whitespace-pre-wrap"
+              className={
+                m.role === "user"
+                  ? "whitespace-pre-wrap"
+                  : "whitespace-pre-wrap text-[17px] leading-[1.55] text-ink"
+              }
               role={m.failed ? "alert" : undefined}
             >
               {m.text ||
@@ -198,37 +202,45 @@ export function Chat() {
                   ""
                 ))}
             </p>
+
             {m.escalated && (
-              <p className="mt-2 rounded-lg bg-amber-100 p-2 text-sm text-amber-900">
+              <div className="rounded-[10px] bg-warn-bg px-3.5 py-2.5 text-[15px] leading-[1.45] text-warn-text">
+                <span aria-hidden="true">⚠ </span>
                 {t("escalatedNotice")}
-              </p>
+              </div>
             )}
+
             {m.referrals && m.referrals.length > 0 && (
-              <div className="mt-2 rounded-lg border border-amber-200 p-2 text-sm">
-                <p className="font-semibold">{t("referral")}</p>
-                <ul className="mt-1 space-y-1">
+              <div className="flex flex-col gap-2.5 rounded-[12px] border border-referral-border bg-referral-bg p-4">
+                <p className="text-[15px] font-bold text-ink">{t("referral")}</p>
+                <div className="flex flex-col gap-1.5">
                   {m.referrals.map((r, k) => (
-                    <li key={k}>
+                    <div
+                      key={k}
+                      className="flex min-h-11 items-center gap-2 text-[16px] text-body"
+                    >
                       {r.org} —{" "}
                       <a
                         href={r.href ?? telHref(r.contact)}
-                        className="inline-flex min-h-11 items-center text-blue-600 underline"
+                        className="font-[650] text-navy underline"
                       >
                         {r.contact}
                       </a>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
                 {m.referralCode && (
-                  <div className="mt-3 rounded-lg bg-white/70 p-2 text-neutral-900">
-                    <p className="font-semibold">{t("referralCodeLabel")}</p>
+                  <div className="flex flex-col gap-1.5 rounded-[10px] border border-hairline bg-white p-3.5">
+                    <p className="text-[14px] font-bold text-ink">
+                      {t("referralCodeLabel")}
+                    </p>
                     <code
-                      className="my-1 block select-all break-all rounded border bg-white px-3 py-2 text-center text-lg font-bold tracking-wider"
+                      className="block select-all break-all rounded-[8px] border border-dashed border-sky-faint bg-[#f6f8fc] px-3 py-2.5 text-center text-[22px] font-extrabold tracking-[0.12em] text-navy"
                       aria-label={`${t("referralCodeLabel")}: ${m.referralCode}`}
                     >
                       {m.referralCode}
                     </code>
-                    <p className="text-xs">
+                    <p className="text-[13px] text-muted">
                       {m.referralExpiresAt
                         ? t("referralCodeHelp", {
                             date: new Intl.DateTimeFormat(locale, {
@@ -241,32 +253,37 @@ export function Chat() {
                 )}
               </div>
             )}
+
             {m.citations && m.citations.length > 0 && (
-              <div className="mt-2 text-xs text-neutral-500">
-                <p className="font-semibold">{t("sources")}</p>
-                <ul className="mt-1 list-inside list-disc space-y-2">
+              <div className="flex flex-col gap-2 border-t border-hairline pt-3">
+                <p className="text-[13px] font-bold uppercase tracking-[0.06em] text-muted">
+                  {t("sources")}
+                </p>
+                <ul className="flex flex-col gap-1.5">
                   {m.citations.map((c, j) => {
                     const href = sourceReferenceHref(c.sourceUrl ?? c.sourceRef);
                     return (
-                      <li key={j}>
+                      <li key={j} className="flex flex-col gap-1">
                         {href ? (
                           <a
                             href={href}
                             target="_blank"
                             rel="noreferrer"
-                            className="break-all text-blue-600 underline"
+                            className="break-words text-[14.5px] text-navy underline"
                           >
                             {c.sourceRef}
                           </a>
                         ) : (
-                          <span>{c.sourceRef}</span>
+                          <span className="text-[14.5px] text-body">
+                            {c.sourceRef}
+                          </span>
                         )}
                         {c.quote && (
-                          <details className="mt-1">
-                            <summary className="cursor-pointer font-medium text-blue-600 underline">
+                          <details>
+                            <summary className="cursor-pointer text-[13.5px] text-muted">
                               {t("sourceExcerpt")}
                             </summary>
-                            <blockquote className="mt-1 whitespace-pre-wrap border-l-2 pl-2 italic">
+                            <blockquote className="mt-1 whitespace-pre-wrap border-l-2 border-hairline pl-3 text-[13.5px] italic text-body-soft">
                               {c.quote}
                             </blockquote>
                           </details>
@@ -277,6 +294,7 @@ export function Chat() {
                 </ul>
               </div>
             )}
+
             {m.role === "assistant" &&
               m.text &&
               !m.failed &&
@@ -285,18 +303,18 @@ export function Chat() {
               i === messages.length - 1 &&
               !busy &&
               (m.rated ? (
-                <p className="mt-2 text-xs text-neutral-500" role="status">
+                <p className="text-[13px] text-muted" role="status">
                   {t("thanks")}
                 </p>
               ) : (
                 <div
-                  className="mt-2 flex items-center gap-2 text-sm"
+                  className="flex items-center gap-2.5"
                   role="group"
                   aria-labelledby={"feedback-prompt-" + i}
                 >
                   <span
                     id={"feedback-prompt-" + i}
-                    className="text-neutral-500"
+                    className="text-[14.5px] text-muted"
                   >
                     {t("helpful")}
                   </span>
@@ -305,7 +323,7 @@ export function Chat() {
                     onClick={() => sendFeedback(5, i, m.messageId!)}
                     disabled={m.feedbackPending}
                     aria-label={t("feedbackYes")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50 dark:hover:bg-neutral-700"
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
                   >
                     👍
                   </button>
@@ -314,14 +332,14 @@ export function Chat() {
                     onClick={() => sendFeedback(1, i, m.messageId!)}
                     disabled={m.feedbackPending}
                     aria-label={t("feedbackNo")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50 dark:hover:bg-neutral-700"
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
                   >
                     👎
                   </button>
                 </div>
               ))}
             {m.feedbackFailed && (
-              <p className="mt-2 text-xs text-red-600" role="alert">
+              <p className="text-[13px] text-emergency" role="alert">
                 {t("feedbackError")}
               </p>
             )}
@@ -329,32 +347,34 @@ export function Chat() {
         ))}
       </div>
 
-      <form onSubmit={send} className="flex gap-2" aria-busy={busy}>
-        <label htmlFor="chat-question" className="sr-only">
-          {t("questionLabel")}
-        </label>
-        <input
-          id="chat-question"
-          name="question"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={t("placeholder")}
-          maxLength={1000}
-          className="flex-1 rounded-xl border px-4 py-3 text-base"
-          disabled={busy}
-          aria-describedby="chat-privacy"
-        />
-        <button
-          type="submit"
-          disabled={busy || !input.trim()}
-          className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white disabled:opacity-50"
-        >
-          {t("send")}
-        </button>
-      </form>
-      <p id="chat-privacy" className="text-xs text-neutral-500">
-        {t("privacy")}
-      </p>
+      <div className="mx-auto flex w-full max-w-[860px] flex-col gap-2.5">
+        <form onSubmit={send} className="flex gap-3" aria-busy={busy}>
+          <label htmlFor="chat-question" className="sr-only">
+            {t("questionLabel")}
+          </label>
+          <input
+            id="chat-question"
+            name="question"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t("placeholder")}
+            maxLength={1000}
+            className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+            disabled={busy}
+            aria-describedby="chat-privacy"
+          />
+          <button
+            type="submit"
+            disabled={busy || !input.trim()}
+            className="min-h-[52px] rounded-[12px] bg-navy px-7 text-[17px] font-bold text-white transition-colors hover:bg-navy-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 disabled:opacity-50"
+          >
+            {t("send")}
+          </button>
+        </form>
+        <p id="chat-privacy" className="text-[13px] leading-[1.5] text-muted">
+          {t("privacy")}
+        </p>
+      </div>
     </div>
   );
 }

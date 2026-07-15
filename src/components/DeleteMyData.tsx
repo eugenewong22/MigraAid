@@ -20,20 +20,28 @@ export function DeleteMyData() {
   }
 
   if (state === "done") {
-    return <p className="text-sm text-green-700" role="status">{t("deleted")}</p>;
+    return (
+      <p className="text-[13px] text-saved-text" role="status">
+        {t("deleted")}
+      </p>
+    );
   }
 
   return (
-    <div className="text-sm">
+    <div className="text-[13px]">
       <button
         type="button"
         onClick={remove}
         disabled={state === "busy"}
-        className="inline-flex min-h-11 items-center text-neutral-500 underline disabled:opacity-50"
+        className="inline-flex min-h-11 items-center text-muted underline transition-colors hover:text-body disabled:opacity-50"
       >
         {state === "busy" ? t("deleting") : t("delete")}
       </button>
-      {state === "error" && <p className="mt-1 text-red-600" role="alert">{t("error")}</p>}
+      {state === "error" && (
+        <p className="mt-1 text-emergency" role="alert">
+          {t("error")}
+        </p>
+      )}
     </div>
   );
 }

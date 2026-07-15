@@ -5,7 +5,21 @@
     "startChat": "Ajukan pertanyaan",
     "contractCta": "Jelaskan kontrak saya",
     "emergencyCta": "Kontak darurat",
+    "eyebrow": "Gratis · Anonim · 8 bahasa",
+    "heroLede": "Jawaban tentang gaji, izin kerja, tempat tinggal, dan layanan kesehatan, berdasarkan hukum Singapura dan diverifikasi oleh petugas kasus NGO.",
+    "chooseLanguage": "Pilih bahasa Anda",
+    "cardLawTitle": "Berdasarkan hukum",
+    "cardLawBody": "Setiap jawaban mencantumkan sumbernya — Employment Act, WICA, atau pedoman MOM.",
+    "cardPrivacyTitle": "Privat secara bawaan",
+    "cardPrivacyBody": "Tanpa login, tanpa nama. Foto kontrak dianalisis, tidak pernah disimpan.",
+    "cardDangerTitle": "Sedang dalam bahaya?",
+    "cardDangerBody": "Hubungi 999 (Polisi) atau 995 (Ambulans/Pemadam), atau buka <link>Kontak darurat</link>.",
     "disclaimer": "MigraAid memberikan informasi umum, bukan nasihat hukum. Untuk situasi khusus Anda, hubungi petugas kasus di organisasi mitra. Dalam keadaan darurat, gunakan halaman Kontak Darurat."
+  },
+  "nav": {
+    "ask": "Tanya",
+    "contract": "Kontrak saya",
+    "emergency": "Darurat"
   },
   "chat": {
     "title": "Tanya MigraAid",

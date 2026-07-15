@@ -5,7 +5,21 @@
     "startChat": "Magtanong",
     "contractCta": "Ipaliwanag ang aking kontrata",
     "emergencyCta": "Mga emergency contact",
+    "eyebrow": "Libre · Hindi nagpapakilala · 8 wika",
+    "heroLede": "Mga sagot tungkol sa sahod, permit, tirahan, at kalusugan, nakabatay sa batas ng Singapore at nasuri ng mga caseworker ng NGO.",
+    "chooseLanguage": "Piliin ang iyong wika",
+    "cardLawTitle": "Nakabatay sa batas",
+    "cardLawBody": "Bawat sagot ay bumabanggit ng pinagmulan nito — ang Employment Act, WICA, o mga alituntunin ng MOM.",
+    "cardPrivacyTitle": "Pribado bilang default",
+    "cardPrivacyBody": "Walang login, walang pangalan. Sinusuri ang mga larawan ng kontrata, hindi kailanman iniimbak.",
+    "cardDangerTitle": "Nasa panganib ka ngayon?",
+    "cardDangerBody": "Tumawag sa 999 (Pulisya) o 995 (Ambulansya/Bumbero), o buksan ang <link>Mga emergency contact</link>.",
     "disclaimer": "Nagbibigay ang MigraAid ng pangkalahatang impormasyon, hindi legal na payo. Para sa iyong partikular na sitwasyon, makipag-ugnayan sa isang caseworker sa isang partner na organisasyon. Sa emergency, gamitin ang pahina ng Mga Emergency Contact."
+  },
+  "nav": {
+    "ask": "Magtanong",
+    "contract": "Aking kontrata",
+    "emergency": "Emergency"
   },
   "chat": {
     "title": "Magtanong sa MigraAid",

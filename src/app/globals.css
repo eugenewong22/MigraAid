@@ -1,20 +1,43 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  MigraAid — "Navy Editorial" design system.
+  Deep navy institutional header/hero, sky-blue accents, editorial type on white
+  content, red reserved strictly for emergency/serious severity.
+*/
+@theme {
+  /* Brand */
+  --color-navy: #0c2b5e;
+  --color-navy-hover: #0a2450;
+  --color-sky: #63a4ff;
+  --color-sky-hover: #4d94fa;
+  --color-sky-muted: #a8c0e8; /* hero body text on navy */
+  --color-sky-faint: #bcd3f5; /* inactive nav / labels on navy */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
+  /* Emergency / serious */
+  --color-emergency: #b42318;
+  --color-emergency-accent: #ffb3ab;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Neutrals */
+  --color-ink: #101828; /* headings */
+  --color-body: #344054; /* body */
+  --color-body-soft: #475467; /* secondary body */
+  --color-muted: #667085; /* microcopy */
+  --color-faint: #98a2b3; /* faint notes */
+  --color-surface: #f2f4f7; /* assistant bubble & pills */
+  --color-hairline: #e4e7ec; /* borders */
+  --color-input: #cdd5e1; /* input border */
+
+  /* Severity + referral surfaces */
+  --color-serious-bg: #fee4e2;
+  --color-serious-border: #fecdca;
+  --color-warn-bg: #fef0c7;
+  --color-warn-border: #f4d7a3;
+  --color-warn-text: #92400e;
+  --color-referral-bg: #fffaf0;
+  --color-referral-border: #f4d7a3;
+  --color-saved-bg: #d1fadf;
+  --color-saved-text: #067647;
 }
 
 /* Larger base size + system fonts (which cover Bengali/Tamil/Thai/Burmese via
@@ -24,9 +47,16 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #ffffff;
+  color: var(--color-body);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
     "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai", "Noto Sans Myanmar",
     sans-serif;
+}
+
+/* Editorial headings read a touch tighter and wrap nicely. */
+h1,
+h2,
+h3 {
+  text-wrap: pretty;
 }

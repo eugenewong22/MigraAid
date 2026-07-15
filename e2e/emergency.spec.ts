@@ -17,7 +17,9 @@ test("the home emergency link reaches callable contacts and navigates back", asy
     "tel:999",
   );
 
-  await page.getByRole("link", { name: new RegExp(en.common.back) }).click();
+  // The redesigned header replaces the "Back" link with the MigraAid wordmark,
+  // which returns to the localized home page.
+  await page.getByRole("link", { name: en.home.title, exact: true }).click();
   await expect(page).toHaveURL(/\/en$/);
   await expect(page.getByRole("heading", { name: en.home.title })).toBeVisible();
 });
