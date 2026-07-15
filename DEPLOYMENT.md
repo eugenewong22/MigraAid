@@ -13,7 +13,11 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
    ```
 3. Create separate credentials. Put a direct/table-owner connection in
    `MIGRATION_DATABASE_URL` for trusted release jobs only. Put a transaction-pooled,
-   DML-only connection in runtime `DATABASE_URL`. The runtime role must be allowed
+   DML-only connection in runtime `DATABASE_URL`. On Supabase these are the same
+   pooler host on different ports: `DATABASE_URL` uses the **transaction pooler
+   (port 6543)**, `MIGRATION_DATABASE_URL` must use the **session pooler (port
+   5432)** — drizzle-kit migrations hold advisory locks and run `DO $$` blocks
+   that the transaction pooler cannot service. The runtime role must be allowed
    through the default-deny RLS boundary (for example a dedicated `BYPASSRLS`
    application role), but must not own tables or have schema/DDL privileges.
 4. Apply every checked-in migration, including the custom default-deny RLS migration:
@@ -24,6 +28,14 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
    schema but does not apply custom security migrations. Run migrations only in
    the trusted release environment with `MIGRATION_DATABASE_URL`; browser-facing
    Supabase `anon` and `authenticated` roles intentionally have no table access.
+
+   This manual run covers first provisioning. After that, every **production**
+   Vercel deploy applies pending migrations automatically: the `vercel-build`
+   script runs `scripts/release/migrate.ts` before `next build`, and fails the
+   deploy if `MIGRATION_DATABASE_URL` is missing or points at the transaction
+   pooler. Code therefore never ships ahead of the schema — a route querying a
+   column its database doesn't have yet is a full outage, and this is the gate
+   that prevents it. Preview builds skip migrations by design.
 5. Have a partner NGO review each checked-in knowledge document and add the
    required publication metadata described in `content/README.md`. Do not
    fabricate reviewer names or dates for the illustrative seed corpus.
@@ -94,9 +106,14 @@ organisation websites before each public release; the current set was checked on
 
 1. Push the repo to GitHub.
 2. Import it in Vercel (framework auto-detected as Next.js).
-3. Add the environment variables above.
-4. Deploy. Vercel gives every pull request a preview URL; the GitHub Actions workflow
-   (`.github/workflows/ci.yml`) runs typecheck + tests + lint on each PR.
+3. Add the environment variables above. Set `MIGRATION_DATABASE_URL` in the
+   **Production** environment only — production builds refuse to deploy without
+   it, and preview builds must not hold a DDL-capable credential.
+4. Deploy. Vercel runs the `vercel-build` script, which applies pending database
+   migrations before building (see section 1), so the schema is always in place
+   before new code serves traffic. Every pull request gets a preview URL; the
+   GitHub Actions workflow (`.github/workflows/ci.yml`) runs typecheck + tests +
+   lint on each PR.
 
 ## 4. Budget notes
 
