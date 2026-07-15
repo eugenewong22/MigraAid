@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/content/auth";
+import { requireAdminPage } from "@/lib/content/auth";
 import { getKpis, type Kpis } from "@/lib/analytics/kpi";
 
 // Fellowship targets.
@@ -39,8 +39,9 @@ function Stat({
   );
 }
 
-export default async function KpiPage() {
-  await requireAdmin();
+export default async function KpiPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  await requireAdminPage(locale);
 
   let kpis: Kpis | null = null;
   let dbError = false;
@@ -85,8 +86,8 @@ export default async function KpiPage() {
           <div className="rounded-xl border p-4">
             <p className="text-sm text-neutral-500">Satisfaction (target 80%)</p>
             <p className="text-2xl font-bold">
-              {kpis.avgSatisfaction != null
-                ? `${Math.round((kpis.avgSatisfaction / 5) * 100)}%`
+              {kpis.satisfactionRate != null
+                ? `${Math.round(kpis.satisfactionRate * 100)}%`
                 : "—"}
               <span className="text-base font-normal text-neutral-400">
                 {kpis.avgSatisfaction != null
@@ -94,6 +95,10 @@ export default async function KpiPage() {
                   : ""}
               </span>
             </p>
+          </div>
+          <div className="rounded-xl border p-4">
+            <p className="text-sm text-neutral-500">Recorded LLM tokens</p>
+            <p className="text-2xl font-bold">{kpis.totalLlmTokens.toLocaleString()}</p>
           </div>
         </>
       )}

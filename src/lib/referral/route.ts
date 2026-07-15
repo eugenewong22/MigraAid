@@ -11,6 +11,7 @@ import type { Domain } from "@/lib/rag/types";
 export interface ReferralTarget {
   org: string;
   contact: string;
+  href?: string;
   reason: string;
 }
 
@@ -23,21 +24,23 @@ export interface ReferralRequest {
 interface OrgInfo {
   name: string;
   contact: string;
+  href?: string;
 }
 
-/** Referral targets. Numbers are best-effort and must be verified before launch. */
+/** Referral targets verified against organisation/government sites on 2026-07-14. */
 const ORGS: Record<string, OrgInfo> = {
   tadm: {
     name: "TADM — Tripartite Alliance for Dispute Management",
-    contact: "1800 342 1800",
+    contact: "Open TADM eServices",
+    href: "https://www.tal.sg/tadm/eservices",
   },
-  mom: { name: "MOM — Ministry of Manpower", contact: "1800 339 5505" },
+  mom: { name: "MOM — Ministry of Manpower", contact: "+65 6438 5122" },
   home: {
     name: "HOME — Humanitarian Organisation for Migration Economics",
-    contact: "1800 797 7977",
+    contact: "+65 6341 5535",
   },
-  twc2: { name: "TWC2 — Transient Workers Count Too", contact: "+65 6297 7564" },
-  healthserve: { name: "HealthServe", contact: "+65 3138 4443" },
+  twc2: { name: "TWC2 — Transient Workers Count Too", contact: "1800 888 1515" },
+  healthserve: { name: "HealthServe", contact: "+65 3129 5000" },
   police: { name: "Police (emergency)", contact: "999" },
 };
 
@@ -62,6 +65,7 @@ export function referralTargets(issueType: string): ReferralTarget[] {
     return {
       org: org.name,
       contact: org.contact,
+      href: org.href,
       reason: `Support for ${issueType.replace(/_/g, " ")}`,
     };
   });

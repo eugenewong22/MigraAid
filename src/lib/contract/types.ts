@@ -1,6 +1,6 @@
 /**
- * Contract explainer types. Implementation (Claude vision → structured output)
- * lands in M3 (lib/contract/analyze.ts).
+ * Contract explainer types. The vision implementation returns structured output
+ * from lib/contract/analyze.ts.
  *
  * Privacy: the uploaded image is processed in-memory and never persisted. Only
  * this derived analysis may be stored (see db/schema `contract_reviews`).

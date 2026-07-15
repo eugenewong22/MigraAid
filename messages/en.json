@@ -17,7 +17,19 @@
     "error": "Sorry, something went wrong. Please try again.",
     "referral": "Who can help",
     "helpful": "Was this helpful?",
-    "thanks": "Thanks for your feedback."
+    "thanks": "Thanks for your feedback.",
+    "questionLabel": "Your question",
+    "loading": "MigraAid is preparing a response.",
+    "feedbackYes": "Yes, this was helpful",
+    "feedbackNo": "No, this was not helpful",
+    "feedbackError": "We could not save your feedback. Please try again.",
+    "speakerYou": "You",
+    "speakerMigraAid": "MigraAid",
+    "sourceExcerpt": "Source excerpt",
+    "referralCodeLabel": "Private handoff code",
+    "referralCodeHelp": "Give this private handoff code to the organisation after you contact them. It expires on {date}.",
+    "referralCodeHelpNoDate": "Give this private handoff code to the organisation after you contact them. It expires in 30 days.",
+    "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it."
   },
   "emergency": {
     "title": "Emergency contacts",
@@ -25,20 +37,70 @@
     "urgent": "Emergency",
     "government": "Government",
     "ngo": "Support organisations",
-    "verifyNote": "Please confirm these numbers are current before relying on them."
+    "verifyNote": "Please confirm these numbers are current before relying on them.",
+    "contacts": {
+      "police": {
+        "name": "Police"
+      },
+      "policeSms": {
+        "name": "Police emergency SMS",
+        "note": "If it is unsafe to speak or you cannot speak"
+      },
+      "ambulanceFire": {
+        "name": "Ambulance / Fire"
+      },
+      "nonEmergencyAmbulance": {
+        "name": "Non-emergency ambulance"
+      },
+      "mom": {
+        "name": "MOM (Ministry of Manpower)",
+        "note": "Work permit, salary, workplace safety"
+      },
+      "home": {
+        "name": "HOME Helpline",
+        "note": "Migrant worker support"
+      },
+      "twc2": {
+        "name": "TWC2 Helpline"
+      },
+      "healthserve": {
+        "name": "HealthServe",
+        "note": "Medical care & counselling"
+      }
+    }
   },
   "contract": {
     "title": "Explain my contract",
     "upload": "Upload or photograph your contract",
     "analyzing": "Reading your contract…",
-    "privacy": "Your photo is analysed to help you and is not saved.",
+    "privacy": "Your photo is securely sent to an AI provider for analysis. MigraAid does not store the photo or extracted contract text. The AI provider may retain safety logs for up to 30 days.",
+    "saveAnalysis": "Save the derived analysis for up to 30 days. MigraAid stores only the summary, key terms, and flagged points—not your photo or extracted contract text. You can delete the saved analysis later from this device.",
+    "savedConfirmation": "Your summary, key terms, and flagged points were saved for up to 30 days. Your photo and extracted contract text were not saved.",
+    "saveFailed": "Your analysis is shown below, but it could not be saved. Your photo and extracted contract text were not stored. You can try again later.",
     "summary": "Summary",
     "keyTerms": "Key terms",
     "flags": "Points to check",
-    "error": "Sorry, we couldn't read that. Please try a clearer photo."
+    "error": "Sorry, we couldn't read that. Please try a clearer photo.",
+    "errorInvalidFile": "Choose a JPEG, PNG, GIF, or WebP image of your contract.",
+    "errorTooLarge": "That image is larger than 8 MB. Choose a smaller image and try again.",
+    "errorRateLimited": "Too many contract checks were requested. Please wait a minute and try again.",
+    "noFlags": "The automated check did not identify a specific concerning clause in this image.",
+    "analysisCaveat": "This automated explanation may miss details and is not legal advice. Check important terms with a caseworker before you agree or sign.",
+    "seriousCta": "See urgent support contacts",
+    "severity": "Severity",
+    "severityInfo": "Information",
+    "severityWarning": "Warning",
+    "severitySerious": "Serious"
   },
   "common": {
     "language": "Language",
     "back": "Back"
+  },
+  "privacy": {
+    "delete": "Delete my MigraAid data",
+    "deleting": "Deleting…",
+    "confirm": "Delete the saved conversations and contract analyses linked to this device? This cannot be undone.",
+    "deleted": "Your MigraAid data has been deleted.",
+    "error": "We could not delete your data. Please try again."
   }
 }

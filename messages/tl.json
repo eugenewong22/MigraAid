@@ -15,7 +15,21 @@
     "sources": "Mga pinagmulan",
     "escalatedNotice": "Mukhang seryoso ito. Mangyaring makipag-ugnayan sa isang caseworker sa isang partner na organisasyon.",
     "error": "Paumanhin, may nangyaring mali. Pakisubukang muli.",
-    "referral": "Sino ang makakatulong"
+    "referral": "Sino ang makakatulong",
+    "helpful": "Nakatulong ba ito?",
+    "thanks": "Salamat sa iyong feedback.",
+    "questionLabel": "Ang iyong tanong",
+    "loading": "Inihahanda ng MigraAid ang sagot.",
+    "feedbackYes": "Oo, nakatulong ito",
+    "feedbackNo": "Hindi, hindi ito nakatulong",
+    "feedbackError": "Hindi namin na-save ang iyong feedback. Pakisubukang muli.",
+    "speakerYou": "Ikaw",
+    "speakerMigraAid": "MigraAid",
+    "sourceExcerpt": "Sipi mula sa pinagmulan",
+    "referralCodeLabel": "Pribadong handoff code",
+    "referralCodeHelp": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa {date}.",
+    "referralCodeHelpNoDate": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa loob ng 30 araw.",
+    "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito."
   },
   "emergency": {
     "title": "Mga emergency contact",
@@ -23,10 +37,70 @@
     "urgent": "Emergency",
     "government": "Pamahalaan",
     "ngo": "Mga organisasyong tumutulong",
-    "verifyNote": "Pakikumpirma na napapanahon ang mga numerong ito bago umasa sa mga ito."
+    "verifyNote": "Pakikumpirma na napapanahon ang mga numerong ito bago umasa sa mga ito.",
+    "contacts": {
+      "police": {
+        "name": "Pulisya"
+      },
+      "policeSms": {
+        "name": "Emergency SMS ng Pulisya",
+        "note": "Kung hindi ligtas magsalita o hindi ka makapagsalita"
+      },
+      "ambulanceFire": {
+        "name": "Ambulansya / Bumbero"
+      },
+      "nonEmergencyAmbulance": {
+        "name": "Non-emergency na ambulansya"
+      },
+      "mom": {
+        "name": "MOM (Ministry of Manpower)",
+        "note": "Work permit, sahod, kaligtasan sa trabaho"
+      },
+      "home": {
+        "name": "HOME Helpline",
+        "note": "Suporta sa migranteng manggagawa"
+      },
+      "twc2": {
+        "name": "TWC2 Helpline"
+      },
+      "healthserve": {
+        "name": "HealthServe",
+        "note": "Medikal na pangangalaga at counseling"
+      }
+    }
+  },
+  "contract": {
+    "title": "Ipaliwanag ang aking kontrata",
+    "upload": "I-upload o kunan ng larawan ang iyong kontrata",
+    "analyzing": "Binabasa ang iyong kontrata…",
+    "privacy": "Ligtas na ipinapadala ang iyong larawan sa isang AI provider para suriin. Hindi iniimbak ng MigraAid ang larawan o hilaw na tekstong binasa mula sa kontrata. Maaaring magpanatili ang AI provider ng mga safety log nang hanggang 30 araw.",
+    "saveAnalysis": "I-save ang nagawang pagsusuri nang hanggang 30 araw. Buod, mahahalagang tuntunin, at mga puntong dapat suriin lamang ang iniimbak ng MigraAid—hindi ang iyong larawan o tekstong binasa mula sa kontrata. Maaari mong burahin ang naka-save na pagsusuri sa ibang pagkakataon mula sa device na ito.",
+    "savedConfirmation": "Na-save nang hanggang 30 araw ang iyong buod, mahahalagang tuntunin, at mga puntong dapat suriin. Hindi na-save ang iyong larawan o tekstong binasa mula sa kontrata.",
+    "saveFailed": "Ipinapakita sa ibaba ang iyong pagsusuri, ngunit hindi ito na-save. Hindi inimbak ang iyong larawan o tekstong binasa mula sa kontrata. Maaari kang sumubok muli sa ibang pagkakataon.",
+    "summary": "Buod",
+    "keyTerms": "Mahahalagang tuntunin",
+    "flags": "Mga puntong dapat suriin",
+    "error": "Paumanhin, hindi namin iyon mabasa. Subukan muli gamit ang mas malinaw na larawan.",
+    "errorInvalidFile": "Pumili ng JPEG, PNG, GIF, o WebP na larawan ng iyong kontrata.",
+    "errorTooLarge": "Mas malaki sa 8 MB ang larawang iyon. Pumili ng mas maliit na larawan at subukang muli.",
+    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli.",
+    "noFlags": "Walang natukoy na partikular na nakababahalang sugnay sa larawang ito ang awtomatikong pagsusuri.",
+    "analysisCaveat": "Maaaring may makaligtaang detalye ang awtomatikong paliwanag na ito at hindi ito legal na payo. Ipasuri ang mahahalagang tuntunin sa isang caseworker bago ka pumayag o pumirma.",
+    "seriousCta": "Tingnan ang mga agarang contact para sa tulong",
+    "severity": "Antas ng panganib",
+    "severityInfo": "Impormasyon",
+    "severityWarning": "Babala",
+    "severitySerious": "Seryoso"
   },
   "common": {
     "language": "Wika",
     "back": "Bumalik"
+  },
+  "privacy": {
+    "delete": "Burahin ang aking MigraAid data",
+    "deleting": "Binubura…",
+    "confirm": "Burahin ang mga naka-save na usapan at pagsusuri ng kontrata na naka-link sa device na ito? Hindi na ito maibabalik.",
+    "deleted": "Nabura na ang iyong MigraAid data.",
+    "error": "Hindi namin mabura ang iyong data. Subukan muli."
   }
 }

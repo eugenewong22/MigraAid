@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { DeleteMyData } from "@/components/DeleteMyData";
 
 export default async function Home({
   params,
@@ -41,7 +42,10 @@ export default async function Home({
         </Link>
       </nav>
 
-      <p className="mt-auto text-sm text-neutral-500">{t("disclaimer")}</p>
+      <div className="mt-auto flex flex-col gap-3">
+        <p className="text-sm text-neutral-500">{t("disclaimer")}</p>
+        <DeleteMyData />
+      </div>
     </main>
   );
 }

@@ -20,7 +20,17 @@ export function getDb() {
       );
     }
     // prepare:false is required for transaction-pooled Postgres (Supabase/pgbouncer).
-    const client = postgres(url, { prepare: false });
+    const client = postgres(url, {
+      prepare: false,
+      // Serverless instances should not each open a large default pool.
+      max: 1,
+      connect_timeout: 10,
+      idle_timeout: 20,
+      max_lifetime: 10 * 60,
+      // Cap any single statement so a hung query cannot consume the whole
+      // serverless function budget (kept below the route maxDuration).
+      connection: { statement_timeout: 15_000 },
+    });
     db = drizzle(client, { schema });
   }
   return db;

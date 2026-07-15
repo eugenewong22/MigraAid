@@ -38,5 +38,40 @@
     "mustCite": true,
     "shouldEscalate": false,
     "expectContains": ["deduct"]
+  },
+  {
+    "locale": "bn",
+    "question": "আমার বেতন দেয়নি",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "ta",
+    "question": "எனக்கு வேலை விபத்து ஏற்பட்டது",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "tl",
+    "question": "Tinanggal sa trabaho nang walang babala",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "zh",
+    "question": "我的合同纠纷很严重",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "id",
+    "question": "Izin kerja dibatalkan",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "th",
+    "question": "นายจ้างข่มขู่ฉัน",
+    "shouldEscalate": true
+  },
+  {
+    "locale": "my",
+    "question": "အလုပ်ရှင်က နေရပ်ပြန်ပို့မည်",
+    "shouldEscalate": true
   }
 ]

@@ -12,6 +12,7 @@ export interface RetrievedChunk {
   chunkId: string;
   contentItemId: string;
   sourceRef: string;
+  sourceUrl?: string | null;
   domain: Domain;
   text: string;
   /** Cosine similarity score (0–1). */
@@ -21,6 +22,7 @@ export interface RetrievedChunk {
 /** A span-level source attribution surfaced to the user. */
 export interface Citation {
   sourceRef: string;
+  sourceUrl?: string;
   contentItemId: string;
   quote?: string;
 }
@@ -33,11 +35,18 @@ export interface RagAnswer {
   /** Issue slug the model flagged when it escalated (drives referral routing). */
   issueType?: string;
   model: string;
+  usage?: {
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+  };
 }
 
 export interface RetrieveOptions {
   query: string;
   locale: string;
+  /** Pre-computed English-normalized + PII-scrubbed query; skips re-translation. */
+  normalizedQuery?: string;
   domain?: Domain;
   limit?: number;
 }

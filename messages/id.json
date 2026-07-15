@@ -15,7 +15,21 @@
     "sources": "Sumber",
     "escalatedNotice": "Ini terlihat serius. Silakan hubungi petugas kasus di organisasi mitra.",
     "error": "Maaf, terjadi kesalahan. Silakan coba lagi.",
-    "referral": "Siapa yang bisa membantu"
+    "referral": "Siapa yang bisa membantu",
+    "helpful": "Apakah ini membantu?",
+    "thanks": "Terima kasih atas masukan Anda.",
+    "questionLabel": "Pertanyaan Anda",
+    "loading": "MigraAid sedang menyiapkan jawaban.",
+    "feedbackYes": "Ya, ini membantu",
+    "feedbackNo": "Tidak, ini tidak membantu",
+    "feedbackError": "Masukan Anda tidak dapat disimpan. Silakan coba lagi.",
+    "speakerYou": "Anda",
+    "speakerMigraAid": "MigraAid",
+    "sourceExcerpt": "Kutipan sumber",
+    "referralCodeLabel": "Kode rujukan pribadi",
+    "referralCodeHelp": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa pada {date}.",
+    "referralCodeHelpNoDate": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa dalam 30 hari.",
+    "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya."
   },
   "emergency": {
     "title": "Kontak darurat",
@@ -23,10 +37,70 @@
     "urgent": "Darurat",
     "government": "Pemerintah",
     "ngo": "Organisasi bantuan",
-    "verifyNote": "Harap pastikan nomor-nomor ini masih berlaku sebelum mengandalkannya."
+    "verifyNote": "Harap pastikan nomor-nomor ini masih berlaku sebelum mengandalkannya.",
+    "contacts": {
+      "police": {
+        "name": "Polisi"
+      },
+      "policeSms": {
+        "name": "SMS darurat Polisi",
+        "note": "Jika tidak aman berbicara atau Anda tidak bisa bicara"
+      },
+      "ambulanceFire": {
+        "name": "Ambulans / Pemadam"
+      },
+      "nonEmergencyAmbulance": {
+        "name": "Ambulans non-darurat"
+      },
+      "mom": {
+        "name": "MOM (Kementerian Tenaga Kerja)",
+        "note": "Izin kerja, gaji, keselamatan kerja"
+      },
+      "home": {
+        "name": "Saluran bantuan HOME",
+        "note": "Dukungan pekerja migran"
+      },
+      "twc2": {
+        "name": "Saluran bantuan TWC2"
+      },
+      "healthserve": {
+        "name": "HealthServe",
+        "note": "Layanan medis & konseling"
+      }
+    }
+  },
+  "contract": {
+    "title": "Jelaskan kontrak saya",
+    "upload": "Unggah atau foto kontrak Anda",
+    "analyzing": "Membaca kontrak Anda…",
+    "privacy": "Foto Anda dikirim dengan aman ke penyedia AI untuk dianalisis. MigraAid tidak menyimpan foto atau teks mentah yang diekstrak dari kontrak. Penyedia AI dapat menyimpan log keamanan hingga 30 hari.",
+    "saveAnalysis": "Simpan hasil analisis hingga 30 hari. MigraAid hanya menyimpan ringkasan, ketentuan utama, dan poin yang ditandai—bukan foto atau teks kontrak yang diekstrak. Anda dapat menghapus analisis tersimpan nanti dari perangkat ini.",
+    "savedConfirmation": "Ringkasan, ketentuan utama, dan poin yang ditandai telah disimpan hingga 30 hari. Foto dan teks kontrak yang diekstrak tidak disimpan.",
+    "saveFailed": "Analisis Anda ditampilkan di bawah, tetapi tidak dapat disimpan. Foto dan teks kontrak yang diekstrak tidak disimpan. Anda dapat mencoba lagi nanti.",
+    "summary": "Ringkasan",
+    "keyTerms": "Ketentuan utama",
+    "flags": "Hal yang perlu diperiksa",
+    "error": "Maaf, kami tidak dapat membacanya. Coba lagi dengan foto yang lebih jelas.",
+    "errorInvalidFile": "Pilih gambar kontrak berformat JPEG, PNG, GIF, atau WebP.",
+    "errorTooLarge": "Gambar ini lebih besar dari 8 MB. Pilih gambar yang lebih kecil dan coba lagi.",
+    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi.",
+    "noFlags": "Pemeriksaan otomatis tidak menemukan klausul tertentu yang mengkhawatirkan dalam gambar ini.",
+    "analysisCaveat": "Penjelasan otomatis ini mungkin melewatkan rincian dan bukan nasihat hukum. Periksa ketentuan penting dengan petugas kasus sebelum Anda menyetujui atau menandatangani.",
+    "seriousCta": "Lihat kontak bantuan mendesak",
+    "severity": "Tingkat",
+    "severityInfo": "Informasi",
+    "severityWarning": "Peringatan",
+    "severitySerious": "Serius"
   },
   "common": {
     "language": "Bahasa",
     "back": "Kembali"
+  },
+  "privacy": {
+    "delete": "Hapus data MigraAid saya",
+    "deleting": "Menghapus…",
+    "confirm": "Hapus percakapan dan analisis kontrak tersimpan yang terkait dengan perangkat ini? Tindakan ini tidak dapat dibatalkan.",
+    "deleted": "Data MigraAid Anda telah dihapus.",
+    "error": "Data Anda tidak dapat dihapus. Silakan coba lagi."
   }
 }

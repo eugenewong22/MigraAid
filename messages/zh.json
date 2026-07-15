@@ -15,7 +15,21 @@
     "sources": "来源",
     "escalatedNotice": "这看起来很严重。请联系合作机构的个案工作者。",
     "error": "抱歉，出了点问题。请重试。",
-    "referral": "谁能帮您"
+    "referral": "谁能帮您",
+    "helpful": "这个回答有帮助吗？",
+    "thanks": "感谢您的反馈。",
+    "questionLabel": "您的问题",
+    "loading": "MigraAid 正在准备回答。",
+    "feedbackYes": "有帮助",
+    "feedbackNo": "没有帮助",
+    "feedbackError": "无法保存您的反馈。请重试。",
+    "speakerYou": "您",
+    "speakerMigraAid": "MigraAid",
+    "sourceExcerpt": "来源摘录",
+    "referralCodeLabel": "私人转介代码",
+    "referralCodeHelp": "联系机构后，请向对方提供此私人转介代码。代码将于 {date} 到期。",
+    "referralCodeHelpNoDate": "联系机构后，请向对方提供此私人转介代码。代码将在 30 天内到期。",
+    "privacy": "请勿填写姓名、身份证或护照号码、电话号码或电子邮箱。您的问题会发送给 AI 服务提供商。MigraAid 会尽可能在发送或存储前移除常见身份信息。"
   },
   "emergency": {
     "title": "紧急联系方式",
@@ -23,10 +37,70 @@
     "urgent": "紧急",
     "government": "政府",
     "ngo": "支援机构",
-    "verifyNote": "在依赖这些号码之前，请确认它们是最新的。"
+    "verifyNote": "在依赖这些号码之前，请确认它们是最新的。",
+    "contacts": {
+      "police": {
+        "name": "警察"
+      },
+      "policeSms": {
+        "name": "警察紧急短信",
+        "note": "如果说话不安全或您无法说话"
+      },
+      "ambulanceFire": {
+        "name": "救护车 / 消防"
+      },
+      "nonEmergencyAmbulance": {
+        "name": "非紧急救护车"
+      },
+      "mom": {
+        "name": "MOM（人力部）",
+        "note": "工作准证、工资、工作场所安全"
+      },
+      "home": {
+        "name": "HOME 求助热线",
+        "note": "外籍劳工支援"
+      },
+      "twc2": {
+        "name": "TWC2 求助热线"
+      },
+      "healthserve": {
+        "name": "HealthServe",
+        "note": "医疗与心理辅导"
+      }
+    }
+  },
+  "contract": {
+    "title": "解释我的合同",
+    "upload": "上传或拍摄您的合同",
+    "analyzing": "正在阅读您的合同…",
+    "privacy": "您的照片会被安全发送给 AI 服务提供商进行分析。MigraAid 不会存储照片或从合同提取的原始文字。AI 服务提供商可能会保留安全日志最多 30 天。",
+    "saveAnalysis": "保存生成的分析最多 30 天。MigraAid 只存储摘要、主要条款和需注意的事项，不存储您的照片或从合同提取的文字。您之后可以从此设备删除已保存的分析。",
+    "savedConfirmation": "您的摘要、主要条款和需注意的事项已保存最多 30 天。您的照片和从合同提取的文字并未保存。",
+    "saveFailed": "您的分析显示在下方，但未能保存。您的照片和从合同提取的文字并未存储。您可以稍后重试。",
+    "summary": "摘要",
+    "keyTerms": "主要条款",
+    "flags": "需注意的事项",
+    "error": "抱歉，我们无法读取该图片。请用更清晰的照片重试。",
+    "errorInvalidFile": "请选择 JPEG、PNG、GIF 或 WebP 格式的合同图片。",
+    "errorTooLarge": "该图片超过 8 MB。请选择较小的图片后重试。",
+    "errorRateLimited": "合同检查请求过多。请等待一分钟后重试。",
+    "noFlags": "自动检查未在这张图片中发现明确的可疑条款。",
+    "analysisCaveat": "自动说明可能遗漏细节，且不构成法律建议。在同意或签署前，请让个案工作者核对重要条款。",
+    "seriousCta": "查看紧急支援联系方式",
+    "severity": "严重程度",
+    "severityInfo": "信息",
+    "severityWarning": "警告",
+    "severitySerious": "严重"
   },
   "common": {
     "language": "语言",
     "back": "返回"
+  },
+  "privacy": {
+    "delete": "删除我的 MigraAid 数据",
+    "deleting": "正在删除…",
+    "confirm": "删除与此设备关联的已保存对话和合同分析？此操作无法撤销。",
+    "deleted": "您的 MigraAid 数据已删除。",
+    "error": "无法删除您的数据，请重试。"
   }
 }

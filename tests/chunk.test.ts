@@ -23,4 +23,23 @@ describe("chunkMarkdown", () => {
     expect(chunks.join(" ")).toContain("First.");
     expect(chunks.join(" ")).toContain("Second.");
   });
+
+  it("bounds a single oversized legal paragraph", () => {
+    const text = Array.from(
+      { length: 40 },
+      (_, index) => `Sentence ${index + 1} explains a separate legal point.`,
+    ).join(" ");
+    const chunks = chunkMarkdown(text, { maxChars: 180 });
+
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks.every((chunk) => chunk.length <= 180)).toBe(true);
+    expect(chunks.join(" ")).toContain("Sentence 40");
+  });
+
+  it("hard-splits long text without whitespace", () => {
+    const chunks = chunkMarkdown("法".repeat(451), { maxChars: 100 });
+    expect(chunks).toHaveLength(5);
+    expect(chunks.every((chunk) => chunk.length <= 100)).toBe(true);
+    expect(chunks.join("")).toBe("法".repeat(451));
+  });
 });

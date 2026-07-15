@@ -1,0 +1,1 @@
+ALTER TABLE "contract_reviews" ADD COLUMN "key_terms" jsonb;

@@ -1,19 +1,72 @@
 /**
  * Vector retrieval over the published knowledge base (pgvector cosine).
  *
- * The corpus is authored in English (Singapore law is English); a multilingual
- * embedder maps a native-language query into the same space, so a Bengali/Tamil
- * question can match English source chunks (cross-lingual retrieval).
+ * The corpus is authored in English (Singapore law is English). Cross-lingual
+ * embedding quality varies a lot by provider: Voyage-3 embeds a native-language
+ * query directly into the same space as the English corpus with strong recall,
+ * but a general-purpose embedder (the OpenAI fallback used when no Voyage key
+ * is configured) can score a correct English match well below an irrelevant
+ * one for the same question asked in, say, Bengali or Tamil — confirmed on
+ * this corpus: an English "Can my employer keep my passport?" scores 0.64
+ * against the right document, the same question in Bengali only scores 0.22.
+ * To keep retrieval reliable regardless of embedding provider, a non-English
+ * query is first translated to English (a cheap, fast model call) and *that*
+ * text is embedded for the vector search — the worker's original question is
+ * still what the model sees and answers in when generating the response.
  */
 import { and, cosineDistance, desc, eq, sql } from "drizzle-orm";
+import OpenAI from "openai";
 import { getDb } from "@/lib/db";
 import { contentChunks, contentItems } from "@/lib/db/schema";
 import { getEmbedder } from "@/lib/embeddings";
 import type { RetrievedChunk, RetrieveOptions } from "./types";
+import { scrubPii } from "@/lib/safety/pii";
+
+const NORMALIZE_MODEL = "gpt-5.6-terra";
+// Kept small so normalize + embed + answer fit inside the route maxDuration.
+const NORMALIZE_TIMEOUT_MS = 8_000;
+
+/**
+ * Translates a non-English query to English for embedding. Falls back to the
+ * original text on any failure — a failed translation should degrade retrieval
+ * quality, not break the request.
+ */
+export async function normalizeQueryForRetrieval(
+  query: string,
+  locale: string,
+): Promise<string> {
+  if (locale === "en") return query;
+  try {
+    // maxRetries:0 — a retry cannot fit the shared serverless time budget.
+    const client = new OpenAI({ timeout: NORMALIZE_TIMEOUT_MS, maxRetries: 0 });
+    const completion = await client.chat.completions.create({
+      model: NORMALIZE_MODEL,
+      store: false,
+      max_completion_tokens: 120,
+      reasoning_effort: "none",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Translate the user's message into concise English, preserving its meaning. " +
+            "Reply with only the English translation — no notes, no quotes.",
+        },
+        { role: "user", content: query },
+      ],
+    });
+    const translated = completion.choices[0]?.message.content?.trim();
+    return translated || query;
+  } catch {
+    return query;
+  }
+}
 
 export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]> {
   const embedder = getEmbedder();
-  const [queryEmbedding] = await embedder.embed([opts.query], {
+  const normalizedQuery =
+    opts.normalizedQuery ??
+    (await normalizeQueryForRetrieval(scrubPii(opts.query), opts.locale));
+  const [queryEmbedding] = await embedder.embed([normalizedQuery], {
     inputType: "query",
   });
 
@@ -25,6 +78,7 @@ export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]>
       chunkId: contentChunks.id,
       contentItemId: contentChunks.contentItemId,
       sourceRef: contentItems.sourceRef,
+      sourceUrl: contentItems.sourceUrl,
       domain: contentItems.domain,
       text: contentChunks.chunkText,
       score,
@@ -34,6 +88,7 @@ export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]>
     .where(
       and(
         eq(contentItems.status, "published"),
+        eq(contentChunks.embeddingGeneration, embedder.generation),
         opts.domain ? eq(contentItems.domain, opts.domain) : undefined,
       ),
     )

@@ -29,3 +29,17 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+      - name: Verify checked-in migrations match the schema
+        run: |
+          pnpm db:generate
+          git diff --exit-code -- drizzle
+
+      - name: Production build
+        run: pnpm build
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Browser safety tests
+        run: pnpm test:e2e

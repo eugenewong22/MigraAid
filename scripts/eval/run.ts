@@ -7,16 +7,20 @@
  *  - the answer contains the expected key facts.
  *
  * Extend `eval/golden.json` with NGO-verified Q&A per domain and per language (M2).
- * Run with: pnpm eval   (needs DATABASE_URL + ANTHROPIC_API_KEY + VOYAGE_API_KEY,
+ * Run with: pnpm eval   (needs DATABASE_URL + OPENAI_API_KEY and optionally VOYAGE_API_KEY,
  * and an ingested corpus — run `pnpm ingest` first).
  */
+import "../env";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { retrieve } from "@/lib/rag/retrieve";
-import { answer } from "@/lib/rag/answer";
+import { answer, preflightSafetyAnswer } from "@/lib/rag/answer";
+
+type Locale = "en" | "bn" | "ta" | "tl" | "zh" | "id" | "th" | "my";
 
 interface GoldenItem {
   question: string;
+  locale?: Locale;
   domain?: "legal_rights" | "healthcare" | "housing" | "financial" | "settlement";
   mustCite?: boolean;
   shouldEscalate?: boolean;
@@ -32,12 +36,18 @@ async function main() {
 
   let passed = 0;
   for (const item of golden) {
-    const chunks = await retrieve({
-      query: item.question,
-      locale: "en",
-      domain: item.domain,
-    });
-    const result = await answer({ query: item.question, locale: "en", chunks });
+    const locale = item.locale ?? "en";
+    const deterministic = preflightSafetyAnswer(item.question, locale);
+    const chunks = deterministic
+      ? []
+      : await retrieve({
+          query: item.question,
+          locale,
+          domain: item.domain,
+        });
+    const result =
+      deterministic ??
+      (await answer({ query: item.question, locale, chunks }));
 
     const checks: string[] = [];
     let ok = true;
@@ -64,7 +74,7 @@ async function main() {
     }
 
     if (ok) passed += 1;
-    console.log(`${ok ? "PASS" : "FAIL"}  ${item.question}`);
+    console.log(`${ok ? "PASS" : "FAIL"}  [${locale}] ${item.question}`);
     console.log(`      ${checks.join("  ·  ")}`);
   }
 
