@@ -46,6 +46,12 @@ export async function POST(req: NextRequest) {
     limit: 20,
     windowMs: 60_000,
   });
+  if (process.env.NODE_ENV === "production" && rl.source === "memory") {
+    await reportError(
+      new Error("Distributed rate limiter unavailable; using local chat quota"),
+      "api.chat.ratelimit",
+    );
+  }
   if (!rl.ok) {
     return new Response("Too many requests", {
       status: 429,
@@ -93,8 +99,26 @@ export async function POST(req: NextRequest) {
   const encoder = new TextEncoder();
   const write = (obj: unknown) => encoder.encode(JSON.stringify(obj) + "\n");
 
+  let cancelled = req.signal.aborted;
+  const generationAbort = new AbortController();
+  const abortGeneration = () => {
+    cancelled = true;
+    generationAbort.abort();
+  };
+  req.signal.addEventListener("abort", abortGeneration, { once: true });
+
   const stream = new ReadableStream({
     async start(controller) {
+      const enqueue = (value: Uint8Array) => {
+        if (cancelled) return false;
+        try {
+          controller.enqueue(value);
+          return true;
+        } catch {
+          abortGeneration();
+          return false;
+        }
+      };
       try {
         let result = preflightSafetyAnswer(message, locale);
         let normalizedQuery = message;
@@ -114,7 +138,12 @@ export async function POST(req: NextRequest) {
             locale,
             normalizedQuery: locale === "en" ? undefined : normalizedQuery,
           });
-          const generated = streamAnswer({ query: message, locale, chunks });
+          const generated = streamAnswer({
+            query: message,
+            locale,
+            chunks,
+            signal: generationAbort.signal,
+          });
           // Generation stays buffered until its citations/tool calls pass the
           // safety gate. The browser receives one atomic terminal payload.
           for await (const _delta of generated.textStream) {
@@ -122,6 +151,7 @@ export async function POST(req: NextRequest) {
           }
           result = await generated.final();
         }
+        if (cancelled) return;
         const deterministicIssue =
           detectHighStakesIssue(message) ?? detectHighStakesIssue(normalizedQuery);
         result.escalated = result.escalated || Boolean(deterministicIssue);
@@ -267,7 +297,7 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        controller.enqueue(
+        const delivered = enqueue(
           write({
             type: "done",
             text: result.text,
@@ -280,6 +310,7 @@ export async function POST(req: NextRequest) {
             referralExpiresAt: referralExpiresAt ?? null,
           }),
         );
+        if (!delivered) return;
         await track(
           {
             type: "message_sent",
@@ -290,13 +321,24 @@ export async function POST(req: NextRequest) {
           { sessionId: sid },
         );
       } catch (err) {
+        if (cancelled || generationAbort.signal.aborted) return;
         await reportError(err, "api.chat");
-        controller.enqueue(
+        enqueue(
           write({ type: "error", message: "Unable to answer safely right now." }),
         );
       } finally {
-        controller.close();
+        req.signal.removeEventListener("abort", abortGeneration);
+        if (!cancelled) {
+          try {
+            controller.close();
+          } catch {
+            // The browser may have cancelled between the last enqueue and close.
+          }
+        }
       }
+    },
+    cancel() {
+      abortGeneration();
     },
   });
 

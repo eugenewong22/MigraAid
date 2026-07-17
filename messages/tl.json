@@ -17,6 +17,7 @@
     "disclaimer": "Nagbibigay ang MigraAid ng pangkalahatang impormasyon, hindi legal na payo. Para sa iyong partikular na sitwasyon, makipag-ugnayan sa isang caseworker sa isang partner na organisasyon. Sa emergency, gamitin ang pahina ng Mga Emergency Contact."
   },
   "nav": {
+    "primary": "Pangunahing nabigasyon",
     "ask": "Magtanong",
     "contract": "Aking kontrata",
     "emergency": "Emergency"
@@ -46,6 +47,7 @@
     "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito."
   },
   "emergency": {
+    "sms": "SMS {number}",
     "title": "Mga emergency contact",
     "intro": "Kung nasa panganib ka, tumawag sa 999 (Pulisya) o 995 (Ambulansya/Bumbero) ngayon.",
     "urgent": "Emergency",

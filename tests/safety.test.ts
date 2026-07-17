@@ -77,6 +77,17 @@ describe("scrubPii", () => {
     expect(result).not.toContain("01712");
   });
 
+  it("redacts spaced identity numbers, postal codes, and contextual prose PII", () => {
+    const result = scrubPii(
+      "My boss Mr Tan of Hin Leong Marine lives at 12 Tuas Road Singapore 638486. FIN G 123 456 7 N.",
+    );
+    expect(result).not.toContain("Tan");
+    expect(result).not.toContain("Hin Leong Marine");
+    expect(result).not.toContain("12 Tuas Road");
+    expect(result).not.toContain("638486");
+    expect(result).not.toContain("G 123 456 7 N");
+  });
+
   it("leaves ordinary guidance text and short numbers intact", () => {
     expect(scrubPii("Salary must be paid within 7 days.")).toBe(
       "Salary must be paid within 7 days.",

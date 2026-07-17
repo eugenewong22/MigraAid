@@ -1,0 +1,66 @@
+name: Eval
+
+# Domain-accuracy gate for the RAG pipeline. Unlike the deterministic subset in
+# tests/eval-golden.test.ts (which runs in CI on every PR), the full harness
+# (scripts/eval/run.ts) exercises real retrieval + generation against the
+# ingested corpus, so it needs a database and provider credentials. It runs on a
+# schedule, on demand, and on release tags — and fails the run if accuracy,
+# citation, or grounding checks regress.
+on:
+  schedule:
+    # Weekly, Monday 03:00 UTC.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: migraaid_eval
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/migraaid_eval
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Fail early if no inference key is configured
+        run: |
+          if [ -z "$OPENAI_API_KEY" ] && [ -z "$VOYAGE_API_KEY" ]; then
+            echo "::error::The eval gate needs OPENAI_API_KEY (and optionally VOYAGE_API_KEY) repository secrets."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply migrations
+        run: pnpm db:migrate
+
+      - name: Ingest the corpus
+        run: pnpm ingest
+
+      - name: Run the eval gate
+        run: pnpm eval

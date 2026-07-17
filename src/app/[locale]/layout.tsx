@@ -6,6 +6,9 @@ import { routing } from "@/i18n/routing";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "../globals.css";
 
+// Per-request CSP nonces cannot be applied to build-time static HTML.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "MigraAid",
   description:

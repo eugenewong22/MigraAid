@@ -53,13 +53,13 @@ function splitOversizedParagraph(paragraph: string, maxChars: number): string[] 
       index >= minimumUsefulBreak;
       index -= 1
     ) {
-      if (/[\s.!?。！？।,;:，；：]/u.test(window[index])) {
+      if (/[\s.!?。！？။၊။ฯ,;:，；：]/u.test(window[index])) {
         splitAt = index + 1;
         break;
       }
     }
 
-    if (splitAt <= 0) splitAt = maxChars;
+    if (splitAt <= 0) splitAt = graphemeSafeSplitAt(remaining, maxChars);
     const piece = remaining.slice(0, splitAt).trim();
     if (piece) pieces.push(piece);
     remaining = remaining.slice(splitAt).trim();
@@ -67,4 +67,18 @@ function splitOversizedParagraph(paragraph: string, maxChars: number): string[] 
 
   if (remaining) pieces.push(remaining);
   return pieces;
+}
+
+function graphemeSafeSplitAt(text: string, maxChars: number): number {
+  if (typeof Intl.Segmenter !== "function") {
+    const codePoints = Array.from(text.slice(0, maxChars));
+    return codePoints.join("").length;
+  }
+  const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+  let splitAt = 0;
+  for (const segment of segmenter.segment(text)) {
+    if (segment.index + segment.segment.length > maxChars) break;
+    splitAt = segment.index + segment.segment.length;
+  }
+  return splitAt || Array.from(text)[0]?.length || 1;
 }

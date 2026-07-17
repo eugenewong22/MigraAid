@@ -2,6 +2,16 @@
    assets. Authenticated/admin/API/RSC responses must never enter Cache Storage. */
 const CACHE = "migraaid-v4";
 const LOCALES = ["en", "bn", "ta", "tl", "zh", "id", "th", "my"];
+const OFFLINE_EMERGENCY = {
+  en: "Emergency contacts are unavailable offline.",
+  bn: "অফলাইনে জরুরি যোগাযোগ পাওয়া যাচ্ছে না।",
+  ta: "இணையமின்றி அவசரத் தொடர்புகள் கிடைக்கவில்லை.",
+  tl: "Hindi available offline ang mga emergency contact.",
+  zh: "离线时无法获取紧急联系方式。",
+  id: "Kontak darurat tidak tersedia saat offline.",
+  th: "ไม่สามารถดูรายชื่อติดต่อฉุกเฉินขณะออฟไลน์ได้",
+  my: "အော့ဖ်လိုင်းတွင် အရေးပေါ်ဆက်သွယ်ရန်များကို မရနိုင်ပါ။",
+};
 const PUBLIC_DOCUMENTS = new Set([
   "/",
   ...LOCALES.flatMap((locale) => [`/${locale}`, `/${locale}/emergency`]),
@@ -76,7 +86,7 @@ self.addEventListener("fetch", (event) => {
           const cached = await caches.match(request);
           return (
             cached ??
-            new Response("Emergency contacts are unavailable offline.", {
+            new Response(OFFLINE_EMERGENCY[url.pathname.split("/")[1]] ?? OFFLINE_EMERGENCY.en, {
               status: 503,
               headers: { "content-type": "text/plain; charset=utf-8" },
             })

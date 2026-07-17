@@ -120,7 +120,7 @@ export function ContractUpload() {
           />
           <label
             htmlFor="contract-file"
-            className="flex min-h-[64px] cursor-pointer items-center justify-center gap-2.5 rounded-[12px] bg-navy px-4 text-center text-[18px] font-bold text-white transition-colors hover:bg-navy-hover peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-sky peer-focus-visible:ring-offset-2"
+            className="flex min-h-[64px] cursor-pointer items-center justify-center gap-2.5 rounded-[12px] bg-navy px-4 text-center text-[18px] font-bold text-white transition-colors hover:bg-navy-hover peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-navy peer-focus-visible:ring-offset-2"
           >
             <span aria-hidden="true">📷</span>
             {busy ? t("analyzing") : t("upload")}
@@ -152,13 +152,19 @@ export function ContractUpload() {
         </div>
 
         {/* Right: results */}
-        {analysis && (
-          <div
-            className="flex flex-col gap-[22px] lg:border-l lg:border-hairline lg:pl-10"
-            role="region"
-            aria-labelledby="contract-summary-heading"
-            aria-live="polite"
-          >
+        <div
+          className={
+            analysis
+              ? "flex flex-col gap-[22px] lg:border-l lg:border-hairline lg:pl-10"
+              : "sr-only"
+          }
+          role="region"
+          aria-labelledby={analysis ? "contract-summary-heading" : undefined}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {analysis && (
+            <>
             {analysis.saved === true && (
               <p
                 className="rounded-[10px] bg-saved-bg px-4 py-3 text-[14px] text-saved-text"
@@ -252,8 +258,9 @@ export function ContractUpload() {
                 </Link>
               )}
             </section>
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

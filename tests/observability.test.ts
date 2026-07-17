@@ -12,11 +12,17 @@ describe("sanitizeSentryEvent", () => {
         data: "raw input",
         query_string: "name=worker",
       },
-      exception: { values: [{ value: "Call +65 9123 4567" }] },
+      exception: {
+        values: [
+          { value: "Call +65 9123 4567. My boss Mr Tan of Example Marine." },
+        ],
+      },
     });
     expect(event.user).toBeUndefined();
     expect(event.request?.headers).toBeUndefined();
     expect(event.request?.data).toBeUndefined();
     expect(event.exception?.values?.[0].value).not.toContain("9123");
+    expect(event.exception?.values?.[0].value).not.toContain("Tan");
+    expect(event.exception?.values?.[0].value).not.toContain("Example Marine");
   });
 });

@@ -63,7 +63,6 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | Sentry | Privacy-sanitized server/client error reporting (optional) |
 | `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | Sentry | Source-map upload during production builds (optional) |
 | `NEXT_PUBLIC_POSTHOG_KEY`, `POSTHOG_HOST` | PostHog/self-hosted | Person-profile-free aggregate events with unlinkable per-event IDs (optional) |
-| `LANGFUSE_*` | Langfuse | LLM tracing (not yet wired) |
 | `UPSTASH_REDIS_REST_URL`, `..._TOKEN`, `RATE_LIMIT_HASH_SALT` | Upstash Redis | Fleet-wide API rate limiting (required for production admin sign-in) |
 
 Copy `.env.example` → `.env.local` for local dev; set the same variables in the Vercel project

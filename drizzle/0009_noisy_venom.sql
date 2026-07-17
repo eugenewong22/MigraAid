@@ -1,0 +1,1 @@
+ALTER TABLE "feedback" DROP COLUMN "comment";

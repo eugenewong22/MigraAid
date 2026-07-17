@@ -182,6 +182,7 @@ export const referrals = pgTable("referrals", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   uniqueIndex("referrals_handoff_code_hash_uidx").on(table.handoffCodeHash),
+  index("referrals_conversation_idx").on(table.conversationId),
   index("referrals_created_at_idx").on(table.createdAt),
   index("referrals_expires_at_idx").on(table.expiresAt),
 ]).enableRLS();
@@ -197,7 +198,6 @@ export const feedback = pgTable("feedback", {
     .references(() => messages.id, { onDelete: "cascade" }),
   /** 1–5 satisfaction rating (KPI: 80%+ satisfied). */
   rating: integer("rating").notNull(),
-  comment: text("comment"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("feedback_conversation_idx").on(table.conversationId),

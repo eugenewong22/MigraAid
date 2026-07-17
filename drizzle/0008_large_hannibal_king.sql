@@ -1,0 +1,1 @@
+CREATE INDEX "referrals_conversation_idx" ON "referrals" USING btree ("conversation_id");

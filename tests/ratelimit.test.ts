@@ -3,6 +3,7 @@ import {
   rateLimit,
   clientKey,
   sensitiveRateLimitKey,
+  localRateLimitKey,
 } from "@/lib/ratelimit";
 
 afterEach(() => {
@@ -11,6 +12,13 @@ afterEach(() => {
 });
 
 describe("rateLimit", () => {
+  it("uses opaque keys for the in-memory fallback", () => {
+    const key = localRateLimitKey("chat:203.0.113.7", "test-salt");
+    expect(key).not.toContain("203.0.113.7");
+    expect(key).toHaveLength(64);
+    expect(key).toBe(localRateLimitKey("chat:203.0.113.7", "test-salt"));
+  });
+
   it("allows up to the limit then blocks within the window", async () => {
     const key = `test-${Math.random()}`;
     const opts = { limit: 3, windowMs: 60_000 };

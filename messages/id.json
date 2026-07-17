@@ -17,6 +17,7 @@
     "disclaimer": "MigraAid memberikan informasi umum, bukan nasihat hukum. Untuk situasi khusus Anda, hubungi petugas kasus di organisasi mitra. Dalam keadaan darurat, gunakan halaman Kontak Darurat."
   },
   "nav": {
+    "primary": "Navigasi utama",
     "ask": "Tanya",
     "contract": "Kontrak saya",
     "emergency": "Darurat"
@@ -46,6 +47,7 @@
     "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya."
   },
   "emergency": {
+    "sms": "SMS {number}",
     "title": "Kontak darurat",
     "intro": "Jika Anda dalam bahaya, hubungi 999 (Polisi) atau 995 (Ambulans/Pemadam) sekarang.",
     "urgent": "Darurat",

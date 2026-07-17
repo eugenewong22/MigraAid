@@ -57,6 +57,20 @@
       "when": 1784024238697,
       "tag": "0007_canonical_source_urls",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1784120300175,
+      "tag": "0008_large_hannibal_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1784121333203,
+      "tag": "0009_noisy_venom",
+      "breakpoints": true
     }
   ]
 }

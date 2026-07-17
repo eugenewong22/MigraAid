@@ -9,6 +9,8 @@ interface Citation {
   sourceRef: string;
   sourceUrl?: string;
   quote?: string;
+  /** 1-based source number matching the [n] marker in the answer text. */
+  sourceNumber?: number;
 }
 
 interface Referral {
@@ -40,12 +42,30 @@ export function Chat() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [liveMessage, setLiveMessage] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
+  const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages]);
+
+  useEffect(
+    () => () => {
+      if (announceTimer.current) clearTimeout(announceTimer.current);
+    },
+    [],
+  );
+
+  // Announce one message (loading, or the completed answer) through a single
+  // polite live region, then clear it so screen-reader users don't re-read the
+  // text while navigating the transcript. Streaming chunks are never announced.
+  function announce(message: string) {
+    setLiveMessage(message);
+    if (announceTimer.current) clearTimeout(announceTimer.current);
+    announceTimer.current = setTimeout(() => setLiveMessage(""), 1200);
+  }
 
   function updateLast(patch: (m: ChatMessage) => ChatMessage) {
     setMessages((prev) => {
@@ -106,6 +126,7 @@ export function Chat() {
       { role: "assistant", text: "" },
     ]);
     setBusy(true);
+    announce(t("loading"));
 
     try {
       const res = await fetch("/api/chat", {
@@ -144,6 +165,7 @@ export function Chat() {
               referralCode: evt.referralCode,
               referralExpiresAt: evt.referralExpiresAt,
             }));
+            announce(evt.text);
           } else if (evt.type === "error") {
             completed = true;
             updateLast((m) => ({ ...m, text: t("error"), failed: true }));
@@ -159,13 +181,15 @@ export function Chat() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-6 py-9">
+    <div className="flex flex-col gap-6 py-9">
+      <p aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveMessage}
+      </p>
       <div
         ref={logRef}
-        className="mx-auto flex w-full max-w-[860px] flex-1 flex-col gap-5"
+        className="mx-auto flex max-h-[60dvh] min-h-64 w-full max-w-[860px] flex-col gap-5 overflow-y-auto overscroll-contain"
         role="log"
-        aria-live="polite"
-        aria-relevant="additions text"
+        aria-live="off"
         aria-busy={busy}
       >
         {messages.length === 0 && (
@@ -194,10 +218,7 @@ export function Chat() {
             >
               {m.text ||
                 (busy && i === messages.length - 1 ? (
-                  <>
-                    <span aria-hidden="true">…</span>
-                    <span className="sr-only">{t("loading")}</span>
-                  </>
+                  <span aria-hidden="true">…</span>
                 ) : (
                   ""
                 ))}
@@ -264,20 +285,27 @@ export function Chat() {
                     const href = sourceReferenceHref(c.sourceUrl ?? c.sourceRef);
                     return (
                       <li key={j} className="flex flex-col gap-1">
-                        {href ? (
-                          <a
-                            href={href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="break-words text-[14.5px] text-navy underline"
-                          >
-                            {c.sourceRef}
-                          </a>
-                        ) : (
-                          <span className="text-[14.5px] text-body">
-                            {c.sourceRef}
-                          </span>
-                        )}
+                        <div className="flex items-baseline gap-2">
+                          {typeof c.sourceNumber === "number" && (
+                            <span className="shrink-0 text-[13px] font-bold text-muted">
+                              [{c.sourceNumber}]
+                            </span>
+                          )}
+                          {href ? (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="break-words text-[14.5px] text-navy underline"
+                            >
+                              {c.sourceRef}
+                            </a>
+                          ) : (
+                            <span className="text-[14.5px] text-body">
+                              {c.sourceRef}
+                            </span>
+                          )}
+                        </div>
                         {c.quote && (
                           <details>
                             <summary className="cursor-pointer text-[13.5px] text-muted">
@@ -323,7 +351,7 @@ export function Chat() {
                     onClick={() => sendFeedback(5, i, m.messageId!)}
                     disabled={m.feedbackPending}
                     aria-label={t("feedbackYes")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-50"
                   >
                     👍
                   </button>
@@ -332,7 +360,7 @@ export function Chat() {
                     onClick={() => sendFeedback(1, i, m.messageId!)}
                     disabled={m.feedbackPending}
                     aria-label={t("feedbackNo")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-50"
                   >
                     👎
                   </button>
@@ -359,14 +387,14 @@ export function Chat() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={t("placeholder")}
             maxLength={1000}
-            className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
+            className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
             disabled={busy}
             aria-describedby="chat-privacy"
           />
           <button
             type="submit"
             disabled={busy || !input.trim()}
-            className="min-h-[52px] rounded-[12px] bg-navy px-7 text-[17px] font-bold text-white transition-colors hover:bg-navy-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 disabled:opacity-50"
+            className="min-h-[52px] rounded-[12px] bg-navy px-7 text-[17px] font-bold text-white transition-colors hover:bg-navy-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 disabled:opacity-50"
           >
             {t("send")}
           </button>

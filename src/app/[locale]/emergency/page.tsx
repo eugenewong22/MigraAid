@@ -94,9 +94,9 @@ export default async function EmergencyPage({
                       <a
                         href={contactHref(c)}
                         aria-label={t(`contacts.${c.id}.name`) + ": " + c.number}
-                        className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full bg-surface px-4 text-[15.5px] font-bold text-navy transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2"
+                        className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full bg-surface px-4 text-[15.5px] font-bold text-navy transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2"
                       >
-                        {isSms ? `SMS ${c.number}` : c.number}
+                        {isSms ? t("sms", { number: c.number }) : c.number}
                       </a>
                     </li>
                   );
@@ -107,7 +107,7 @@ export default async function EmergencyPage({
         })}
       </div>
 
-      <p className="px-6 text-[13px] text-faint md:px-12">{t("verifyNote")}</p>
+      <p className="px-6 text-[13px] text-muted md:px-12">{t("verifyNote")}</p>
       <p className="px-6 pb-6 pt-3 text-[13px] leading-[1.5] text-muted md:px-12">
         {th("disclaimer")}
       </p>

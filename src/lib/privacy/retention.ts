@@ -8,7 +8,7 @@ import {
 } from "@/lib/db/schema";
 
 export const DEFAULT_RETENTION_DAYS = 30;
-export const MAX_RETENTION_DAYS = 90;
+export const MAX_RETENTION_DAYS = 30;
 
 export function retentionCutoff(
   now = new Date(),

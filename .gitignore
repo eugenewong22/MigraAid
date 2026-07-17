@@ -41,3 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local design handoff artifacts
+/design_handoff_migraaid_redesign/

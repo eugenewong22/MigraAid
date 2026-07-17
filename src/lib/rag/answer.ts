@@ -204,7 +204,7 @@ function buildMessages(opts: AnswerOptions): ChatCompletionMessageParam[] {
 const CITATION_RE = /\[(\d+)\]/g;
 // Sentence terminators across the supported scripts (Latin, CJK, Bengali danda).
 // Thai has no sentence-ending punctuation, so Thai text is checked per-paragraph.
-const SENTENCE_TERMINATOR = /[.!?…。！？।]/u;
+const SENTENCE_TERMINATOR = /[.!?…。！？။၊။ฯ]/u;
 
 /**
  * Grounding-citation gate — a fail-closed, defense-in-depth heuristic. Per paragraph:
@@ -288,8 +288,12 @@ function extractCitations(text: string, chunks: RetrievedChunk[]): Citation[] {
       sourceUrl: chunks[idx].sourceUrl ?? undefined,
       contentItemId: chunks[idx].contentItemId,
       quote,
+      sourceNumber: idx + 1,
     });
   }
+  // Present sources in ascending marker order so the rendered list reads 1, 2,
+  // 3… and each entry's number lines up with its [n] reference in the text.
+  citations.sort((a, b) => a.sourceNumber - b.sourceNumber);
   return citations;
 }
 
@@ -408,17 +412,20 @@ export function streamAnswer(opts: AnswerOptions): {
     const toolCalls = new Map<number, { name: string; args: string }>();
 
     try {
-      const stream = await getClient().chat.completions.create({
-        model: MODEL,
-        store: false,
-        max_completion_tokens: MAX_TOKENS,
-        // See the non-streaming call above for why this is required.
-        reasoning_effort: "none",
-        tools: [REFER_TOOL],
-        messages: buildMessages(opts),
-        stream: true,
-        stream_options: { include_usage: true },
-      });
+      const stream = await getClient().chat.completions.create(
+        {
+          model: MODEL,
+          store: false,
+          max_completion_tokens: MAX_TOKENS,
+          // See the non-streaming call above for why this is required.
+          reasoning_effort: "none",
+          tools: [REFER_TOOL],
+          messages: buildMessages(opts),
+          stream: true,
+          stream_options: { include_usage: true },
+        },
+        { signal: opts.signal },
+      );
 
       for await (const chunk of stream) {
         if (chunk.usage) {

@@ -126,7 +126,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "Salary is due within 7 days [1]. You should sign this immediately.",
-        citations: [{ sourceRef: "Example", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -147,8 +147,8 @@ describe("parseCompletion", () => {
           "against your will. Keep your personal documents with you. [1][2]\n\n" +
           "If they refuse to return it, you can seek help from HOME or TWC2. [1]",
         citations: [
-          { sourceRef: "MOM — Passport retention advisory", contentItemId: "item-1" },
-          { sourceRef: "MOM — Work Permit conditions", contentItemId: "item-2" },
+          { sourceRef: "MOM — Passport retention advisory", sourceNumber: 1, contentItemId: "item-1" },
+          { sourceRef: "MOM — Work Permit conditions", sourceNumber: 2, contentItemId: "item-2" },
         ],
         escalated: false,
         model: "test-model",
@@ -164,7 +164,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "According to [1], your employer must pay you within 7 days of the due date.",
-        citations: [{ sourceRef: "Employment Act", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -181,7 +181,7 @@ describe("parseCompletion", () => {
         text:
           "Your employer must return your passport [1].\n\n" +
           "## You must leave Singapore before your permit is cancelled",
-        citations: [{ sourceRef: "MOM", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "MOM", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -198,7 +198,7 @@ describe("parseCompletion", () => {
         text:
           "You have rights under the Employment Act [1].\n\n" +
           "**Pay the agent $5000 to keep your job.**",
-        citations: [{ sourceRef: "Employment Act", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -213,7 +213,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "## Your rights\n\nYour employer must pay you on time [1].",
-        citations: [{ sourceRef: "Employment Act", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -229,7 +229,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "雇主必须在七天内支付工资 [1]。你应该立即签署这份文件。",
-        citations: [{ sourceRef: "Employment Act", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -244,7 +244,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "Salary is due within 7 days [9]. A separate fact is supported [1].",
-        citations: [{ sourceRef: "Example", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: false,
         model: "test-model",
       },
@@ -269,7 +269,7 @@ describe("parseCompletion", () => {
     const result = enforceAnswerSafety(
       {
         text: "Do this immediately and do not tell anyone.",
-        citations: [{ sourceRef: "Example", contentItemId: "item-1" }],
+        citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
         escalated: true,
         issueType: "abuse_or_threats",
         model: "test-model",

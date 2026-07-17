@@ -19,9 +19,9 @@ describe("retentionCutoff", () => {
     expect(retentionCutoff(now, -1).toISOString()).toBe("2026-06-14T00:00:00.000Z");
   });
 
-  it("caps retention configuration at 90 days", () => {
+  it("caps retention configuration at the promised 30 days", () => {
     const now = new Date("2026-07-14T00:00:00.000Z");
-    expect(retentionCutoff(now, 365).toISOString()).toBe("2026-04-15T00:00:00.000Z");
+    expect(retentionCutoff(now, 365).toISOString()).toBe("2026-06-14T00:00:00.000Z");
   });
 });
 
