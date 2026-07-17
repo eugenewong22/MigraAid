@@ -1,9 +1,30 @@
 import { isCronSecretConfigured } from "@/lib/privacy/cron";
+import journal from "../../../drizzle/meta/_journal.json";
 
 export interface KnowledgeReadiness {
   ready: boolean;
   publishedItems: number;
   indexedItems: number;
+}
+
+/** Number of migrations the code in this build expects to be applied. */
+export const EXPECTED_MIGRATIONS = journal.entries.length;
+
+/**
+ * The vercel-build migration gate only runs on a real production build.
+ * Vercel's "Promote to Production" reuses an existing preview build (which
+ * deliberately skips migrations), so promoted code can reach production against
+ * a schema missing its migrations — exactly the outage the gate exists to
+ * prevent. Comparing the applied count in drizzle.__drizzle_migrations against
+ * the journal bundled with this build lets the readiness probe fail such a
+ * deploy before it takes traffic. `>=` because a newer deploy may already have
+ * migrated further ahead (additive schema, old code is fine).
+ */
+export function hasAllMigrationsApplied(
+  appliedCount: number,
+  expected: number = EXPECTED_MIGRATIONS,
+): boolean {
+  return Number.isFinite(appliedCount) && appliedCount >= expected;
 }
 
 /**

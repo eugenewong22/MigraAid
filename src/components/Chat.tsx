@@ -44,6 +44,7 @@ export function Chat() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [liveMessage, setLiveMessage] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -126,6 +127,9 @@ export function Chat() {
       { role: "assistant", text: "" },
     ]);
     setBusy(true);
+    // Keep focus in the composer: the Send button is about to disable, and a
+    // disabled element silently drops keyboard/screen-reader focus to the page.
+    inputRef.current?.focus();
     announce(t("loading"));
 
     try {
@@ -149,7 +153,13 @@ export function Chat() {
         buffer = lines.pop() ?? "";
         for (const line of lines) {
           if (!line.trim()) continue;
-          const evt = JSON.parse(line);
+          let evt;
+          try {
+            evt = JSON.parse(line);
+          } catch {
+            // One malformed frame must not abort the rest of the stream.
+            continue;
+          }
           if (evt.type === "text") {
             updateLast((m) => ({ ...m, text: m.text + evt.text }));
           } else if (evt.type === "done") {
@@ -168,13 +178,17 @@ export function Chat() {
             announce(evt.text);
           } else if (evt.type === "error") {
             completed = true;
-            updateLast((m) => ({ ...m, text: t("error"), failed: true }));
+            // Keep any partial answer already shown — replacing it with the
+            // error wording deletes half-useful text on a flaky connection.
+            updateLast((m) => ({ ...m, failed: true }));
+            announce(t("error"));
           }
         }
       }
       if (!completed) throw new Error("incomplete response");
     } catch {
-      updateLast((m) => ({ ...m, text: t("error"), failed: true }));
+      updateLast((m) => ({ ...m, failed: true }));
+      announce(t("error"));
     } finally {
       setBusy(false);
     }
@@ -214,7 +228,6 @@ export function Chat() {
                   ? "whitespace-pre-wrap"
                   : "whitespace-pre-wrap text-[17px] leading-[1.55] text-ink"
               }
-              role={m.failed ? "alert" : undefined}
             >
               {m.text ||
                 (busy && i === messages.length - 1 ? (
@@ -223,6 +236,15 @@ export function Chat() {
                   ""
                 ))}
             </p>
+
+            {m.failed && (
+              <p
+                role="alert"
+                className="text-[15px] leading-[1.45] text-emergency"
+              >
+                {t("error")}
+              </p>
+            )}
 
             {m.escalated && (
               <div className="rounded-[10px] bg-warn-bg px-3.5 py-2.5 text-[15px] leading-[1.45] text-warn-text">
@@ -331,7 +353,14 @@ export function Chat() {
               i === messages.length - 1 &&
               !busy &&
               (m.rated ? (
-                <p className="text-[13px] text-muted" role="status">
+                // Focused on mount: it replaces the feedback button the user
+                // just activated, whose removal would otherwise drop focus.
+                <p
+                  className="text-[13px] text-muted focus:outline-none"
+                  role="status"
+                  tabIndex={-1}
+                  ref={(el) => el?.focus()}
+                >
                   {t("thanks")}
                 </p>
               ) : (
@@ -346,21 +375,29 @@ export function Chat() {
                   >
                     {t("helpful")}
                   </span>
+                  {/* Guarded in the handler, not `disabled`: disabling the
+                      focused button while the request runs drops focus. */}
                   <button
                     type="button"
-                    onClick={() => sendFeedback(5, i, m.messageId!)}
-                    disabled={m.feedbackPending}
+                    onClick={() => {
+                      if (m.feedbackPending) return;
+                      sendFeedback(5, i, m.messageId!);
+                    }}
+                    aria-disabled={m.feedbackPending || undefined}
                     aria-label={t("feedbackYes")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-50"
+                    className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy ${m.feedbackPending ? "opacity-50" : ""}`}
                   >
                     👍
                   </button>
                   <button
                     type="button"
-                    onClick={() => sendFeedback(1, i, m.messageId!)}
-                    disabled={m.feedbackPending}
+                    onClick={() => {
+                      if (m.feedbackPending) return;
+                      sendFeedback(1, i, m.messageId!);
+                    }}
+                    aria-disabled={m.feedbackPending || undefined}
                     aria-label={t("feedbackNo")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy disabled:opacity-50"
+                    className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy ${m.feedbackPending ? "opacity-50" : ""}`}
                   >
                     👎
                   </button>
@@ -380,15 +417,17 @@ export function Chat() {
           <label htmlFor="chat-question" className="sr-only">
             {t("questionLabel")}
           </label>
+          {/* Never disabled: disabling the focused field on submit dumps focus
+              to the page; send() ignores submissions while busy instead. */}
           <input
             id="chat-question"
             name="question"
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t("placeholder")}
             maxLength={1000}
             className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
-            disabled={busy}
             aria-describedby="chat-privacy"
           />
           <button

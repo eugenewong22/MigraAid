@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  EXPECTED_MIGRATIONS,
+  hasAllMigrationsApplied,
   knowledgeReadiness,
   isInferenceConfigured,
   isRetentionConfigured,
 } from "@/lib/health/readiness";
+import journal from "../drizzle/meta/_journal.json";
 
 const env = (overrides: Record<string, string>) =>
   overrides as unknown as NodeJS.ProcessEnv;
@@ -20,6 +23,26 @@ describe("inference readiness", () => {
   it("is ready only when an OpenAI key is present", () => {
     expect(isInferenceConfigured(env({ OPENAI_API_KEY: "sk-test" }))).toBe(true);
     expect(isInferenceConfigured(env({}))).toBe(false);
+  });
+});
+
+describe("migration readiness", () => {
+  it("tracks the checked-in migration journal", () => {
+    expect(EXPECTED_MIGRATIONS).toBe(journal.entries.length);
+    expect(EXPECTED_MIGRATIONS).toBeGreaterThan(0);
+  });
+
+  it("reports a promoted build running ahead of the database as not ready", () => {
+    expect(hasAllMigrationsApplied(EXPECTED_MIGRATIONS - 1)).toBe(false);
+    expect(hasAllMigrationsApplied(EXPECTED_MIGRATIONS)).toBe(true);
+    // A newer deploy may already have migrated further ahead; additive schema
+    // with older code stays healthy.
+    expect(hasAllMigrationsApplied(EXPECTED_MIGRATIONS + 1)).toBe(true);
+  });
+
+  it("fails closed on a missing or malformed count", () => {
+    expect(hasAllMigrationsApplied(Number.NaN)).toBe(false);
+    expect(hasAllMigrationsApplied(0)).toBe(false);
   });
 });
 

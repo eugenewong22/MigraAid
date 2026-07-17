@@ -8,6 +8,7 @@ export function DeleteMyData() {
   const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
 
   async function remove() {
+    if (state === "busy") return;
     if (!window.confirm(t("confirm"))) return;
     setState("busy");
     try {
@@ -21,7 +22,14 @@ export function DeleteMyData() {
 
   if (state === "done") {
     return (
-      <p className="text-[13px] text-saved-text" role="status">
+      // Focused on mount: it replaces the button the user just activated,
+      // whose removal would otherwise drop focus to the page.
+      <p
+        className="text-[13px] text-saved-text focus:outline-none"
+        role="status"
+        tabIndex={-1}
+        ref={(el) => el?.focus()}
+      >
         {t("deleted")}
       </p>
     );
@@ -29,11 +37,13 @@ export function DeleteMyData() {
 
   return (
     <div className="text-[13px]">
+      {/* Guarded in the handler, not `disabled`: disabling the focused button
+          while the request runs drops focus. */}
       <button
         type="button"
         onClick={remove}
-        disabled={state === "busy"}
-        className="inline-flex min-h-11 items-center text-muted underline transition-colors hover:text-body disabled:opacity-50"
+        aria-disabled={state === "busy" || undefined}
+        className={`inline-flex min-h-11 items-center text-muted underline transition-colors hover:text-body ${state === "busy" ? "opacity-50" : ""}`}
       >
         {state === "busy" ? t("deleting") : t("delete")}
       </button>

@@ -89,6 +89,7 @@
     "title": "Ipaliwanag ang aking kontrata",
     "upload": "I-upload o kunan ng larawan ang iyong kontrata",
     "analyzing": "Binabasa ang iyong kontrata…",
+    "analysisReady": "Handa na ang pagsusuri ng iyong kontrata.",
     "privacy": "Ligtas na ipinapadala ang iyong larawan sa isang AI provider para suriin. Hindi iniimbak ng MigraAid ang larawan o hilaw na tekstong binasa mula sa kontrata. Maaaring magpanatili ang AI provider ng mga safety log nang hanggang 30 araw.",
     "saveAnalysis": "I-save ang nagawang pagsusuri nang hanggang 30 araw. Buod, mahahalagang tuntunin, at mga puntong dapat suriin lamang ang iniimbak ng MigraAid—hindi ang iyong larawan o tekstong binasa mula sa kontrata. Maaari mong burahin ang naka-save na pagsusuri sa ibang pagkakataon mula sa device na ito.",
     "savedConfirmation": "Na-save nang hanggang 30 araw ang iyong buod, mahahalagang tuntunin, at mga puntong dapat suriin. Hindi na-save ang iyong larawan o tekstong binasa mula sa kontrata.",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
@@ -53,11 +53,23 @@ export function ContractUpload() {
   const [saveAnalysis, setSaveAnalysis] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [error, setError] = useState("");
+  const summaryHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move keyboard/screen-reader focus to the results when they arrive; the
+  // upload control keeps focus during analysis (it is never disabled, which
+  // would silently drop focus to the document).
+  useEffect(() => {
+    if (analysis) summaryHeadingRef.current?.focus();
+  }, [analysis]);
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
     const input = e.currentTarget;
+    if (busy) {
+      input.value = "";
+      return;
+    }
     setError("");
     setAnalysis(null);
     const validationError = validateContractUpload(file);
@@ -115,7 +127,6 @@ export function ContractUpload() {
             accept={CONTRACT_UPLOAD_IMAGE_TYPES.join(",")}
             onChange={onFile}
             className="peer sr-only"
-            disabled={busy}
             aria-describedby="contract-privacy contract-save-analysis"
           />
           <label
@@ -135,15 +146,16 @@ export function ContractUpload() {
               checked={saveAnalysis}
               onChange={(event) => setSaveAnalysis(event.target.checked)}
               className="mt-0.5 h-5 w-5 shrink-0 accent-navy"
-              disabled={busy}
             />
             <span>{t("saveAnalysis")}</span>
           </label>
-          {busy && (
-            <p className="sr-only" role="status">
-              {t("analyzing")}
-            </p>
-          )}
+          {/* Single persistent status region: announces progress and then a
+              short "ready" cue — never the whole analysis (the results region
+              below is deliberately NOT live so screen-reader users can read it
+              at their own pace instead of hearing one atomic monologue). */}
+          <p className="sr-only" role="status">
+            {busy ? t("analyzing") : analysis ? t("analysisReady") : ""}
+          </p>
           {error && (
             <p className="text-[14px] text-emergency" role="alert">
               {error}
@@ -160,8 +172,6 @@ export function ContractUpload() {
           }
           role="region"
           aria-labelledby={analysis ? "contract-summary-heading" : undefined}
-          aria-live="polite"
-          aria-atomic="true"
         >
           {analysis && (
             <>
@@ -186,7 +196,12 @@ export function ContractUpload() {
               aria-labelledby="contract-summary-heading"
               className="flex flex-col gap-2"
             >
-              <h2 id="contract-summary-heading" className={SECTION_LABEL}>
+              <h2
+                id="contract-summary-heading"
+                ref={summaryHeadingRef}
+                tabIndex={-1}
+                className={`${SECTION_LABEL} focus:outline-none`}
+              >
                 {t("summary")}
               </h2>
               <p className="whitespace-pre-wrap text-[16.5px] leading-[1.55] text-ink">

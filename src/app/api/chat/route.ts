@@ -26,6 +26,7 @@ import {
   readBoundedJson,
   RequestBodyTooLargeError,
 } from "@/lib/http/body";
+import { isSameOriginRequest } from "@/lib/http/origin";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -42,6 +43,12 @@ const UUID_PATTERN =
  *   {"type":"error","message":"..."}                    (on failure)
  */
 export async function POST(req: NextRequest) {
+  // The JSON body reader accepts text/plain, which makes this endpoint callable
+  // as a preflight-free cross-site "simple request" — every state-changing
+  // worker route requires an explicit same-origin proof.
+  if (!isSameOriginRequest(req)) {
+    return new Response("Cross-origin requests are not allowed", { status: 403 });
+  }
   const rl = await rateLimit(`chat:${clientKey(req.headers)}`, {
     limit: 20,
     windowMs: 60_000,
@@ -250,15 +257,22 @@ export async function POST(req: NextRequest) {
               if (!existingActive) {
                 const code = generateHandoffCode();
                 const expiresAt = handoffCodeExpiry();
-                await tx.insert(referralsTable).values({
-                  conversationId: activeConversationId,
-                  issueType: result.issueType ?? "referral",
-                  org: referrals.map((referral) => referral.org).join(", "),
-                  outcome: "surfaced",
-                  handoffCodeHash: hashHandoffCode(code),
-                  expiresAt,
-                });
-                handoff = { code, expiresAt };
+                // The partial unique index on (conversation_id) WHERE NOT
+                // confirmed is the real guarantee; a concurrent turn that wins
+                // the race simply leaves this turn without a (duplicate) code.
+                const minted = await tx
+                  .insert(referralsTable)
+                  .values({
+                    conversationId: activeConversationId,
+                    issueType: result.issueType ?? "referral",
+                    org: referrals.map((referral) => referral.org).join(", "),
+                    outcome: "surfaced",
+                    handoffCodeHash: hashHandoffCode(code),
+                    expiresAt,
+                  })
+                  .onConflictDoNothing()
+                  .returning({ id: referralsTable.id });
+                if (minted.length > 0) handoff = { code, expiresAt };
               }
             }
 

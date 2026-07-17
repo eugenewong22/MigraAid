@@ -9,6 +9,7 @@ import {
   RequestBodyTooLargeError,
 } from "@/lib/http/body";
 import { reportError } from "@/lib/observability/sentry";
+import { isSameOriginRequest } from "@/lib/http/origin";
 
 export const runtime = "nodejs";
 
@@ -21,6 +22,15 @@ const UUID_PATTERN =
  * anonymous session. Free-text feedback is intentionally not accepted.
  */
 export async function POST(req: NextRequest) {
+  // SameSite=Lax on the session cookie already blocks cross-site submission;
+  // the explicit origin check keeps that protection non-implicit and uniform
+  // across every state-changing route.
+  if (!isSameOriginRequest(req)) {
+    return Response.json(
+      { error: "Cross-origin requests are not allowed" },
+      { status: 403 },
+    );
+  }
   const limited = await rateLimit(`feedback:${clientKey(req.headers)}`, {
     limit: 10,
     windowMs: 60_000,

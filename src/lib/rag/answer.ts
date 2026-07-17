@@ -101,7 +101,12 @@ function ungroundedAnswer(locale: string): RagAnswer {
   return {
     text: UNGROUNDED_RESPONSES[locale] ?? UNGROUNDED_RESPONSES.en,
     citations: [],
-    escalated: true,
+    // Like the injection refusal, this is a scope refusal, not a worker crisis:
+    // marking it escalated minted a real NGO referral row + handoff code for
+    // every "what's the weather" question (KPI inflation, retention exemption,
+    // emergency framing). Genuine crises are still escalated independently by
+    // the deterministic high-stakes detector on every turn.
+    escalated: false,
     issueType: "out_of_scope",
     model: "safety-policy",
   };

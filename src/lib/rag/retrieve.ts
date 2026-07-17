@@ -14,7 +14,7 @@
  * text is embedded for the vector search — the worker's original question is
  * still what the model sees and answers in when generating the response.
  */
-import { and, cosineDistance, desc, eq, sql } from "drizzle-orm";
+import { and, asc, cosineDistance, eq, sql } from "drizzle-orm";
 import OpenAI from "openai";
 import { getDb } from "@/lib/db";
 import { contentChunks, contentItems } from "@/lib/db/schema";
@@ -71,7 +71,13 @@ export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]>
   });
 
   const db = getDb();
-  const score = sql<number>`1 - (${cosineDistance(contentChunks.embedding, queryEmbedding)})`;
+  // ORDER BY must be the bare ascending distance expression: pgvector's HNSW
+  // index only serves `ORDER BY embedding <=> $q ASC LIMIT n`, and the planner
+  // will not rewrite the equivalent `DESC(1 - distance)` — that form forced a
+  // full sequential scan and sort on every chat turn as the corpus grows. The
+  // similarity score is still computed for the grounding threshold.
+  const distance = cosineDistance(contentChunks.embedding, queryEmbedding);
+  const score = sql<number>`1 - (${distance})`;
 
   return db
     .select({
@@ -92,6 +98,6 @@ export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]>
         opts.domain ? eq(contentItems.domain, opts.domain) : undefined,
       ),
     )
-    .orderBy(desc(score))
+    .orderBy(asc(distance))
     .limit(opts.limit ?? 6);
 }

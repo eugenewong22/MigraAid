@@ -106,7 +106,8 @@ describe("parseCompletion", () => {
       },
       "en",
     );
-    expect(result.escalated).toBe(true);
+    // A scope refusal, not an escalation: no NGO referral may be minted for it.
+    expect(result.escalated).toBe(false);
     expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("legal step");
     expect(result.usage?.totalTokens).toBe(120);
@@ -118,8 +119,9 @@ describe("parseCompletion", () => {
       "en",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
     expect(result.issueType).toBe("out_of_scope");
+    expect(result.text).toContain("verified source");
   });
 
   it("rejects a new uncited claim written after a paragraph's citation", () => {
@@ -133,7 +135,8 @@ describe("parseCompletion", () => {
       "en",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("sign this");
   });
 
@@ -188,7 +191,8 @@ describe("parseCompletion", () => {
       "en",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("leave Singapore");
   });
 
@@ -205,7 +209,8 @@ describe("parseCompletion", () => {
       "en",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("Pay the agent");
   });
 
@@ -236,7 +241,8 @@ describe("parseCompletion", () => {
       "zh",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("立即签署");
   });
 
@@ -251,7 +257,9 @@ describe("parseCompletion", () => {
       "en",
       1,
     );
-    expect(result.escalated).toBe(true);
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
+    expect(result.text).not.toContain("[9]");
   });
 
   it("escapes source delimiters before inserting retrieved text into the prompt", () => {
