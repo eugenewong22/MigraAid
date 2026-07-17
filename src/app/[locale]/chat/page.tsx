@@ -16,7 +16,7 @@ export default async function ChatPage({
     <main className="flex min-h-full flex-1 flex-col">
       <SiteHeader active="chat" breadcrumb={th("startChat")} />
       <h1 className="sr-only">{t("title")}</h1>
-      <div className="flex flex-1 flex-col px-6 md:px-12">
+      <div className="flex min-h-0 flex-1 flex-col px-6 md:px-12">
         <Chat />
       </div>
       <p className="px-6 pb-6 text-[13px] leading-[1.5] text-muted md:px-12">

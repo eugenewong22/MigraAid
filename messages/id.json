@@ -17,6 +17,7 @@
     "disclaimer": "MigraAid memberikan informasi umum, bukan nasihat hukum. Untuk situasi khusus Anda, hubungi petugas kasus di organisasi mitra. Dalam keadaan darurat, gunakan halaman Kontak Darurat."
   },
   "nav": {
+    "primary": "Navigasi utama",
     "ask": "Tanya",
     "contract": "Kontrak saya",
     "emergency": "Darurat"
@@ -46,6 +47,7 @@
     "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya."
   },
   "emergency": {
+    "sms": "SMS {number}",
     "title": "Kontak darurat",
     "intro": "Jika Anda dalam bahaya, hubungi 999 (Polisi) atau 995 (Ambulans/Pemadam) sekarang.",
     "urgent": "Darurat",
@@ -87,6 +89,7 @@
     "title": "Jelaskan kontrak saya",
     "upload": "Unggah atau foto kontrak Anda",
     "analyzing": "Membaca kontrak Anda…",
+    "analysisReady": "Analisis kontrak Anda sudah siap.",
     "privacy": "Foto Anda dikirim dengan aman ke penyedia AI untuk dianalisis. MigraAid tidak menyimpan foto atau teks mentah yang diekstrak dari kontrak. Penyedia AI dapat menyimpan log keamanan hingga 30 hari.",
     "saveAnalysis": "Simpan hasil analisis hingga 30 hari. MigraAid hanya menyimpan ringkasan, ketentuan utama, dan poin yang ditandai—bukan foto atau teks kontrak yang diekstrak. Anda dapat menghapus analisis tersimpan nanti dari perangkat ini.",
     "savedConfirmation": "Ringkasan, ketentuan utama, dan poin yang ditandai telah disimpan hingga 30 hari. Foto dan teks kontrak yang diekstrak tidak disimpan.",

@@ -42,4 +42,19 @@ describe("chunkMarkdown", () => {
     expect(chunks.every((chunk) => chunk.length <= 100)).toBe(true);
     expect(chunks.join("")).toBe("法".repeat(451));
   });
+
+  it("keeps emoji and combining-character graphemes intact on hard splits", () => {
+    const grapheme = "👩🏽‍🔧";
+    const chunks = chunkMarkdown(grapheme.repeat(30), { maxChars: 25 });
+    expect(chunks.join("")).toBe(grapheme.repeat(30));
+    expect(chunks.every((chunk) => !chunk.startsWith("\u200d"))).toBe(true);
+    expect(chunks.every((chunk) => !chunk.endsWith("\u200d"))).toBe(true);
+  });
+
+  it("recognizes Burmese and Thai break punctuation", () => {
+    const text = `${"က".repeat(60)}။${"ခ".repeat(60)}ฯ${"ဂ".repeat(60)}`;
+    const chunks = chunkMarkdown(text, { maxChars: 80 });
+    expect(chunks.join("")).toBe(text);
+    expect(chunks[0]).toMatch(/။$/u);
+  });
 });

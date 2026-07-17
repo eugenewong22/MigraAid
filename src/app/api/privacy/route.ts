@@ -1,11 +1,20 @@
 import type { NextRequest } from "next/server";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { clientKey, rateLimit } from "@/lib/ratelimit";
+import { isSameOriginRequest } from "@/lib/http/origin";
 
 export const runtime = "nodejs";
 
 /** Delete all records linkable to the caller's opaque worker session. */
 export async function DELETE(req: NextRequest) {
+  // Destructive and cookie-authenticated: require an explicit same-origin
+  // proof rather than relying on SameSite/preflight behaviour alone.
+  if (!isSameOriginRequest(req)) {
+    return Response.json(
+      { error: "Cross-origin requests are not allowed" },
+      { status: 403 },
+    );
+  }
   const sid = req.cookies.get("maid_sid")?.value;
   const ip = clientKey(req.headers);
   const [limited, networkLimited] = await Promise.all([

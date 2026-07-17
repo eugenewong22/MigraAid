@@ -17,6 +17,7 @@
     "disclaimer": "MigraAid gives general information, not legal advice. For your specific situation, contact a caseworker at a partner organisation. In an emergency, use the Emergency Contacts page."
   },
   "nav": {
+    "primary": "Primary navigation",
     "ask": "Ask",
     "contract": "My contract",
     "emergency": "Emergency"
@@ -46,6 +47,7 @@
     "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it."
   },
   "emergency": {
+    "sms": "SMS {number}",
     "title": "Emergency contacts",
     "intro": "If you are in danger, call 999 (Police) or 995 (Ambulance/Fire) now.",
     "urgent": "Emergency",
@@ -87,6 +89,7 @@
     "title": "Explain my contract",
     "upload": "Upload or photograph your contract",
     "analyzing": "Reading your contract…",
+    "analysisReady": "Your contract analysis is ready.",
     "privacy": "Your photo is securely sent to an AI provider for analysis. MigraAid does not store the photo or extracted contract text. The AI provider may retain safety logs for up to 30 days.",
     "saveAnalysis": "Save the derived analysis for up to 30 days. MigraAid stores only the summary, key terms, and flagged points—not your photo or extracted contract text. You can delete the saved analysis later from this device.",
     "savedConfirmation": "Your summary, key terms, and flagged points were saved for up to 30 days. Your photo and extracted contract text were not saved.",

@@ -36,6 +36,15 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
    pooler. Code therefore never ships ahead of the schema — a route querying a
    column its database doesn't have yet is a full outage, and this is the gate
    that prevents it. Preview builds skip migrations by design.
+
+   > **Do not use Vercel "Promote to Production"** (dashboard button or
+   > `vercel promote`) to ship a preview deployment: promotion reuses the
+   > preview build, so the migration step never ran with production
+   > credentials and the promoted code can be ahead of the production schema.
+   > Always deploy production through a git push / production build. As a
+   > backstop, `/api/health/ready` compares the migration journal bundled with
+   > the running code against `drizzle.__drizzle_migrations` and reports
+   > `not_ready` (503) when the database is behind — gate traffic on it.
 5. Have a partner NGO review each checked-in knowledge document and add the
    required publication metadata described in `content/README.md`. Do not
    fabricate reviewer names or dates for the illustrative seed corpus.
@@ -63,7 +72,6 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | Sentry | Privacy-sanitized server/client error reporting (optional) |
 | `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | Sentry | Source-map upload during production builds (optional) |
 | `NEXT_PUBLIC_POSTHOG_KEY`, `POSTHOG_HOST` | PostHog/self-hosted | Person-profile-free aggregate events with unlinkable per-event IDs (optional) |
-| `LANGFUSE_*` | Langfuse | LLM tracing (not yet wired) |
 | `UPSTASH_REDIS_REST_URL`, `..._TOKEN`, `RATE_LIMIT_HASH_SALT` | Upstash Redis | Fleet-wide API rate limiting (required for production admin sign-in) |
 
 Copy `.env.example` → `.env.local` for local dev; set the same variables in the Vercel project

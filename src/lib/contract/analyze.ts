@@ -18,6 +18,16 @@ import type { ContractAnalysis } from "./types";
 const MODEL = "gpt-5.6-terra";
 const MODEL_TIMEOUT_MS = 45_000;
 
+export class ContractAnalysisError extends Error {
+  constructor(
+    message: string,
+    readonly code: "too_long" | "refused",
+  ) {
+    super(message);
+    this.name = "ContractAnalysisError";
+  }
+}
+
 export const SUPPORTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
@@ -188,7 +198,20 @@ export async function analyzeContract(input: {
     response_format: { type: "json_schema", json_schema: ANALYSIS_JSON_SCHEMA },
   });
 
-  const raw = completion.choices[0]?.message.content;
+  const choice = completion.choices[0];
+  if (choice?.finish_reason === "length") {
+    throw new ContractAnalysisError(
+      "The photo contains too much text. Crop it to one page and try again.",
+      "too_long",
+    );
+  }
+  if (choice?.message.refusal) {
+    throw new ContractAnalysisError(
+      "This contract photo could not be analysed safely. Try a clearer photo of one page.",
+      "refused",
+    );
+  }
+  const raw = choice?.message.content;
   if (!raw) throw new Error("Could not analyse the contract.");
 
   const parsed = AnalysisSchema.safeParse(JSON.parse(raw));

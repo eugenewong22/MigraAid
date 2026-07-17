@@ -40,6 +40,10 @@
   --color-saved-text: #067647;
 }
 
+:root {
+  color-scheme: light;
+}
+
 /* Larger base size + system fonts (which cover Bengali/Tamil/Thai/Burmese via
    OS fallback) for a low-literacy, mobile-first audience. */
 html {

@@ -6,7 +6,12 @@ import {
   referrals,
 } from "@/lib/db/schema";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
-import { retentionCutoff } from "@/lib/privacy/retention";
+import {
+  MAX_BATCHES_PER_RUN,
+  RETENTION_BATCH_SIZE,
+  deleteExpiredWorkerData,
+  retentionCutoff,
+} from "@/lib/privacy/retention";
 
 describe("retentionCutoff", () => {
   it("uses a bounded day-based retention period", () => {
@@ -19,9 +24,121 @@ describe("retentionCutoff", () => {
     expect(retentionCutoff(now, -1).toISOString()).toBe("2026-06-14T00:00:00.000Z");
   });
 
-  it("caps retention configuration at 90 days", () => {
+  it("caps retention configuration at the promised 30 days", () => {
     const now = new Date("2026-07-14T00:00:00.000Z");
-    expect(retentionCutoff(now, 365).toISOString()).toBe("2026-04-15T00:00:00.000Z");
+    expect(retentionCutoff(now, 365).toISOString()).toBe("2026-06-14T00:00:00.000Z");
+  });
+});
+
+/**
+ * Fake Drizzle surface for the retention sweep: selects return the first
+ * `limit` rows of a table's remaining state, deletes splice off one batch. This
+ * is enough to prove the sweep's structural guarantees — bounded batch sizes,
+ * one transaction per conversation batch, and forward progress under a budget.
+ */
+function fakeRetentionDb(seed: { conversations: number; contracts: number }) {
+  const state = {
+    conversations: Array.from({ length: seed.conversations }, (_, i) => ({
+      id: `conversation-${i}`,
+    })),
+    contracts: Array.from({ length: seed.contracts }, (_, i) => ({
+      id: `contract-${i}`,
+    })),
+    feedback: [] as Array<{ id: string }>,
+  };
+  const deleteSizes: number[] = [];
+  let transactions = 0;
+
+  const tableRows = (table: unknown) => {
+    if (table === conversations) return state.conversations;
+    if (table === contractReviews) return state.contracts;
+    if (table === feedback) return state.feedback;
+    return [] as Array<{ id: string }>; // referrals: no protected conversations
+  };
+
+  const select = () => ({
+    from: (table: unknown) => ({
+      where: () => ({
+        limit: async (limit: number) => tableRows(table).slice(0, limit),
+        then: (
+          onFulfilled: (rows: Array<{ id: string }>) => unknown,
+          onRejected?: (reason: unknown) => unknown,
+        ) => Promise.resolve(tableRows(table).slice()).then(onFulfilled, onRejected),
+      }),
+    }),
+  });
+
+  const remove = (table: unknown) => ({
+    where: () => {
+      let run: Promise<Array<{ id: string }>> | null = null;
+      const exec = () =>
+        (run ??= Promise.resolve().then(() => {
+          const rows = tableRows(table);
+          const removed = rows.splice(0, Math.min(RETENTION_BATCH_SIZE, rows.length));
+          deleteSizes.push(removed.length);
+          return removed;
+        }));
+      return {
+        returning: () => exec(),
+        then: (
+          onFulfilled: (rows: Array<{ id: string }>) => unknown,
+          onRejected?: (reason: unknown) => unknown,
+        ) => exec().then(onFulfilled, onRejected),
+      };
+    },
+  });
+
+  const queries = { select, delete: remove };
+  const database = {
+    ...queries,
+    transaction: async (callback: (tx: typeof queries) => unknown) => {
+      transactions += 1;
+      return callback(queries);
+    },
+  };
+
+  return {
+    database: database as unknown as NonNullable<
+      Parameters<typeof deleteExpiredWorkerData>[1]
+    >,
+    state,
+    deleteSizes,
+    transactions: () => transactions,
+  };
+}
+
+describe("deleteExpiredWorkerData", () => {
+  it("sweeps in bounded batches with one transaction per conversation batch", async () => {
+    const db = fakeRetentionDb({ conversations: 1200, contracts: 700 });
+
+    const result = await deleteExpiredWorkerData(new Date(), db.database);
+
+    expect(result.conversations).toBe(1200);
+    expect(result.contractReviews).toBe(700);
+    expect(result.complete).toBe(true);
+    // 1200 conversations at a 500-row cap → three separate transactions, so a
+    // failure in one batch can no longer roll back the whole night's progress.
+    expect(db.transactions()).toBe(3);
+    expect(Math.max(...db.deleteSizes)).toBeLessThanOrEqual(RETENTION_BATCH_SIZE);
+    expect(db.state.conversations).toHaveLength(0);
+    expect(db.state.contracts).toHaveLength(0);
+  });
+
+  it("stops at the per-run budget and reports the sweep as incomplete", async () => {
+    // One batch goes to the (empty) old-feedback pass; the rest of the budget
+    // cannot cover this backlog, so the run must commit what it can and say so.
+    const backlog = MAX_BATCHES_PER_RUN * RETENTION_BATCH_SIZE;
+    const db = fakeRetentionDb({ conversations: backlog, contracts: 10 });
+
+    const result = await deleteExpiredWorkerData(new Date(), db.database);
+
+    expect(result.complete).toBe(false);
+    expect(result.conversations).toBe(
+      (MAX_BATCHES_PER_RUN - 1) * RETENTION_BATCH_SIZE,
+    );
+    // Progress is committed: the next scheduled run resumes from here.
+    expect(db.state.conversations).toHaveLength(RETENTION_BATCH_SIZE);
+    expect(db.state.contracts).toHaveLength(10);
   });
 });
 

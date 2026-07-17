@@ -25,6 +25,12 @@ export interface Citation {
   sourceUrl?: string;
   contentItemId: string;
   quote?: string;
+  /**
+   * 1-based source number matching the `[n]` marker in the answer text, so the
+   * rendered citation list can be labelled to align with in-text references
+   * even when the model cites out of order.
+   */
+  sourceNumber: number;
 }
 
 /** The result of answering a question over retrieved sources. */
@@ -56,4 +62,6 @@ export interface AnswerOptions {
   locale: string;
   /** Retrieved sources, in the order they are passed to the model (document_index order). */
   chunks: RetrievedChunk[];
+  /** Cancels provider generation when the HTTP client disconnects. */
+  signal?: AbortSignal;
 }

@@ -1,0 +1,89 @@
+name: Eval
+
+# Domain-accuracy gate for the RAG pipeline. Unlike the deterministic subset in
+# tests/eval-golden.test.ts (which runs in CI on every PR), the full harness
+# (scripts/eval/run.ts) exercises real retrieval + generation against the
+# ingested corpus, so it needs a database and provider credentials. It runs on a
+# schedule, on demand, and on release tags — and fails the run if accuracy,
+# citation, or grounding checks regress.
+on:
+  schedule:
+    # Weekly, Monday 03:00 UTC.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+# One eval at a time, and a hard timeout: this workflow spends real inference
+# credits, so parallel or hung runs must not burn them unbounded.
+concurrency:
+  group: eval
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: migraaid_eval
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      # Throwaway service-container credentials only. The inference keys are
+      # deliberately NOT job-level env: they are scoped to exactly the steps
+      # that call the providers, so third-party actions and dependency
+      # installation never see them.
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/migraaid_eval
+    steps:
+      # Third-party actions are pinned to commit SHAs (not mutable tags) so a
+      # repointed tag cannot inject code into a run that holds API secrets.
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Fail early if no inference key is configured
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ] && [ -z "$VOYAGE_API_KEY" ]; then
+            echo "::error::The eval gate needs OPENAI_API_KEY (and optionally VOYAGE_API_KEY) repository secrets."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply migrations
+        run: pnpm db:migrate
+
+      - name: Ingest the corpus
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: pnpm ingest
+
+      - name: Run the eval gate
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: pnpm eval

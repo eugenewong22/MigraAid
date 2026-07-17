@@ -79,7 +79,7 @@ export async function SiteHeader({
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 md:gap-x-7">
           <nav
-            aria-label="Primary"
+            aria-label={t("primary")}
             className="flex items-center gap-x-5 gap-y-2 md:gap-x-7"
           >
             {items.map((item) => (

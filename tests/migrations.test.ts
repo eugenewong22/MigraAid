@@ -72,4 +72,22 @@ describe("database security migration", () => {
       ),
     );
   });
+
+  it("indexes referrals by conversation for chat and retention lookups", async () => {
+    const sql = await readFile(
+      path.join(process.cwd(), "drizzle", "0008_large_hannibal_king.sql"),
+      "utf8",
+    );
+    expect(sql).toContain(
+      'CREATE INDEX "referrals_conversation_idx" ON "referrals" USING btree ("conversation_id")',
+    );
+  });
+
+  it("drops the unused free-text feedback comment column", async () => {
+    const sql = await readFile(
+      path.join(process.cwd(), "drizzle", "0009_noisy_venom.sql"),
+      "utf8",
+    );
+    expect(sql).toContain('ALTER TABLE "feedback" DROP COLUMN "comment"');
+  });
 });

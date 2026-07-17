@@ -24,10 +24,10 @@ export function LocaleSwitcher() {
         onChange={(e) =>
           router.replace(pathname, { locale: e.target.value as Locale })
         }
-        className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0"
+        className="peer absolute inset-0 h-full w-full cursor-pointer text-[16px] opacity-0"
       >
         {routing.locales.map((l) => (
-          <option key={l} value={l}>
+          <option key={l} value={l} lang={l}>
             {LOCALE_LABELS[l] ?? l}
           </option>
         ))}

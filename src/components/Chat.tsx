@@ -9,6 +9,8 @@ interface Citation {
   sourceRef: string;
   sourceUrl?: string;
   quote?: string;
+  /** 1-based source number matching the [n] marker in the answer text. */
+  sourceNumber?: number;
 }
 
 interface Referral {
@@ -40,12 +42,31 @@ export function Chat() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [liveMessage, setLiveMessage] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages]);
+
+  useEffect(
+    () => () => {
+      if (announceTimer.current) clearTimeout(announceTimer.current);
+    },
+    [],
+  );
+
+  // Announce one message (loading, or the completed answer) through a single
+  // polite live region, then clear it so screen-reader users don't re-read the
+  // text while navigating the transcript. Streaming chunks are never announced.
+  function announce(message: string) {
+    setLiveMessage(message);
+    if (announceTimer.current) clearTimeout(announceTimer.current);
+    announceTimer.current = setTimeout(() => setLiveMessage(""), 1200);
+  }
 
   function updateLast(patch: (m: ChatMessage) => ChatMessage) {
     setMessages((prev) => {
@@ -106,6 +127,10 @@ export function Chat() {
       { role: "assistant", text: "" },
     ]);
     setBusy(true);
+    // Keep focus in the composer: the Send button is about to disable, and a
+    // disabled element silently drops keyboard/screen-reader focus to the page.
+    inputRef.current?.focus();
+    announce(t("loading"));
 
     try {
       const res = await fetch("/api/chat", {
@@ -128,7 +153,13 @@ export function Chat() {
         buffer = lines.pop() ?? "";
         for (const line of lines) {
           if (!line.trim()) continue;
-          const evt = JSON.parse(line);
+          let evt;
+          try {
+            evt = JSON.parse(line);
+          } catch {
+            // One malformed frame must not abort the rest of the stream.
+            continue;
+          }
           if (evt.type === "text") {
             updateLast((m) => ({ ...m, text: m.text + evt.text }));
           } else if (evt.type === "done") {
@@ -144,28 +175,35 @@ export function Chat() {
               referralCode: evt.referralCode,
               referralExpiresAt: evt.referralExpiresAt,
             }));
+            announce(evt.text);
           } else if (evt.type === "error") {
             completed = true;
-            updateLast((m) => ({ ...m, text: t("error"), failed: true }));
+            // Keep any partial answer already shown — replacing it with the
+            // error wording deletes half-useful text on a flaky connection.
+            updateLast((m) => ({ ...m, failed: true }));
+            announce(t("error"));
           }
         }
       }
       if (!completed) throw new Error("incomplete response");
     } catch {
-      updateLast((m) => ({ ...m, text: t("error"), failed: true }));
+      updateLast((m) => ({ ...m, failed: true }));
+      announce(t("error"));
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-6 py-9">
+    <div className="flex flex-col gap-6 py-9">
+      <p aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveMessage}
+      </p>
       <div
         ref={logRef}
-        className="mx-auto flex w-full max-w-[860px] flex-1 flex-col gap-5"
+        className="mx-auto flex max-h-[60dvh] min-h-64 w-full max-w-[860px] flex-col gap-5 overflow-y-auto overscroll-contain"
         role="log"
-        aria-live="polite"
-        aria-relevant="additions text"
+        aria-live="off"
         aria-busy={busy}
       >
         {messages.length === 0 && (
@@ -190,18 +228,23 @@ export function Chat() {
                   ? "whitespace-pre-wrap"
                   : "whitespace-pre-wrap text-[17px] leading-[1.55] text-ink"
               }
-              role={m.failed ? "alert" : undefined}
             >
               {m.text ||
                 (busy && i === messages.length - 1 ? (
-                  <>
-                    <span aria-hidden="true">…</span>
-                    <span className="sr-only">{t("loading")}</span>
-                  </>
+                  <span aria-hidden="true">…</span>
                 ) : (
                   ""
                 ))}
             </p>
+
+            {m.failed && (
+              <p
+                role="alert"
+                className="text-[15px] leading-[1.45] text-emergency"
+              >
+                {t("error")}
+              </p>
+            )}
 
             {m.escalated && (
               <div className="rounded-[10px] bg-warn-bg px-3.5 py-2.5 text-[15px] leading-[1.45] text-warn-text">
@@ -264,20 +307,27 @@ export function Chat() {
                     const href = sourceReferenceHref(c.sourceUrl ?? c.sourceRef);
                     return (
                       <li key={j} className="flex flex-col gap-1">
-                        {href ? (
-                          <a
-                            href={href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="break-words text-[14.5px] text-navy underline"
-                          >
-                            {c.sourceRef}
-                          </a>
-                        ) : (
-                          <span className="text-[14.5px] text-body">
-                            {c.sourceRef}
-                          </span>
-                        )}
+                        <div className="flex items-baseline gap-2">
+                          {typeof c.sourceNumber === "number" && (
+                            <span className="shrink-0 text-[13px] font-bold text-muted">
+                              [{c.sourceNumber}]
+                            </span>
+                          )}
+                          {href ? (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="break-words text-[14.5px] text-navy underline"
+                            >
+                              {c.sourceRef}
+                            </a>
+                          ) : (
+                            <span className="text-[14.5px] text-body">
+                              {c.sourceRef}
+                            </span>
+                          )}
+                        </div>
                         {c.quote && (
                           <details>
                             <summary className="cursor-pointer text-[13.5px] text-muted">
@@ -303,7 +353,14 @@ export function Chat() {
               i === messages.length - 1 &&
               !busy &&
               (m.rated ? (
-                <p className="text-[13px] text-muted" role="status">
+                // Focused on mount: it replaces the feedback button the user
+                // just activated, whose removal would otherwise drop focus.
+                <p
+                  className="text-[13px] text-muted focus:outline-none"
+                  role="status"
+                  tabIndex={-1}
+                  ref={(el) => el?.focus()}
+                >
                   {t("thanks")}
                 </p>
               ) : (
@@ -318,21 +375,29 @@ export function Chat() {
                   >
                     {t("helpful")}
                   </span>
+                  {/* Guarded in the handler, not `disabled`: disabling the
+                      focused button while the request runs drops focus. */}
                   <button
                     type="button"
-                    onClick={() => sendFeedback(5, i, m.messageId!)}
-                    disabled={m.feedbackPending}
+                    onClick={() => {
+                      if (m.feedbackPending) return;
+                      sendFeedback(5, i, m.messageId!);
+                    }}
+                    aria-disabled={m.feedbackPending || undefined}
                     aria-label={t("feedbackYes")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
+                    className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy ${m.feedbackPending ? "opacity-50" : ""}`}
                   >
                     👍
                   </button>
                   <button
                     type="button"
-                    onClick={() => sendFeedback(1, i, m.messageId!)}
-                    disabled={m.feedbackPending}
+                    onClick={() => {
+                      if (m.feedbackPending) return;
+                      sendFeedback(1, i, m.messageId!);
+                    }}
+                    aria-disabled={m.feedbackPending || undefined}
                     aria-label={t("feedbackNo")}
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:opacity-50"
+                    className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] border border-hairline bg-white text-[18px] transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy ${m.feedbackPending ? "opacity-50" : ""}`}
                   >
                     👎
                   </button>
@@ -352,21 +417,23 @@ export function Chat() {
           <label htmlFor="chat-question" className="sr-only">
             {t("questionLabel")}
           </label>
+          {/* Never disabled: disabling the focused field on submit dumps focus
+              to the page; send() ignores submissions while busy instead. */}
           <input
             id="chat-question"
             name="question"
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t("placeholder")}
             maxLength={1000}
-            className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky"
-            disabled={busy}
+            className="min-h-[52px] flex-1 rounded-[12px] border-[1.5px] border-input px-[18px] text-[17px] text-ink placeholder:text-muted focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
             aria-describedby="chat-privacy"
           />
           <button
             type="submit"
             disabled={busy || !input.trim()}
-            className="min-h-[52px] rounded-[12px] bg-navy px-7 text-[17px] font-bold text-white transition-colors hover:bg-navy-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 disabled:opacity-50"
+            className="min-h-[52px] rounded-[12px] bg-navy px-7 text-[17px] font-bold text-white transition-colors hover:bg-navy-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 disabled:opacity-50"
           >
             {t("send")}
           </button>

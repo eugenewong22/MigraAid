@@ -17,6 +17,7 @@
     "disclaimer": "Nagbibigay ang MigraAid ng pangkalahatang impormasyon, hindi legal na payo. Para sa iyong partikular na sitwasyon, makipag-ugnayan sa isang caseworker sa isang partner na organisasyon. Sa emergency, gamitin ang pahina ng Mga Emergency Contact."
   },
   "nav": {
+    "primary": "Pangunahing nabigasyon",
     "ask": "Magtanong",
     "contract": "Aking kontrata",
     "emergency": "Emergency"
@@ -46,6 +47,7 @@
     "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito."
   },
   "emergency": {
+    "sms": "SMS {number}",
     "title": "Mga emergency contact",
     "intro": "Kung nasa panganib ka, tumawag sa 999 (Pulisya) o 995 (Ambulansya/Bumbero) ngayon.",
     "urgent": "Emergency",
@@ -87,6 +89,7 @@
     "title": "Ipaliwanag ang aking kontrata",
     "upload": "I-upload o kunan ng larawan ang iyong kontrata",
     "analyzing": "Binabasa ang iyong kontrata…",
+    "analysisReady": "Handa na ang pagsusuri ng iyong kontrata.",
     "privacy": "Ligtas na ipinapadala ang iyong larawan sa isang AI provider para suriin. Hindi iniimbak ng MigraAid ang larawan o hilaw na tekstong binasa mula sa kontrata. Maaaring magpanatili ang AI provider ng mga safety log nang hanggang 30 araw.",
     "saveAnalysis": "I-save ang nagawang pagsusuri nang hanggang 30 araw. Buod, mahahalagang tuntunin, at mga puntong dapat suriin lamang ang iniimbak ng MigraAid—hindi ang iyong larawan o tekstong binasa mula sa kontrata. Maaari mong burahin ang naka-save na pagsusuri sa ibang pagkakataon mula sa device na ito.",
     "savedConfirmation": "Na-save nang hanggang 30 araw ang iyong buod, mahahalagang tuntunin, at mga puntong dapat suriin. Hindi na-save ang iyong larawan o tekstong binasa mula sa kontrata.",

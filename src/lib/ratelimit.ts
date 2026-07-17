@@ -23,11 +23,21 @@ export interface RateLimitOptions {
   windowMs?: number;
 }
 
+/** Opaque per-process bucket key for the availability fallback. */
+export function localRateLimitKey(
+  key: string,
+  salt = LOCAL_HASH_SALT,
+): string {
+  return createHmac("sha256", salt).update(key).digest("hex");
+}
+
 function memoryRateLimit(
   key: string,
   limit: number,
   windowMs: number,
 ): RateLimitResult {
+  // Keep raw IPs and other caller identifiers out of process memory too.
+  key = localRateLimitKey(key);
   const now = Date.now();
   if (now - lastSweepAt >= 60_000 || buckets.size >= MAX_MEMORY_BUCKETS) {
     for (const [bucketKey, candidate] of buckets) {

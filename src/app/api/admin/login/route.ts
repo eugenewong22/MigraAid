@@ -12,6 +12,7 @@ import {
   RequestBodyTooLargeError,
   UnsupportedMediaTypeError,
 } from "@/lib/http/body";
+import { isSameOriginRequest } from "@/lib/http/origin";
 
 export const runtime = "nodejs";
 const MAX_LOGIN_BODY_BYTES = 16 * 1024;
@@ -36,21 +37,7 @@ function requireDistributedLimiter(source: "redis" | "memory") {
 export async function POST(req: NextRequest) {
   // CSRF: require a same-origin Origin (or Referer fallback) on this
   // state-changing POST — a missing Origin header must NOT bypass the check.
-  const expectedOrigin = new URL(req.url).origin;
-  const requestOrigin = req.headers.get("origin");
-  let refererOrigin: string | null = null;
-  const referer = req.headers.get("referer");
-  if (referer) {
-    try {
-      refererOrigin = new URL(referer).origin;
-    } catch {
-      refererOrigin = null;
-    }
-  }
-  const sameOrigin = requestOrigin
-    ? requestOrigin === expectedOrigin
-    : refererOrigin === expectedOrigin;
-  if (!sameOrigin) {
+  if (!isSameOriginRequest(req)) {
     return new Response("Cross-origin form submission rejected", { status: 403 });
   }
   const limited = await rateLimit(`admin-login:${clientKey(req.headers)}`, {
@@ -104,12 +91,16 @@ export async function POST(req: NextRequest) {
 
   try {
     const session = await signInAdmin(email, password);
-    const response = Response.redirect(new URL(`/${locale}/admin`, req.url), 303);
-    response.headers.append(
-      "set-cookie",
-      `${ADMIN_COOKIE}=${session.accessToken}; Path=/; HttpOnly; SameSite=Strict; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=${Math.max(60, session.expiresIn - 30)}`,
-    );
-    return response;
+    // Build the redirect as a plain Response: Response.redirect() returns
+    // immutable headers, so appending the session cookie there throws — which
+    // would swallow the throw and bounce every valid login back as a failure.
+    return new Response(null, {
+      status: 303,
+      headers: {
+        location: new URL(`/${locale}/admin`, req.url).toString(),
+        "set-cookie": `${ADMIN_COOKIE}=${session.accessToken}; Path=/; HttpOnly; SameSite=Strict; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=${Math.max(60, session.expiresIn - 30)}`,
+      },
+    });
   } catch (error) {
     loginUrl.searchParams.set(
       "error",

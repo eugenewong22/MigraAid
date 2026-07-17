@@ -18,6 +18,8 @@ import {
   readBoundedBytes,
   RequestBodyTooLargeError,
 } from "@/lib/http/body";
+import { isSameOriginRequest } from "@/lib/http/origin";
+import { ContractAnalysisError } from "@/lib/contract/analyze";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -34,8 +36,7 @@ const MAX_REQUEST_BYTES = MAX_BYTES + 1024 * 1024;
  * written to disk or the database.
  */
 export async function POST(req: NextRequest) {
-  const requestOrigin = req.headers.get("origin");
-  if (requestOrigin && requestOrigin !== new URL(req.url).origin) {
+  if (!isSameOriginRequest(req)) {
     return Response.json(
       { error: "Cross-origin upload rejected" },
       { status: 403 },
@@ -47,6 +48,16 @@ export async function POST(req: NextRequest) {
     limit: 5,
     windowMs: 60_000,
   });
+  if (process.env.NODE_ENV === "production" && rl.source === "memory") {
+    await reportError(
+      new Error("Distributed rate limiter unavailable for contract analysis"),
+      "api.contract.ratelimit",
+    );
+    return Response.json(
+      { error: "Contract analysis is temporarily unavailable" },
+      { status: 503, headers: { "retry-after": "60" } },
+    );
+  }
   if (!rl.ok) {
     return Response.json(
       { error: "Too many requests" },
@@ -166,6 +177,12 @@ export async function POST(req: NextRequest) {
     // The image base64 goes out of scope here; only the analysis is stored.
     return Response.json({ ...analysis, saved }, { headers });
   } catch (err) {
+    if (err instanceof ContractAnalysisError) {
+      return Response.json(
+        { error: err.message, code: err.code },
+        { status: 422 },
+      );
+    }
     await reportError(err, "api.contract");
     return Response.json({ error: "Could not analyse the contract." }, { status: 500 });
   }

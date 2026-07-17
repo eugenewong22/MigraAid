@@ -182,6 +182,15 @@ export const referrals = pgTable("referrals", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   uniqueIndex("referrals_handoff_code_hash_uidx").on(table.handoffCodeHash),
+  // DB-enforced "one active referral per conversation": the route's
+  // check-then-insert cannot exclude a concurrent turn minting a second code.
+  // Expiry cannot appear in an index predicate (non-immutable), so the
+  // invariant is keyed on the unconfirmed state; the insert handles the rare
+  // expired-but-unconfirmed conflict with ON CONFLICT DO NOTHING.
+  uniqueIndex("referrals_active_conversation_uidx")
+    .on(table.conversationId)
+    .where(sql`${table.confirmedByNgo} = false`),
+  index("referrals_conversation_idx").on(table.conversationId),
   index("referrals_created_at_idx").on(table.createdAt),
   index("referrals_expires_at_idx").on(table.expiresAt),
 ]).enableRLS();
@@ -197,7 +206,6 @@ export const feedback = pgTable("feedback", {
     .references(() => messages.id, { onDelete: "cascade" }),
   /** 1–5 satisfaction rating (KPI: 80%+ satisfied). */
   rating: integer("rating").notNull(),
-  comment: text("comment"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("feedback_conversation_idx").on(table.conversationId),
