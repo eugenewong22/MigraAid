@@ -25,6 +25,7 @@ import {
 } from "@/lib/safety/policy";
 import type { AnswerOptions, Citation, RagAnswer, RetrievedChunk } from "./types";
 import { scrubPii } from "@/lib/safety/pii";
+import { isKnownIssueType, KNOWN_ISSUE_TYPES } from "@/lib/referral/route";
 import { normalizeQueryForRetrieval } from "./retrieve";
 
 const MODEL = "gpt-5.6-terra";
@@ -147,14 +148,24 @@ const REFER_TOOL: ChatCompletionTool = {
   type: "function",
   function: {
     name: "refer_to_human",
+    // High-stakes situations ONLY. Insufficient sources must NOT escalate:
+    // the citation-coverage gate already converts uncited prose into the calm
+    // "not enough verified information" refusal, whereas an escalation mints a
+    // real NGO referral row + handoff code and shows crisis wording — false
+    // emergencies for benign questions inflate partner KPIs and alarm workers.
     description:
-      "Call this when the worker's issue is high-stakes (unpaid salary, workplace injury, " +
-      "dismissal, contract dispute, threats/abuse, immigration status, repatriation) or when the " +
-      "source documents do not contain enough verified information to answer safely.",
+      "Call this ONLY when the worker's issue is high-stakes for them personally: unpaid " +
+      "salary, workplace injury, dismissal, contract dispute, threats or abuse, immigration " +
+      "status, or repatriation. Do NOT call it merely because the source documents lack the " +
+      "answer — in that case answer in prose that you do not have enough verified information.",
     parameters: {
       type: "object",
       properties: {
-        issue_type: { type: "string", description: "Short slug describing the issue." },
+        issue_type: {
+          type: "string",
+          description: "Slug describing the issue.",
+          enum: KNOWN_ISSUE_TYPES,
+        },
       },
       required: ["issue_type"],
     },
@@ -315,8 +326,11 @@ export function parseCompletion(
     if (call.type === "function" && call.function.name === "refer_to_human") {
       escalated = true;
       try {
-        const input = JSON.parse(call.function.arguments) as { issue_type?: string };
-        if (input.issue_type) issueType = input.issue_type;
+        const input = JSON.parse(call.function.arguments) as { issue_type?: unknown };
+        // Allowlist-validate: a model string must never reach referral routing,
+        // the referral card, or the database as a slug. An unknown slug simply
+        // leaves issueType unset (the deterministic detector still covers it).
+        if (isKnownIssueType(input.issue_type)) issueType = input.issue_type;
       } catch {
         // Malformed tool arguments — still treat as escalated, just without a slug.
       }
@@ -456,8 +470,9 @@ export function streamAnswer(opts: AnswerOptions): {
         if (name !== "refer_to_human") continue;
         escalated = true;
         try {
-          const input = JSON.parse(args) as { issue_type?: string };
-          if (input.issue_type) issueType = input.issue_type;
+          const input = JSON.parse(args) as { issue_type?: unknown };
+          // Same allowlist as the non-streaming path: never trust a model slug.
+          if (isKnownIssueType(input.issue_type)) issueType = input.issue_type;
         } catch {
           // Malformed tool arguments — still treat as escalated.
         }

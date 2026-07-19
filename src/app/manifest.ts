@@ -9,8 +9,11 @@ export default function manifest(): MetadataRoute.Manifest {
       "Multilingual rights and support hub for migrant workers in Singapore.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#0c2b5e",
+    // Daybreak cream — must track globals.css --color-cream so the installed
+    // PWA splash/status chrome matches the app instead of flashing a stale
+    // palette.
+    background_color: "#faf6ef",
+    theme_color: "#faf6ef",
     icons: [
       {
         src: "/icon-192.png",

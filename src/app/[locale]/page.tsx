@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
-import { LanguagePicker } from "@/components/LanguagePicker";
 import { DeleteMyData } from "@/components/DeleteMyData";
 
 export default async function Home({
@@ -18,83 +17,105 @@ export default async function Home({
       {/* Programmatic page title; the visible headline is the tagline below. */}
       <h1 className="sr-only">{t("title")}</h1>
 
-      {/* Navy block: header + hero */}
-      <div className="bg-navy px-6 md:px-12">
-        <SiteHeader embedded />
+      <SiteHeader />
 
-        <div className="grid grid-cols-1 items-center gap-10 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-[72px] lg:pt-16">
-          <div className="order-2 flex flex-col gap-5 lg:order-1">
-            <span className="text-[14px] font-bold uppercase tracking-[0.1em] text-sky">
-              {t("eyebrow")}
-            </span>
-            <h2 className="text-[34px] font-[750] leading-[1.1] tracking-[-0.02em] text-white sm:text-[48px]">
-              {t("tagline")}
-            </h2>
-            <p className="text-[19px] leading-[1.55] text-sky-muted">
-              {t("heroLede")}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-3.5">
-              <Link
-                href="/chat"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-[10px] bg-sky px-7 text-[17px] font-bold text-navy transition-colors hover:bg-sky-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-              >
-                {t("startChat")}
-              </Link>
-              <Link
-                href="/contract"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-[10px] border border-white/40 px-7 text-[17px] font-[600] text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-              >
-                {t("contractCta")}
-              </Link>
+      {/* Hero — cream with decorative sunrise circles behind the content. */}
+      <section className="relative overflow-hidden px-5 py-8 md:px-12 md:pb-20 md:pt-[72px]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-[90px] right-[-70px] h-[230px] w-[230px] rounded-full bg-[#f3d9a4] opacity-55 md:-top-[180px] md:right-[-110px] md:h-[430px] md:w-[430px]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-[140px] right-[60px] h-[180px] w-[180px] rounded-full bg-[#e8b48f] opacity-35 md:-bottom-[230px] md:right-[180px] md:h-[330px] md:w-[330px] md:opacity-40"
+        />
+        <div className="relative flex max-w-[760px] flex-col gap-4 md:gap-6">
+          <span className="font-bold uppercase leading-none tracking-[0.12em] text-terracotta text-[12.5px] md:text-[14px]">
+            {t("eyebrow")}
+          </span>
+          <h2 className="font-display font-[650] tracking-[-0.01em] text-ink text-[34px] leading-[1.1] md:text-[58px] md:leading-[1.06] md:tracking-[-0.015em]">
+            {t("tagline")}
+          </h2>
+          <p className="max-w-[580px] text-body-soft text-[16.5px] leading-[1.55] md:text-[19.5px] md:leading-[1.6]">
+            {t("heroLede")}
+          </p>
+          <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:gap-3.5 md:mt-1.5">
+            <Link
+              href="/chat"
+              className="inline-flex min-h-[54px] items-center justify-center rounded-full bg-terracotta px-8 text-[17px] font-bold text-[#fff7ec] transition-colors hover:bg-terracotta-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+            >
+              {t("startChat")}
+            </Link>
+            <Link
+              href="/contract"
+              className="inline-flex min-h-[54px] items-center justify-center rounded-full border-2 border-terracotta px-8 text-[17px] font-[600] text-terracotta transition-colors hover:bg-terracotta/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+            >
+              {t("contractCta")}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Three info cards. Stacked (circle-left-of-text) on mobile, 3-col grid
+          on desktop; the danger card uses the emergency surface. */}
+      <div className="flex flex-col gap-7 px-5 pb-10 md:px-12 md:pb-12">
+        <div className="grid gap-3 md:grid-cols-3 md:gap-5">
+          <section className="flex items-start gap-3.5 rounded-2xl bg-sand p-[18px] md:flex-col md:gap-2.5 md:rounded-[18px] md:p-[26px]">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-amber md:mt-0 md:h-7 md:w-7"
+            />
+            <div className="flex flex-col gap-1 md:gap-2.5">
+              <h3 className="font-display font-[650] text-ink text-[17.5px] md:text-[20px]">
+                {t("cardLawTitle")}
+              </h3>
+              <p className="text-body-soft text-[14.5px] leading-[1.5] md:text-[15.5px] md:leading-[1.55]">
+                {t("cardLawBody")}
+              </p>
             </div>
-          </div>
-
-          <div className="order-1 flex flex-col gap-3.5 rounded-2xl border border-white/15 bg-white/[0.07] p-6 lg:order-2">
-            <p className="text-[14px] font-bold uppercase tracking-[0.08em] text-sky-faint">
-              {t("chooseLanguage")}
-            </p>
-            <LanguagePicker />
-          </div>
-        </div>
-      </div>
-
-      {/* Below hero: three editorial columns with top rules */}
-      <div className="flex flex-col gap-7 px-6 py-10 md:px-12 md:pb-12">
-        <div className="grid gap-6 md:grid-cols-3">
-          <section className="flex flex-col gap-2 border-t-[3px] border-navy pt-5">
-            <h3 className="text-[20px] font-bold text-ink">{t("cardLawTitle")}</h3>
-            <p className="text-[15.5px] leading-[1.5] text-body-soft">
-              {t("cardLawBody")}
-            </p>
           </section>
-          <section className="flex flex-col gap-2 border-t-[3px] border-navy pt-5">
-            <h3 className="text-[20px] font-bold text-ink">
-              {t("cardPrivacyTitle")}
-            </h3>
-            <p className="text-[15.5px] leading-[1.5] text-body-soft">
-              {t("cardPrivacyBody")}
-            </p>
+          <section className="flex items-start gap-3.5 rounded-2xl bg-sand p-[18px] md:flex-col md:gap-2.5 md:rounded-[18px] md:p-[26px]">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-amber md:mt-0 md:h-7 md:w-7"
+            />
+            <div className="flex flex-col gap-1 md:gap-2.5">
+              <h3 className="font-display font-[650] text-ink text-[17.5px] md:text-[20px]">
+                {t("cardPrivacyTitle")}
+              </h3>
+              <p className="text-body-soft text-[14.5px] leading-[1.5] md:text-[15.5px] md:leading-[1.55]">
+                {t("cardPrivacyBody")}
+              </p>
+            </div>
           </section>
-          <section className="flex flex-col gap-2 border-t-[3px] border-emergency pt-5">
-            <h3 className="text-[20px] font-bold text-emergency">
-              {t("cardDangerTitle")}
-            </h3>
-            <p className="text-[15.5px] leading-[1.5] text-body-soft">
-              {t.rich("cardDangerBody", {
-                link: (chunks) => (
-                  <Link
-                    href="/emergency"
-                    className="font-[650] text-emergency underline"
-                  >
-                    {chunks}
-                  </Link>
-                ),
-              })}
-            </p>
+          <section className="flex items-start gap-3.5 rounded-2xl bg-emergency-bg p-[18px] md:flex-col md:gap-2.5 md:rounded-[18px] md:p-[26px]">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-emergency md:mt-0 md:h-7 md:w-7"
+            />
+            <div className="flex flex-col gap-1 md:gap-2.5">
+              <h3 className="font-display font-[650] text-emergency text-[17.5px] md:text-[20px]">
+                {t("cardDangerTitle")}
+              </h3>
+              <p className="text-body-soft text-[14.5px] leading-[1.5] md:text-[15.5px] md:leading-[1.55]">
+                {t.rich("cardDangerBody", {
+                  link: (chunks) => (
+                    <Link
+                      href="/emergency"
+                      className="font-[650] text-emergency underline"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </p>
+            </div>
           </section>
         </div>
 
-        <p className="text-[14px] leading-[1.5] text-muted">{t("disclaimer")}</p>
+        <p className="max-w-[820px] text-muted text-[13.5px] leading-[1.55]">
+          {t("disclaimer")}
+        </p>
         <DeleteMyData />
       </div>
     </main>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { referralTargets } from "@/lib/referral/route";
+import { isKnownIssueType, referralTargets } from "@/lib/referral/route";
 import { contactHref, telHref } from "@/lib/referral/emergency";
 import {
   generateHandoffCode,
@@ -24,6 +24,29 @@ describe("referralTargets", () => {
   it("falls back to HOME for an unknown issue", () => {
     const targets = referralTargets("something_unmapped");
     expect(targets[0].org).toContain("HOME");
+  });
+
+  it("survives inherited-property slugs and never echoes unknown slugs", () => {
+    // Plain indexing made ISSUE_TO_ORGS["__proto__"] return a truthy
+    // non-array, crashing .map mid-escalation; and an unknown slug used to be
+    // interpolated verbatim into the user-visible referral reason.
+    for (const slug of ["__proto__", "toString", "constructor", "hasOwnProperty"]) {
+      const targets = referralTargets(slug);
+      expect(targets[0].org).toContain("HOME");
+      expect(targets[0].reason).not.toContain(slug);
+    }
+    expect(referralTargets("free text from a model").at(0)?.reason).toBe(
+      "Support for migrant workers",
+    );
+  });
+
+  it("accepts only allowlisted issue slugs", () => {
+    expect(isKnownIssueType("unpaid_salary")).toBe(true);
+    expect(isKnownIssueType("healthcare")).toBe(true);
+    expect(isKnownIssueType("__proto__")).toBe(false);
+    expect(isKnownIssueType("out_of_scope")).toBe(false);
+    expect(isKnownIssueType(undefined)).toBe(false);
+    expect(isKnownIssueType(42)).toBe(false);
   });
 });
 

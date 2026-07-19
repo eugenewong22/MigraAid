@@ -4,6 +4,7 @@ import {
   clientKey,
   rateLimit,
   sensitiveRateLimitKey,
+  UNTRUSTED_CLIENT_KEY,
 } from "@/lib/ratelimit";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
@@ -40,7 +41,20 @@ export async function POST(req: NextRequest) {
   if (!isSameOriginRequest(req)) {
     return new Response("Cross-origin form submission rejected", { status: 403 });
   }
-  const limited = await rateLimit(`admin-login:${clientKey(req.headers)}`, {
+  const ip = clientKey(req.headers);
+  if (process.env.NODE_ENV === "production" && ip === UNTRUSTED_CLIENT_KEY) {
+    // Without a trusted client IP the 5/15-min bucket below is ONE shared pool:
+    // an attacker sending 5 junk POSTs per window locks every volunteer out of
+    // admin sign-in indefinitely. Refuse to run with a degraded identity —
+    // matching how a degraded distributed limiter 503s — so a self-hosted
+    // deploy surfaces the TRUST_PROXY_HEADERS misconfiguration loudly instead
+    // of as a mystery lockout. (On Vercel the platform always sets the header.)
+    return new Response(
+      "Admin sign-in requires a trusted client IP source. Set TRUST_PROXY_HEADERS=true behind a proxy that rewrites x-real-ip/x-forwarded-for.",
+      { status: 503 },
+    );
+  }
+  const limited = await rateLimit(`admin-login:${ip}`, {
     limit: 5,
     windowMs: 15 * 60_000,
   });

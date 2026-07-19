@@ -1,13 +1,13 @@
 {
   "home": {
     "title": "MigraAid",
+    "metaDescription": "为新加坡客工提供的多语言权益与支持平台。",
     "tagline": "用您的语言，了解您在新加坡的权利。",
     "startChat": "提出问题",
     "contractCta": "解释我的合同",
     "emergencyCta": "紧急联系方式",
     "eyebrow": "免费 · 匿名 · 8 种语言",
     "heroLede": "关于工资、准证、住房和医疗的解答，依据新加坡法律，并由 NGO 个案工作者核实。",
-    "chooseLanguage": "选择您的语言",
     "cardLawTitle": "依据法律",
     "cardLawBody": "每个回答都会注明其依据的《雇佣法》、WICA 或人力部指南。",
     "cardPrivacyTitle": "默认保护隐私",
@@ -37,6 +37,8 @@
     "loading": "MigraAid 正在准备回答。",
     "feedbackYes": "有帮助",
     "feedbackNo": "没有帮助",
+    "feedbackYesShort": "是",
+    "feedbackNoShort": "否",
     "feedbackError": "无法保存您的反馈。请重试。",
     "speakerYou": "您",
     "speakerMigraAid": "MigraAid",
@@ -88,6 +90,7 @@
   "contract": {
     "title": "解释我的合同",
     "upload": "上传或拍摄您的合同",
+    "fileHint": "JPEG、PNG、GIF 或 WebP · 最大 8 MB",
     "analyzing": "正在阅读您的合同…",
     "analysisReady": "您的合同分析已完成。",
     "privacy": "您的照片会被安全发送给 AI 服务提供商进行分析。MigraAid 不会存储照片或从合同提取的原始文字。AI 服务提供商可能会保留安全日志最多 30 天。",

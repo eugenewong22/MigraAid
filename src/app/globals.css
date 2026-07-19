@@ -1,64 +1,72 @@
 @import "tailwindcss";
 
 /*
-  MigraAid — "Navy Editorial" design system.
-  Deep navy institutional header/hero, sky-blue accents, editorial type on white
-  content, red reserved strictly for emergency/serious severity.
+  MigraAid — "Daybreak" design system.
+  Warm, human, NGO-friendly: terracotta + amber on cream, rounded pill shapes,
+  sunrise circle motifs, Bricolage Grotesque display type on Spline Sans body.
+  Flat surfaces + hairlines; red reserved strictly for emergency/serious severity.
 */
 @theme {
-  /* Brand */
-  --color-navy: #0c2b5e;
-  --color-navy-hover: #0a2450;
-  --color-sky: #63a4ff;
-  --color-sky-hover: #4d94fa;
-  --color-sky-muted: #a8c0e8; /* hero body text on navy */
-  --color-sky-faint: #bcd3f5; /* inactive nav / labels on navy */
+  /* Brand.
+     Terracotta is darkened from the handoff's #c65a2e for WCAG AA: #b04f27
+     gives 4.95:1 with the #fff7ec button/bubble text and 4.88:1 as text on
+     cream (the original failed both at 4.03:1 / 3.98:1). */
+  --color-terracotta: #b04f27; /* primary accent */
+  --color-terracotta-hover: #9a4522;
+  --color-amber: #e8a13c; /* secondary accent, warning chips, decorative dots */
+  --color-amber-deep: #7d5510; /* small caps labels on amber surfaces (6.0:1 on warn-bg) */
+  --color-cream: #faf6ef; /* page background */
+  --color-paper: #fffdf8; /* cards, chat bubbles, input bar */
+  --color-sand: #f3ead9; /* tinted surfaces: info notes, source chips, number pills */
+  --color-sand-deep: #f0e8d8; /* hairlines inside cards */
+  --color-hairline: #e9e0d2; /* borders between page regions */
+  --color-line: #d9cbb6; /* input/pill borders */
 
-  /* Emergency / serious */
+  /* Text */
+  --color-ink: #2b2118; /* headings */
+  --color-body: #3d3128; /* primary body */
+  --color-body-soft: #6b5c4d; /* secondary body */
+  --color-muted: #78654c; /* microcopy, disclaimers — darkened from the handoff's
+     #a08c72, which failed AA everywhere (2.7–3.2:1); this passes on cream
+     (5.2:1), paper (5.5:1), and sand (4.7:1) */
+  --color-chip-text: #8a5a2e; /* text on sand chips/pills */
+
+  /* Emergency — red stays reserved for emergency only */
   --color-emergency: #b42318;
-  --color-emergency-accent: #ffb3ab;
+  --color-emergency-bg: #fde8e4; /* danger card + serious flag background */
+  --color-emergency-border: #f2c4bc; /* emergency section underline */
 
-  /* Neutrals */
-  --color-ink: #101828; /* headings */
-  --color-body: #344054; /* body */
-  --color-body-soft: #475467; /* secondary body */
-  --color-muted: #667085; /* microcopy */
-  --color-faint: #98a2b3; /* faint notes */
-  --color-surface: #f2f4f7; /* assistant bubble & pills */
-  --color-hairline: #e4e7ec; /* borders */
-  --color-input: #cdd5e1; /* input border */
+  /* Severity */
+  --color-warn-bg: #fdf3e0;
+  --color-warn-border: #f0dcb4;
+  --color-warn-text: #5c3d08; /* text on amber "Warning" chip */
 
-  /* Severity + referral surfaces */
-  --color-serious-bg: #fee4e2;
-  --color-serious-border: #fecdca;
-  --color-warn-bg: #fef0c7;
-  --color-warn-border: #f4d7a3;
-  --color-warn-text: #92400e;
-  --color-referral-bg: #fffaf0;
-  --color-referral-border: #f4d7a3;
-  --color-saved-bg: #d1fadf;
-  --color-saved-text: #067647;
+  /* Display type — Latin-only Bricolage, falling back to Noto for other scripts */
+  --font-display: var(--font-bricolage), system-ui, "Noto Sans",
+    "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai",
+    "Noto Sans Myanmar", sans-serif;
+  --font-sans: var(--font-spline), system-ui, -apple-system, "Segoe UI", Roboto,
+    "Noto Sans", "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai",
+    "Noto Sans Myanmar", sans-serif;
 }
 
 :root {
   color-scheme: light;
 }
 
-/* Larger base size + system fonts (which cover Bengali/Tamil/Thai/Burmese via
-   OS fallback) for a low-literacy, mobile-first audience. */
+/* Larger base size (low-literacy, mobile-first audience). Non-Latin scripts
+   render via the OS Noto fallback baked into the font stacks above. */
 html {
   font-size: 18px;
 }
 
 body {
-  background: #ffffff;
+  background: var(--color-cream);
   color: var(--color-body);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
-    "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai", "Noto Sans Myanmar",
-    sans-serif;
+  font-family: var(--font-sans);
 }
 
-/* Editorial headings read a touch tighter and wrap nicely. */
+/* Display headings read a touch tighter and wrap nicely. */
 h1,
 h2,
 h3 {

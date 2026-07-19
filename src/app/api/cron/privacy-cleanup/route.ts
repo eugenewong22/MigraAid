@@ -18,6 +18,16 @@ async function cleanup(req: NextRequest) {
 
   try {
     const result = await deleteExpiredWorkerData();
+    if (!result.complete) {
+      // Vercel Cron ignores response bodies, so an exhausted batch budget is
+      // invisible unless reported: sustained expiry volume above the per-run
+      // cap would otherwise silently retain worker data past the promised
+      // 30 days, indefinitely.
+      await reportError(
+        new Error("Retention sweep incomplete: batch budget exhausted"),
+        "cron.privacy-cleanup",
+      );
+    }
     return Response.json(result, {
       headers: { "cache-control": "private, no-store" },
     });

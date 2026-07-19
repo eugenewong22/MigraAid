@@ -35,6 +35,15 @@ export async function POST(req: NextRequest) {
     limit: 10,
     windowMs: 60_000,
   });
+  if (process.env.NODE_ENV === "production" && limited.source === "memory") {
+    // Match the chat route: a Redis outage silently downgrades the fleet-wide
+    // cap to per-instance quotas; operators need the signal (KPI metrics can
+    // be inflated while degraded).
+    await reportError(
+      new Error("Distributed rate limiter unavailable; using local feedback quota"),
+      "api.feedback.ratelimit",
+    );
+  }
   if (!limited.ok) {
     return Response.json({ error: "Too many requests" }, { status: 429 });
   }

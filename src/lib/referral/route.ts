@@ -57,16 +57,34 @@ const ISSUE_TO_ORGS: Record<string, string[]> = {
   repatriation: ["mom", "home"],
 };
 
+/**
+ * The closed set of issue slugs the system accepts. Model tool calls are
+ * validated against this list before an issue type may influence routing,
+ * rendering, or persistence — an LLM string is never trusted as a slug.
+ */
+export const KNOWN_ISSUE_TYPES = Object.keys(ISSUE_TO_ORGS);
+
+export function isKnownIssueType(value: unknown): value is string {
+  return typeof value === "string" && Object.hasOwn(ISSUE_TO_ORGS, value);
+}
+
 /** Pure resolver: issue type → ordered list of referral targets (defaults to HOME). */
 export function referralTargets(issueType: string): ReferralTarget[] {
-  const keys = ISSUE_TO_ORGS[issueType] ?? ["home"];
+  // `Object.hasOwn`, not plain indexing: an inherited-property name such as
+  // "__proto__" or "toString" must fall through to the default, not return a
+  // truthy non-array that crashes `.map` mid-escalation.
+  const known = isKnownIssueType(issueType);
+  const keys = known ? ISSUE_TO_ORGS[issueType] : ["home"];
   return keys.map((key) => {
     const org = ORGS[key];
     return {
       org: org.name,
       contact: org.contact,
       href: org.href,
-      reason: `Support for ${issueType.replace(/_/g, " ")}`,
+      // Only a validated slug may be echoed into user-visible text.
+      reason: known
+        ? `Support for ${issueType.replace(/_/g, " ")}`
+        : "Support for migrant workers",
     };
   });
 }

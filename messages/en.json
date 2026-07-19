@@ -1,13 +1,13 @@
 {
   "home": {
     "title": "MigraAid",
+    "metaDescription": "Multilingual rights and support hub for migrant workers in Singapore.",
     "tagline": "Understand your rights in Singapore — in your language.",
     "startChat": "Ask a question",
     "contractCta": "Explain my contract",
     "emergencyCta": "Emergency contacts",
     "eyebrow": "Free · Anonymous · 8 languages",
     "heroLede": "Answers about pay, permits, housing and healthcare, grounded in Singapore law and verified with NGO caseworkers.",
-    "chooseLanguage": "Choose your language",
     "cardLawTitle": "Grounded in law",
     "cardLawBody": "Every answer cites the Employment Act, WICA, or MOM guidelines it comes from.",
     "cardPrivacyTitle": "Private by default",
@@ -37,6 +37,8 @@
     "loading": "MigraAid is preparing a response.",
     "feedbackYes": "Yes, this was helpful",
     "feedbackNo": "No, this was not helpful",
+    "feedbackYesShort": "Yes",
+    "feedbackNoShort": "No",
     "feedbackError": "We could not save your feedback. Please try again.",
     "speakerYou": "You",
     "speakerMigraAid": "MigraAid",
@@ -88,6 +90,7 @@
   "contract": {
     "title": "Explain my contract",
     "upload": "Upload or photograph your contract",
+    "fileHint": "JPEG, PNG, GIF or WebP · up to 8 MB",
     "analyzing": "Reading your contract…",
     "analysisReady": "Your contract analysis is ready.",
     "privacy": "Your photo is securely sent to an AI provider for analysis. MigraAid does not store the photo or extracted contract text. The AI provider may retain safety logs for up to 30 days.",

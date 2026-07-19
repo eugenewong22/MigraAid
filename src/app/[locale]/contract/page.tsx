@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContractUpload } from "@/components/ContractUpload";
 import { SiteHeader } from "@/components/SiteHeader";
+
+/** Localized tab title ("Explain my contract — MigraAid" per locale). */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contract" });
+  return { title: t("title") };
+}
 
 export default async function ContractPage({
   params,
@@ -14,11 +26,9 @@ export default async function ContractPage({
 
   return (
     <main className="flex min-h-full flex-1 flex-col">
-      <SiteHeader active="contract" breadcrumb={t("title")} />
-      <div className="flex flex-1 flex-col px-6 md:px-12">
-        <ContractUpload />
-      </div>
-      <p className="px-6 pb-6 text-[13px] leading-[1.5] text-muted md:px-12">
+      <SiteHeader active="contract" mobileTitle={t("title")} />
+      <ContractUpload />
+      <p className="px-5 pb-6 text-[13px] leading-[1.5] text-muted md:px-12">
         {th("disclaimer")}
       </p>
     </main>
