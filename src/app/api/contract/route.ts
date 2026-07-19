@@ -164,7 +164,9 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const headers: Record<string, string> = {};
+    // Extracted contract terms are sensitive personal data — match the chat
+    // route's explicit no-store rather than relying on POST-caching defaults.
+    const headers: Record<string, string> = { "cache-control": "no-store" };
     // Only plant a durable session cookie when the worker opted to save the
     // analysis (so it can later be deleted). A one-off, no-consent analysis
     // leaves no session identifier behind.

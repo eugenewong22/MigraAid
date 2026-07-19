@@ -2,6 +2,10 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
+// global-error replaces the entire document, and only the locale layout
+// imports the stylesheet — without this import the crash page renders as
+// unstyled browser defaults, exactly when reassurance matters most.
+import "./globals.css";
 
 const COPY = {
   en: ["Something went wrong", "Your information has not been submitted. Please try again.", "Try again"],
@@ -35,16 +39,19 @@ export default function GlobalError({
 
   return (
     <html lang={locale}>
+      <head>
+        <title>{title}</title>
+      </head>
       <body className="flex min-h-screen items-center justify-center p-6">
         <main className="max-w-sm text-center">
-          <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="mt-3 text-neutral-600">
+          <h1 className="text-2xl font-bold text-ink">{title}</h1>
+          <p className="mt-3 text-body-soft">
             {body}
           </p>
           <button
             type="button"
             onClick={reset}
-            className="mt-5 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white"
+            className="mt-5 inline-flex min-h-[52px] items-center justify-center rounded-full bg-terracotta px-8 font-semibold text-[#fff7ec] transition-colors hover:bg-terracotta-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
           >
             {retry}
           </button>

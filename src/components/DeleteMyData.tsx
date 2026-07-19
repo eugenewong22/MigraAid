@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { StatusFocus } from "@/components/StatusFocus";
 
 export function DeleteMyData() {
   const t = useTranslations("privacy");
@@ -22,16 +23,11 @@ export function DeleteMyData() {
 
   if (state === "done") {
     return (
-      // Focused on mount: it replaces the button the user just activated,
+      // Focused once on mount: it replaces the button the user just activated,
       // whose removal would otherwise drop focus to the page.
-      <p
-        className="text-[13px] text-saved-text focus:outline-none"
-        role="status"
-        tabIndex={-1}
-        ref={(el) => el?.focus()}
-      >
+      <StatusFocus className="text-[13px] text-body-soft focus:outline-none">
         {t("deleted")}
-      </p>
+      </StatusFocus>
     );
   }
 
@@ -43,7 +39,7 @@ export function DeleteMyData() {
         type="button"
         onClick={remove}
         aria-disabled={state === "busy" || undefined}
-        className={`inline-flex min-h-11 items-center text-muted underline transition-colors hover:text-body ${state === "busy" ? "opacity-50" : ""}`}
+        className={`inline-flex min-h-11 items-center text-muted underline transition-colors hover:text-terracotta ${state === "busy" ? "opacity-50" : ""}`}
       >
         {state === "busy" ? t("deleting") : t("delete")}
       </button>

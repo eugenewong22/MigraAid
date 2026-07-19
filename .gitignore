@@ -44,3 +44,4 @@ next-env.d.ts
 
 # local design handoff artifacts
 /design_handoff_migraaid_redesign/
+/design_handoff_daybreak_redesign/

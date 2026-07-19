@@ -1,13 +1,13 @@
 {
   "home": {
     "title": "MigraAid",
+    "metaDescription": "Multilinggwal na sentro ng mga karapatan at suporta para sa mga migranteng manggagawa sa Singapore.",
     "tagline": "Unawain ang iyong mga karapatan sa Singapore — sa iyong wika.",
     "startChat": "Magtanong",
     "contractCta": "Ipaliwanag ang aking kontrata",
     "emergencyCta": "Mga emergency contact",
     "eyebrow": "Libre · Hindi nagpapakilala · 8 wika",
     "heroLede": "Mga sagot tungkol sa sahod, permit, tirahan, at kalusugan, nakabatay sa batas ng Singapore at nasuri ng mga caseworker ng NGO.",
-    "chooseLanguage": "Piliin ang iyong wika",
     "cardLawTitle": "Nakabatay sa batas",
     "cardLawBody": "Bawat sagot ay bumabanggit ng pinagmulan nito — ang Employment Act, WICA, o mga alituntunin ng MOM.",
     "cardPrivacyTitle": "Pribado bilang default",
@@ -37,6 +37,8 @@
     "loading": "Inihahanda ng MigraAid ang sagot.",
     "feedbackYes": "Oo, nakatulong ito",
     "feedbackNo": "Hindi, hindi ito nakatulong",
+    "feedbackYesShort": "Oo",
+    "feedbackNoShort": "Hindi",
     "feedbackError": "Hindi namin na-save ang iyong feedback. Pakisubukang muli.",
     "speakerYou": "Ikaw",
     "speakerMigraAid": "MigraAid",
@@ -88,6 +90,7 @@
   "contract": {
     "title": "Ipaliwanag ang aking kontrata",
     "upload": "I-upload o kunan ng larawan ang iyong kontrata",
+    "fileHint": "JPEG, PNG, GIF o WebP · hanggang 8 MB",
     "analyzing": "Binabasa ang iyong kontrata…",
     "analysisReady": "Handa na ang pagsusuri ng iyong kontrata.",
     "privacy": "Ligtas na ipinapadala ang iyong larawan sa isang AI provider para suriin. Hindi iniimbak ng MigraAid ang larawan o hilaw na tekstong binasa mula sa kontrata. Maaaring magpanatili ang AI provider ng mga safety log nang hanggang 30 araw.",

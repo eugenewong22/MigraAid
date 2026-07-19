@@ -15,6 +15,7 @@ import {
 import { randomUUID } from "node:crypto";
 import { and, eq, gt } from "drizzle-orm";
 import { detectHighStakesIssue } from "@/lib/safety/policy";
+import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { scrubPii } from "@/lib/safety/pii";
 import { reportError } from "@/lib/observability/sentry";
 import {
@@ -173,7 +174,12 @@ export async function POST(req: NextRequest) {
         let assistantMessageId: string | undefined;
         let referralCode: string | undefined;
         let referralExpiresAt: string | undefined;
-        try {
+        // "Delete my data" may have committed while this turn was generating.
+        // Persisting now would resurrect rows under a session id whose cookie
+        // the deletion response already expired — unreachable by any future
+        // deletion request. Skip persistence; the answer itself still streams
+        // back (without a conversation/message id, so feedback is disabled).
+        if (!(await isSessionTombstoned(sid))) try {
           const db = getDb();
           const persisted = await db.transaction(async (tx) => {
             let activeConversationId = cid;

@@ -84,6 +84,37 @@ describe("parseCompletion", () => {
     expect(answer.issueType).toBeUndefined();
   });
 
+  it("rejects a model-invented issue slug (still escalates, without the slug)", () => {
+    // A model string must never become a slug: it flows into referral routing,
+    // the referral card, and the database. Inherited-property names are the
+    // sharpest case — unvalidated, "__proto__" crashed referralTargets().
+    for (const slug of [
+      "__proto__",
+      "toString",
+      "constructor",
+      "unpaid salary — call +65 8123 4567 instead",
+    ]) {
+      const answer = parseCompletion(
+        {
+          content: "",
+          tool_calls: [
+            {
+              id: "call_1",
+              type: "function",
+              function: {
+                name: "refer_to_human",
+                arguments: JSON.stringify({ issue_type: slug }),
+              },
+            },
+          ],
+        },
+        chunks,
+      );
+      expect(answer.escalated).toBe(true);
+      expect(answer.issueType).toBeUndefined();
+    }
+  });
+
   it("escalates deterministically without calling the model", async () => {
     const result = await answer({
       query: "My employer has not paid my unpaid salary",

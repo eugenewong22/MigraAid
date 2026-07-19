@@ -148,6 +148,15 @@ export async function rateLimit(
   return memoryRateLimit(key, limit, windowMs);
 }
 
+/**
+ * Sentinel returned by `clientKey` when no trusted per-client identity exists
+ * (self-hosted without `TRUST_PROXY_HEADERS`). Every caller then shares ONE
+ * bucket, so a quota keyed on it is a global switch an attacker can flip —
+ * routes protecting sign-in or a worker's data rights must not let the shared
+ * bucket lock out legitimate users (see admin login and privacy delete).
+ */
+export const UNTRUSTED_CLIENT_KEY = "anon";
+
 /** Derive a client key only from forwarding headers set by a trusted proxy. */
 export function clientKey(
   headers: Headers,
@@ -162,5 +171,5 @@ export function clientKey(
       : env.TRUST_PROXY_HEADERS === "true"
         ? (headers.get("x-real-ip") ?? headers.get("x-forwarded-for"))
         : null;
-  return forwarded?.split(",")[0]?.trim() || "anon";
+  return forwarded?.split(",")[0]?.trim() || UNTRUSTED_CLIENT_KEY;
 }

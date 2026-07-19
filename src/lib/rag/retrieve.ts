@@ -20,6 +20,7 @@ import { getDb } from "@/lib/db";
 import { contentChunks, contentItems } from "@/lib/db/schema";
 import { getEmbedder } from "@/lib/embeddings";
 import type { RetrievedChunk, RetrieveOptions } from "./types";
+import { reportError } from "@/lib/observability/sentry";
 import { scrubPii } from "@/lib/safety/pii";
 
 const NORMALIZE_MODEL = "gpt-5.6-terra";
@@ -56,7 +57,12 @@ export async function normalizeQueryForRetrieval(
     });
     const translated = completion.choices[0]?.message.content?.trim();
     return translated || query;
-  } catch {
+  } catch (error) {
+    // Availability-first fallback — but never a silent one: the English-
+    // normalized text also feeds the deterministic high-stakes/injection
+    // backstop, so a persistent normalize outage quietly weakens safety
+    // coverage for non-English workers unless operators can see it.
+    await reportError(error, "rag.normalize");
     return query;
   }
 }

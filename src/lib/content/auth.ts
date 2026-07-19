@@ -141,6 +141,28 @@ export async function signInAdmin(email: string, password: string) {
   };
 }
 
+/**
+ * Best-effort server-side revocation at sign-out. Clearing the cookie alone
+ * leaves the stateless JWT (and the unused refresh token minted at sign-in)
+ * valid until natural expiry — up to ~1h of replayable access for anyone who
+ * captured the token. `scope: "global"` revokes the whole Supabase session.
+ * Failures are swallowed: sign-out must always succeed locally, and the JWT
+ * TTL bounds the residual window.
+ */
+export async function signOutAdmin(token: string): Promise<void> {
+  const cfg = config();
+  if (!cfg || !token) return;
+  try {
+    await authFetch(`${cfg.url}/auth/v1/logout?scope=global`, {
+      method: "POST",
+      headers: { apikey: cfg.anonKey, authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+  } catch {
+    // Best-effort only.
+  }
+}
+
 /** Fail-closed guard used by both pages and server actions. */
 export async function requireAdmin(
   minimumRole: AdminRole = "author",
