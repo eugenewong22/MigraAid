@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { after } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import {
@@ -142,7 +143,9 @@ export async function POST(req: NextRequest) {
       mediaType: file.type,
       locale,
     });
-    await track({ type: "contract_explained", locale }, { sessionId: sid });
+    // Analytics run after the response is flushed — never between the finished
+    // analysis and the worker seeing it. `track` swallows its own failures.
+    after(() => track({ type: "contract_explained", locale }, { sessionId: sid }));
 
     // Persist derived analysis only after an explicit opt-in. The image and its
     // raw text are never stored, even when the worker opts in.

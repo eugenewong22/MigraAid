@@ -238,12 +238,19 @@ const SENTENCE_TERMINATOR = /[.!?…。！？၊။ฯ।॥]/u;
  *  3. Every other (substantive) paragraph must contain at least one valid marker.
  *  4. A trailing citation legitimately covers the sentences before it, but a NEW
  *     substantive sentence written AFTER the paragraph's last marker is treated
- *     as uncited and rejected (e.g. "Salary is due [1]. Sign this now." fails).
- *     A citation that leads or sits mid-sentence still covers that sentence
- *     (so "According to [1], you must be paid within 7 days." is accepted).
+ *     as uncited and rejected (e.g. "Salary is due. [1] Sign this now." fails —
+ *     the marker ends one sentence and the directive opens a fresh, uncited one).
+ *     A citation that leads or sits mid-sentence still covers the remainder of
+ *     THAT sentence (so "According to [1], you must be paid within 7 days." and
+ *     "You must be paid [1] within 7 days." are accepted). The distinction is
+ *     whether the marker opens its sentence (a terminator, not cited words,
+ *     precedes it) — if so, the text after it is a new claim, not a continuation.
  *
  * This is a positional heuristic behind the grounding-score gate and the
  * source-only system prompt; it cannot prove semantic grounding on its own.
+ * Scripts without sentence-ending punctuation (Thai) cannot be segmented, so a
+ * mid-string "cited [1] directive" injection is not catchable here for them —
+ * the grounding-score gate and reviewed corpus are the backstop in that case.
  */
 function hasValidCitationCoverage(text: string, sourceCount: number): boolean {
   const isValidMarker = (match: RegExpMatchArray) => {
@@ -296,8 +303,24 @@ function hasValidCitationCoverage(text: string, sourceCount: number): boolean {
 
     // Reject a new substantive sentence written after the paragraph's last marker.
     const last = markers[markers.length - 1];
-    const after = paragraph.slice((last.index ?? 0) + last[0].length);
-    const sentencesAfterMarker = after.split(SENTENCE_TERMINATOR).slice(1);
+    const markerStart = last.index ?? 0;
+    const after = paragraph.slice(markerStart + last[0].length);
+
+    // Does the marker OPEN its sentence? Look at the text since the previous
+    // terminator: if nothing cited-worthy precedes the marker in its own
+    // sentence (e.g. "…7 days. [1] …"), then even the first chunk of trailing
+    // text is a fresh, uncited claim. Otherwise the marker sits inside/at the
+    // end of a sentence and the run up to the next terminator completes it.
+    const currentSentencePrefix = paragraph
+      .slice(0, markerStart)
+      .split(SENTENCE_TERMINATOR)
+      .pop() ?? "";
+    const markerOpensSentence = !/[\p{L}\p{N}]/u.test(
+      currentSentencePrefix.replace(CITATION_RE, ""),
+    );
+
+    const segments = after.split(SENTENCE_TERMINATOR);
+    const sentencesAfterMarker = markerOpensSentence ? segments : segments.slice(1);
     const hasUncitedTrailingSentence = sentencesAfterMarker.some((sentence) =>
       /[\p{L}\p{N}]/u.test(sentence.replace(CITATION_RE, "")),
     );

@@ -29,6 +29,7 @@ interface Citation {
 }
 
 interface Referral {
+  orgKey?: string;
   org: string;
   contact: string;
   href?: string;
@@ -52,6 +53,10 @@ interface ChatMessage {
 
 export function Chat() {
   const t = useTranslations("chat");
+  // Referral org names/notes reuse the professionally-translated emergency
+  // contact catalog (all 8 locales) rather than the English strings the API
+  // sends, so the "who can help" card isn't English at the moment of escalation.
+  const te = useTranslations("emergency");
   const locale = useLocale();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -176,11 +181,29 @@ export function Chat() {
     inputRef.current?.focus();
     announce(t("loading"));
 
+    // A cellular/Wi-Fi handoff can drop the socket without a FIN, leaving
+    // `fetch`/`read()` pending forever — which would strand the composer with
+    // Send disabled and no way to retry but a reload (losing the question).
+    // Guard with both an overall ceiling and a per-chunk inactivity timer; the
+    // server emits heartbeat frames during generation so a healthy slow answer
+    // keeps the inactivity timer alive while a dead connection trips it.
+    const controller = new AbortController();
+    const OVERALL_TIMEOUT_MS = 75_000;
+    const INACTIVITY_TIMEOUT_MS = 25_000;
+    const overallTimer = setTimeout(() => controller.abort(), OVERALL_TIMEOUT_MS);
+    let inactivityTimer: ReturnType<typeof setTimeout> | undefined;
+    const resetInactivity = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => controller.abort(), INACTIVITY_TIMEOUT_MS);
+    };
+
     try {
+      resetInactivity();
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ message: question, locale, conversationId }),
+        signal: controller.signal,
       });
       if (!res.ok || !res.body) throw new Error("request failed");
 
@@ -192,6 +215,7 @@ export function Chat() {
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
+        resetInactivity();
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
         buffer = lines.pop() ?? "";
@@ -236,6 +260,8 @@ export function Chat() {
       restoreQuestion(question);
       announce(t("error"));
     } finally {
+      clearTimeout(overallTimer);
+      clearTimeout(inactivityTimer);
       setBusy(false);
     }
   }
@@ -334,23 +360,43 @@ export function Chat() {
                         {t("referral")}
                       </p>
                       <div className="flex flex-col gap-1.5">
-                        {m.referrals.map((r, k) => (
-                          <p
-                            key={k}
-                            className="text-[15.5px] leading-[1.5] text-body-soft"
-                          >
-                            <strong className="font-[650] text-ink">
-                              {r.org}
-                            </strong>
-                            {r.reason ? ` — ${r.reason}` : ""} ·{" "}
-                            <a
-                              href={r.href ?? telHref(r.contact)}
-                              className="whitespace-nowrap text-body-soft underline underline-offset-2"
+                        {m.referrals.map((r, k) => {
+                          // Prefer the localized emergency-catalog name/note;
+                          // fall back to the API's English name for orgs (only
+                          // TADM) not present there.
+                          const hasLocalized =
+                            !!r.orgKey && te.has(`contacts.${r.orgKey}.name`);
+                          const orgName = hasLocalized
+                            ? te(`contacts.${r.orgKey}.name`)
+                            : r.org;
+                          const note =
+                            hasLocalized && te.has(`contacts.${r.orgKey}.note`)
+                              ? te(`contacts.${r.orgKey}.note`)
+                              : null;
+                          // Language-neutral link text: a bare hostname for web
+                          // links, the dialable number for phone contacts — no
+                          // English action label to leave untranslated.
+                          const linkLabel = r.href
+                            ? sourceChipLabel(r.href)
+                            : r.contact;
+                          return (
+                            <p
+                              key={k}
+                              className="text-[15.5px] leading-[1.5] text-body-soft"
                             >
-                              {r.contact}
-                            </a>
-                          </p>
-                        ))}
+                              <strong className="font-[650] text-ink">
+                                {orgName}
+                              </strong>
+                              {note ? ` — ${note}` : ""} ·{" "}
+                              <a
+                                href={r.href ?? telHref(r.contact)}
+                                className="whitespace-nowrap text-body-soft underline underline-offset-2"
+                              >
+                                {linkLabel}
+                              </a>
+                            </p>
+                          );
+                        })}
                       </div>
                       {m.referralCode && (
                         <div className="flex flex-col gap-1 border-t border-warn-border pt-2.5">

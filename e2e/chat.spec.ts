@@ -59,6 +59,63 @@ test("a cited answer exposes evidence and binds feedback to that answer", async 
   await expect(answer.getByRole("status")).toHaveText(en.chat.thanks);
 });
 
+test("an escalated answer renders a localized referral card with a neutral link", async ({
+  page,
+}) => {
+  const conversationId = "11111111-1111-4111-8111-111111111111";
+  const messageId = "22222222-2222-4222-8222-222222222222";
+  await page.route("**/api/chat", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/x-ndjson; charset=utf-8",
+      body: `${JSON.stringify({
+        type: "done",
+        text: "This looks serious. [1]",
+        conversationId,
+        messageId,
+        citations: [{ sourceRef: "MOM", contentItemId: "33333333-3333-4333-8333-333333333333" }],
+        escalated: true,
+        // The API still sends the English `org`/`reason`; the client must render
+        // the localized emergency-catalog name and a neutral link, not these.
+        referrals: [
+          {
+            orgKey: "home",
+            org: "HOME — Humanitarian Organisation for Migration Economics",
+            contact: "+65 6341 5535",
+            reason: "Support for unpaid salary",
+          },
+          {
+            orgKey: "tadm",
+            org: "TADM — Tripartite Alliance for Dispute Management",
+            contact: "Open TADM eServices",
+            href: "https://www.tal.sg/tadm/eservices",
+            reason: "Support for unpaid salary",
+          },
+        ],
+      })}\n`,
+    });
+  });
+
+  await page.goto("/en/chat");
+  await page.getByLabel(en.chat.questionLabel).fill("My boss has not paid me.");
+  await page.getByRole("button", { name: en.chat.send }).click();
+
+  const answer = page.getByRole("article", { name: en.chat.speakerMigraAid });
+  // Localized name + note from the emergency catalog, not the English API string.
+  await expect(answer.getByText("HOME Helpline")).toBeVisible();
+  await expect(answer).toContainText("Migrant worker support");
+  await expect(answer).not.toContainText("Support for unpaid salary");
+  // Web link shows the bare hostname; phone contact shows the dialable number.
+  await expect(answer.getByRole("link", { name: "tal.sg" })).toHaveAttribute(
+    "href",
+    "https://www.tal.sg/tadm/eservices",
+  );
+  await expect(answer.getByRole("link", { name: "+65 6341 5535" })).toHaveAttribute(
+    "href",
+    "tel:+6563415535",
+  );
+});
+
 test("accumulates streamed NDJSON text frames into the final answer", async ({
   page,
 }) => {

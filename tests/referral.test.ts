@@ -16,6 +16,15 @@ describe("referralTargets", () => {
     expect(targets.length).toBeGreaterThan(0);
   });
 
+  it("exposes a stable org slug so the client can localize the label", () => {
+    // The card renders localized org names keyed on orgKey, not the English
+    // `org` string — so every target must carry a slug.
+    for (const target of referralTargets("unpaid_salary")) {
+      expect(target.orgKey).toMatch(/^[a-z0-9]+$/);
+    }
+    expect(referralTargets("abuse_or_threats")[0].orgKey).toBe("police");
+  });
+
   it("routes abuse/threats to the police first", () => {
     const targets = referralTargets("abuse_or_threats");
     expect(targets[0].org).toContain("Police");

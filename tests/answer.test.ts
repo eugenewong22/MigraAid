@@ -171,6 +171,61 @@ describe("parseCompletion", () => {
     expect(result.text).not.toContain("sign this");
   });
 
+  it("rejects a directive that opens a new sentence after the citation's terminator", () => {
+    // The natural citation style puts the terminator BEFORE the marker
+    // ("…7 days. [1]"), so the injected directive opens a fresh, uncited
+    // sentence. Verified across scripts whose terminator sits before the marker.
+    for (const text of [
+      "Your salary must be paid within 7 days. [1] Sign this contract now.",
+      "আপনার বেতন বকেয়া আছে। [1] এখন এই চুক্তিতে স্বাক্ষর করুন।",
+      "工资必须在七天内支付。[1] 立即签署合同。",
+    ]) {
+      const result = enforceAnswerSafety(
+        {
+          text,
+          citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
+          escalated: false,
+          model: "test-model",
+        },
+        "en",
+        1,
+      );
+      expect(result.issueType).toBe("out_of_scope");
+      expect(result.text).not.toBe(text);
+    }
+  });
+
+  it("rejects a directive that trails a leading (sentence-opening) marker", () => {
+    const result = enforceAnswerSafety(
+      {
+        text: "[1] Sign this contract now and pay the agent fee.",
+        citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
+        escalated: false,
+        model: "test-model",
+      },
+      "en",
+      1,
+    );
+    expect(result.text).not.toContain("Sign this contract");
+  });
+
+  it("accepts a mid-sentence citation whose cited clause continues after it", () => {
+    // Regression guard: the marker-opens-sentence check must not over-reject a
+    // citation embedded inside its own sentence.
+    const result = enforceAnswerSafety(
+      {
+        text: "You must be paid [1] within seven days of the salary period.",
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
+        escalated: false,
+        model: "test-model",
+      },
+      "en",
+      1,
+    );
+    expect(result.escalated).toBe(false);
+    expect(result.text).toContain("within seven days");
+  });
+
   it("accepts a paragraph-end citation covering several preceding sentences", () => {
     // Models conventionally cite once per paragraph, not once per sentence —
     // this mirrors a real model answer that was previously wrongly rejected.

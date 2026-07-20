@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { after } from "next/server";
 import { getDb } from "@/lib/db";
 import { conversations, feedback, messages } from "@/lib/db/schema";
 import { track } from "@/lib/analytics";
@@ -114,7 +115,9 @@ export async function POST(req: NextRequest) {
         conversationId,
         messageId,
       });
-    await track({ type: "feedback_submitted", rating }, { sessionId: sid });
+    // Rating is recorded; report the tap after the response flushes so the
+    // button spinner isn't held open for a PostHog round trip.
+    after(() => track({ type: "feedback_submitted", rating }, { sessionId: sid }));
   } catch (error) {
     if (
       typeof error === "object" &&

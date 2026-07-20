@@ -135,6 +135,13 @@ export async function POST(req: NextRequest) {
           return false;
         }
       };
+      // The answer is buffered until it clears the safety gate, so nothing
+      // reaches the browser for the whole retrieve+generate window (up to tens
+      // of seconds). Emit a heartbeat so the client can tell a slow-but-alive
+      // stream from a dead socket and keep its inactivity timer from tripping.
+      const heartbeat = setInterval(() => {
+        enqueue(write({ type: "ping" }));
+      }, 10_000);
       try {
         let result = preflightSafetyAnswer(message, locale);
         let normalizedQuery = message;
@@ -182,6 +189,10 @@ export async function POST(req: NextRequest) {
         let assistantMessageId: string | undefined;
         let referralCode: string | undefined;
         let referralExpiresAt: string | undefined;
+        // Captured during persistence, emitted AFTER the answer frame so no
+        // analytics round trip sits between "answer ready" and "answer shown".
+        let startedInfo: { newWorker: boolean } | undefined;
+        let referralOrg: string | undefined;
         // "Delete my data" may have committed while this turn was generating.
         // Persisting now would resurrect rows under a session id whose cookie
         // the deletion response already expired — unreachable by any future
@@ -310,22 +321,8 @@ export async function POST(req: NextRequest) {
             assistantMessageId = persisted.assistantMessageId;
             referralCode = persisted.handoff?.code;
             referralExpiresAt = persisted.handoff?.expiresAt.toISOString();
-            if (persisted.started) {
-              await track(
-                {
-                  type: "conversation_started",
-                  locale,
-                  newWorker: persisted.started.newWorker,
-                },
-                { sessionId: sid },
-              );
-            }
-            if (persisted.handoff) {
-              await track(
-                { type: "referral_created", org: referrals[0].org },
-                { sessionId: sid },
-              );
-            }
+            startedInfo = persisted.started;
+            if (persisted.handoff) referralOrg = referrals[0].org;
           }
         } catch (persistenceError) {
           // No database configured — skip persistence, still answer the worker.
@@ -348,15 +345,34 @@ export async function POST(req: NextRequest) {
           }),
         );
         if (!delivered) return;
-        await track(
-          {
-            type: "message_sent",
-            locale,
-            escalated: result.escalated,
-            tokens: result.usage?.totalTokens,
-          },
-          { sessionId: sid },
-        );
+        // Analytics run only after the worker has the answer. Batched so a slow
+        // PostHog endpoint can't serialize into added latency, and settled (not
+        // thrown) so an analytics failure never surfaces to the worker.
+        const analytics: Promise<void>[] = [
+          track(
+            {
+              type: "message_sent",
+              locale,
+              escalated: result.escalated,
+              tokens: result.usage?.totalTokens,
+            },
+            { sessionId: sid },
+          ),
+        ];
+        if (startedInfo) {
+          analytics.push(
+            track(
+              { type: "conversation_started", locale, newWorker: startedInfo.newWorker },
+              { sessionId: sid },
+            ),
+          );
+        }
+        if (referralOrg) {
+          analytics.push(
+            track({ type: "referral_created", org: referralOrg }, { sessionId: sid }),
+          );
+        }
+        await Promise.allSettled(analytics);
       } catch (err) {
         if (cancelled || generationAbort.signal.aborted) return;
         await reportError(err, "api.chat");
@@ -364,6 +380,7 @@ export async function POST(req: NextRequest) {
           write({ type: "error", message: "Unable to answer safely right now." }),
         );
       } finally {
+        clearInterval(heartbeat);
         req.signal.removeEventListener("abort", abortGeneration);
         if (!cancelled) {
           try {
