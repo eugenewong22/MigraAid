@@ -2,7 +2,12 @@ import type { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { conversations, feedback, messages } from "@/lib/db/schema";
 import { track } from "@/lib/analytics";
-import { clientKey, rateLimit } from "@/lib/ratelimit";
+import {
+  clientKey,
+  rateLimit,
+  reportUntrustedClientKey,
+  UNTRUSTED_CLIENT_KEY,
+} from "@/lib/ratelimit";
 import { and, eq } from "drizzle-orm";
 import {
   readBoundedJson,
@@ -31,7 +36,9 @@ export async function POST(req: NextRequest) {
       { status: 403 },
     );
   }
-  const limited = await rateLimit(`feedback:${clientKey(req.headers)}`, {
+  const clientIp = clientKey(req.headers);
+  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.feedback");
+  const limited = await rateLimit(`feedback:${clientIp}`, {
     limit: 10,
     windowMs: 60_000,
   });

@@ -19,8 +19,11 @@
   --color-paper: #fffdf8; /* cards, chat bubbles, input bar */
   --color-sand: #f3ead9; /* tinted surfaces: info notes, source chips, number pills */
   --color-sand-deep: #f0e8d8; /* hairlines inside cards */
-  --color-hairline: #e9e0d2; /* borders between page regions */
-  --color-line: #d9cbb6; /* input/pill borders */
+  --color-hairline: #e9e0d2; /* decorative borders between page regions */
+  --color-line: #94805f; /* interactive control borders (input/pill/dropzone) —
+     darkened from the handoff's #d9cbb6 (1.48:1, invisible) to 3.54:1 on cream
+     so the control boundary meets WCAG 1.4.11. Decorative hairlines stay light
+     via --color-hairline / --color-sand-deep. */
 
   /* Text */
   --color-ink: #2b2118; /* headings */
@@ -41,23 +44,38 @@
   --color-warn-border: #f0dcb4;
   --color-warn-text: #5c3d08; /* text on amber "Warning" chip */
 
-  /* Display type — Latin-only Bricolage, falling back to Noto for other scripts */
-  --font-display: var(--font-bricolage), system-ui, "Noto Sans",
+  /* Display type — Latin-only Bricolage, falling back to Noto for other scripts.
+     The var() carries an inline fallback so the declaration stays valid where
+     the next/font variables aren't injected (e.g. global-error renders its own
+     <html> without the font className); otherwise the whole font-family is
+     "invalid at computed-value time" and the page drops to the UA serif. */
+  --font-display: var(--font-bricolage, system-ui), system-ui, "Noto Sans",
     "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai",
     "Noto Sans Myanmar", sans-serif;
-  --font-sans: var(--font-spline), system-ui, -apple-system, "Segoe UI", Roboto,
-    "Noto Sans", "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Thai",
-    "Noto Sans Myanmar", sans-serif;
+  --font-sans: var(--font-spline, system-ui), system-ui, -apple-system,
+    "Segoe UI", Roboto, "Noto Sans", "Noto Sans Bengali", "Noto Sans Tamil",
+    "Noto Sans Thai", "Noto Sans Myanmar", sans-serif;
 }
 
 :root {
   color-scheme: light;
 }
 
-/* Larger base size (low-literacy, mobile-first audience). Non-Latin scripts
-   render via the OS Noto fallback baked into the font stacks above. */
+/* Larger base size (low-literacy, mobile-first audience), expressed relative to
+   the browser's font-size setting (112.5% of the 16px default = 18px) so a
+   worker who raises their default font is still scaled up, rather than pinned
+   to a fixed 18px. Non-Latin scripts render via the OS Noto fallback baked into
+   the font stacks above. */
 html {
-  font-size: 18px;
+  font-size: 112.5%;
+}
+
+/* Chat transcript height with a vh fallback: `dvh` (dynamic viewport height) is
+   unsupported on older Android WebView/Chrome common to this audience's phones,
+   where a lone `max-height: 58dvh` is dropped and the log never scrolls. */
+.chat-log-maxh {
+  max-height: 58vh;
+  max-height: 58dvh;
 }
 
 body {

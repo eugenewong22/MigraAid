@@ -4,7 +4,12 @@ import { routing } from "@/i18n/routing";
 import { retrieve, normalizeQueryForRetrieval } from "@/lib/rag/retrieve";
 import { preflightSafetyAnswer, streamAnswer } from "@/lib/rag/answer";
 import { referralTargets } from "@/lib/referral/route";
-import { rateLimit, clientKey } from "@/lib/ratelimit";
+import {
+  rateLimit,
+  clientKey,
+  reportUntrustedClientKey,
+  UNTRUSTED_CLIENT_KEY,
+} from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import {
@@ -16,6 +21,7 @@ import { randomUUID } from "node:crypto";
 import { and, eq, gt } from "drizzle-orm";
 import { detectHighStakesIssue } from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
+import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { scrubPii } from "@/lib/safety/pii";
 import { reportError } from "@/lib/observability/sentry";
 import {
@@ -50,7 +56,9 @@ export async function POST(req: NextRequest) {
   if (!isSameOriginRequest(req)) {
     return new Response("Cross-origin requests are not allowed", { status: 403 });
   }
-  const rl = await rateLimit(`chat:${clientKey(req.headers)}`, {
+  const clientIp = clientKey(req.headers);
+  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.chat");
+  const rl = await rateLimit(`chat:${clientIp}`, {
     limit: 20,
     windowMs: 60_000,
   });
@@ -290,25 +298,34 @@ export async function POST(req: NextRequest) {
             };
           });
 
-          cid = persisted.conversationId;
-          assistantMessageId = persisted.assistantMessageId;
-          referralCode = persisted.handoff?.code;
-          referralExpiresAt = persisted.handoff?.expiresAt.toISOString();
-          if (persisted.started) {
-            await track(
-              {
-                type: "conversation_started",
-                locale,
-                newWorker: persisted.started.newWorker,
-              },
-              { sessionId: sid },
-            );
-          }
-          if (persisted.handoff) {
-            await track(
-              { type: "referral_created", org: referrals[0].org },
-              { sessionId: sid },
-            );
+          // Re-check after commit: a "delete my data" request may have landed
+          // during the transaction (its tombstone written before its delete, so
+          // the pre-transaction check above could still miss it). If so, undo
+          // this turn's rows and leave the response without ids so nothing is
+          // attributed to a session the worker already erased.
+          if (await isSessionTombstoned(sid)) {
+            await deleteWorkerSessionData(sid);
+          } else {
+            cid = persisted.conversationId;
+            assistantMessageId = persisted.assistantMessageId;
+            referralCode = persisted.handoff?.code;
+            referralExpiresAt = persisted.handoff?.expiresAt.toISOString();
+            if (persisted.started) {
+              await track(
+                {
+                  type: "conversation_started",
+                  locale,
+                  newWorker: persisted.started.newWorker,
+                },
+                { sessionId: sid },
+              );
+            }
+            if (persisted.handoff) {
+              await track(
+                { type: "referral_created", org: referrals[0].org },
+                { sessionId: sid },
+              );
+            }
           }
         } catch (persistenceError) {
           // No database configured — skip persistence, still answer the worker.

@@ -277,6 +277,48 @@ describe("parseCompletion", () => {
     expect(result.text).not.toContain("立即签署");
   });
 
+  it("rejects an uncited Bengali directive after the danda (U+0964)", () => {
+    // Bengali sentences end with the danda, not a Latin period. Without it in
+    // the terminator class, the trailing directive slipped the gate.
+    const result = enforceAnswerSafety(
+      {
+        text: "আপনার বেতন বকেয়া আছে [1]। এখন এই চুক্তিতে স্বাক্ষর করুন।",
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
+        escalated: false,
+        model: "test-model",
+      },
+      "bn",
+      1,
+    );
+    expect(result.escalated).toBe(false);
+    expect(result.issueType).toBe("out_of_scope");
+    expect(result.text).not.toContain("স্বাক্ষর করুন");
+  });
+
+  it("rejects a short standalone directive formatted as bold or a heading", () => {
+    // No trailing punctuation and <= 48 chars, so the old label exemption
+    // waived the citation requirement — an uncited directive to the worker.
+    for (const text of [
+      "**Give your boss your passport**",
+      "### Sign now",
+      "**Pay the agent now to keep your job**",
+    ]) {
+      const result = enforceAnswerSafety(
+        {
+          text,
+          citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
+          escalated: false,
+          model: "test-model",
+        },
+        "en",
+        1,
+      );
+      expect(result.escalated).toBe(false);
+      expect(result.issueType).toBe("out_of_scope");
+      expect(result.text).not.toBe(text);
+    }
+  });
+
   it("rejects citation markers that do not refer to a supplied source", () => {
     const result = enforceAnswerSafety(
       {

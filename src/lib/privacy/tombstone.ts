@@ -14,6 +14,7 @@
  * open (treat as not tombstoned) — availability first; the nightly retention
  * sweep remains the durable backstop for any row that slips through.
  */
+import { reportError } from "@/lib/observability/sentry";
 import { sensitiveRateLimitKey } from "@/lib/ratelimit";
 
 /** Chat route maxDuration is 60s; cover a full in-flight request plus skew. */
@@ -47,16 +48,24 @@ export async function tombstoneSession(sessionId: string): Promise<void> {
   const redis = redisConfig();
   if (!redis) return;
   try {
-    await fetch(
-      `${redis.url}/set/${encodeURIComponent(`migraaid:tomb:${key}`)}/1?px=${TOMBSTONE_TTL_MS}`,
+    const response = await fetch(
+      `${redis.url}/set/${encodeURIComponent(`migraaid:tomb:${key}`)}/1?PX=${TOMBSTONE_TTL_MS}`,
       {
         method: "POST",
         headers: { authorization: `Bearer ${redis.token}` },
         signal: AbortSignal.timeout(1_500),
       },
     );
-  } catch {
-    // Memory entry still covers this instance; retention sweep covers the rest.
+    if (!response.ok) throw new Error(`tombstone SET returned ${response.status}`);
+  } catch (error) {
+    // The in-memory entry still covers THIS instance, but on multi-instance
+    // serverless the in-flight chat turn usually runs elsewhere — so a failed
+    // distributed write means the delete/persist race is unguarded there.
+    // Report it (as the rate limiter reports its own degradation) rather than
+    // failing silently; the retention sweep remains the durable backstop.
+    if (process.env.NODE_ENV === "production") {
+      await reportError(error, "privacy.tombstone.write");
+    }
   }
 }
 

@@ -23,7 +23,7 @@ export default async function Home({
       <section className="relative overflow-hidden px-5 py-8 md:px-12 md:pb-20 md:pt-[72px]">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-[90px] right-[-70px] h-[230px] w-[230px] rounded-full bg-[#f3d9a4] opacity-55 md:-top-[180px] md:right-[-110px] md:h-[430px] md:w-[430px]"
+          className="pointer-events-none absolute -top-[90px] right-[-70px] h-[230px] w-[230px] rounded-full bg-[#f3d9a4] opacity-25 md:-top-[180px] md:right-[-110px] md:h-[430px] md:w-[430px] md:opacity-55"
         />
         <div
           aria-hidden="true"
@@ -48,7 +48,7 @@ export default async function Home({
             </Link>
             <Link
               href="/contract"
-              className="inline-flex min-h-[54px] items-center justify-center rounded-full border-2 border-terracotta px-8 text-[17px] font-[600] text-terracotta transition-colors hover:bg-terracotta/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+              className="inline-flex min-h-[54px] items-center justify-center rounded-full border-2 border-terracotta px-8 text-[17px] font-[600] text-terracotta transition-colors hover:bg-terracotta/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
             >
               {t("contractCta")}
             </Link>

@@ -110,7 +110,7 @@ export default async function EmergencyPage({
                       <a
                         href={contactHref(c)}
                         aria-label={t(`contacts.${c.id}.name`) + ": " + c.number}
-                        className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full bg-sand px-[18px] text-[15.5px] font-bold text-chip-text transition-colors hover:bg-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+                        className="inline-flex min-h-11 items-center whitespace-nowrap rounded-full bg-sand px-[18px] text-[15.5px] font-bold text-chip-text transition-colors hover:bg-sand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
                       >
                         {isSms ? t("sms", { number: c.number }) : c.number}
                       </a>

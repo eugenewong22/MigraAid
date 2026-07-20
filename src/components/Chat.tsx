@@ -6,6 +6,20 @@ import { StatusFocus } from "@/components/StatusFocus";
 import { telHref } from "@/lib/referral/emergency";
 import { sourceReferenceHref } from "@/lib/rag/source-link";
 
+/**
+ * Compact chip text: a URL source reference renders as its host (e.g.
+ * "mom.gov.sg") so a 50+-char link can't blow out the chat layout on a phone;
+ * a human-readable reference ("MOM — Employer guidelines") is shown as-is. The
+ * full reference remains the link's accessible name and target.
+ */
+function sourceChipLabel(ref: string): string {
+  try {
+    return new URL(ref).hostname.replace(/^www\./, "");
+  } catch {
+    return ref;
+  }
+}
+
 interface Citation {
   sourceRef: string;
   sourceUrl?: string;
@@ -75,10 +89,17 @@ export function Chat() {
   // Announce one message (loading, or the completed answer) through a single
   // polite live region, then clear it so screen-reader users don't re-read the
   // text while navigating the transcript. Streaming chunks are never announced.
-  function announce(message: string) {
+  // The hold scales with length: clearing a long answer after a flat 1.2s
+  // mutated the region mid-utterance and truncated it on some AT engines.
+  function announce(message: string, holdMs = 1200) {
     setLiveMessage(message);
     if (announceTimer.current) clearTimeout(announceTimer.current);
-    announceTimer.current = setTimeout(() => setLiveMessage(""), 1200);
+    announceTimer.current = setTimeout(() => setLiveMessage(""), holdMs);
+  }
+
+  /** ~200 wpm reading ≈ 55ms/char; clamp so the region clears eventually. */
+  function announceHoldMs(text: string) {
+    return Math.min(30_000, Math.max(1_200, text.length * 55));
   }
 
   function updateLast(patch: (m: ChatMessage) => ChatMessage) {
@@ -198,7 +219,7 @@ export function Chat() {
               referralCode: evt.referralCode,
               referralExpiresAt: evt.referralExpiresAt,
             }));
-            announce(evt.text);
+            announce(evt.text, announceHoldMs(evt.text));
           } else if (evt.type === "error") {
             completed = true;
             // Keep any partial answer already shown — replacing it with the
@@ -238,7 +259,7 @@ export function Chat() {
           <div
             ref={logRef}
             onScroll={onLogScroll}
-            className="flex max-h-[58dvh] min-h-56 flex-col gap-5 overflow-y-auto overscroll-contain"
+            className="chat-log-maxh flex min-h-56 flex-col gap-5 overflow-y-auto overscroll-contain"
             role="log"
             aria-live="off"
             aria-busy={busy}
@@ -280,8 +301,8 @@ export function Chat() {
                   <p
                     className={
                       m.role === "user"
-                        ? "whitespace-pre-wrap"
-                        : "whitespace-pre-wrap text-[17px] leading-[1.6] text-body"
+                        ? "whitespace-pre-wrap [overflow-wrap:anywhere]"
+                        : "whitespace-pre-wrap [overflow-wrap:anywhere] text-[17px] leading-[1.6] text-body"
                     }
                   >
                     {m.text ||
@@ -333,10 +354,7 @@ export function Chat() {
                       </div>
                       {m.referralCode && (
                         <div className="flex flex-col gap-1 border-t border-warn-border pt-2.5">
-                          <p
-                            className="text-[13.5px] leading-[1.5] text-muted"
-                            aria-label={`${t("referralCodeLabel")}: ${m.referralCode}`}
-                          >
+                          <p className="text-[13.5px] leading-[1.5] text-muted">
                             {t("referralCodeLabel")}:{" "}
                             <code className="select-all break-all font-mono font-[600] text-body-soft">
                               {m.referralCode}
@@ -366,26 +384,29 @@ export function Chat() {
                           const href = sourceReferenceHref(
                             c.sourceUrl ?? c.sourceRef,
                           );
-                          const label =
+                          const prefix =
                             typeof c.sourceNumber === "number"
-                              ? `[${c.sourceNumber}] ${c.sourceRef}`
-                              : c.sourceRef;
+                              ? `[${c.sourceNumber}] `
+                              : "";
+                          const fullLabel = `${prefix}${c.sourceRef}`;
+                          const shownLabel = `${prefix}${sourceChipLabel(c.sourceRef)}`;
                           return href ? (
                             <a
                               key={j}
                               href={href}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex min-h-9 items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text transition-colors hover:bg-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                              aria-label={fullLabel}
+                              className="inline-flex min-h-9 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere] transition-colors hover:bg-sand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                             >
-                              {label}
+                              {shownLabel}
                             </a>
                           ) : (
                             <span
                               key={j}
-                              className="inline-flex min-h-9 items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text"
+                              className="inline-flex min-h-9 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere]"
                             >
-                              {label}
+                              {shownLabel}
                             </span>
                           );
                         })}

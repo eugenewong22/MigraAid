@@ -18,25 +18,22 @@ export async function DELETE(req: NextRequest) {
   }
   const sid = req.cookies.get("maid_sid")?.value;
   const ip = clientKey(req.headers);
-  // Without a trusted client IP (self-hosted, no TRUST_PROXY_HEADERS) the
-  // network bucket is one shared "anon" pool: 60 cookieless junk requests per
-  // hour would then 429 every real worker's deletion right. A session-bearing
-  // request is already limited per-sid, so skip the shared bucket for it; the
-  // bucket still caps cookieless probing.
-  const skipNetworkBucket = Boolean(sid) && ip === UNTRUSTED_CLIENT_KEY;
+  // The network bucket always applies — an unthrottled DB-hitting endpoint is
+  // abusable with rotating fabricated cookies (each spawns a fresh per-session
+  // bucket). Without a trusted client IP (self-hosted, no TRUST_PROXY_HEADERS)
+  // every caller shares one "anon" pool, so a low limit there would 429 real
+  // workers' deletion right; raise the ceiling in that case so it bounds abuse
+  // without locking legitimate workers out. A trusted per-IP bucket stays tight.
+  const networkLimit = ip === UNTRUSTED_CLIENT_KEY ? 600 : 60;
   const [limited, networkLimited] = await Promise.all([
     rateLimit(`privacy-delete:${sid ? `session:${sid}` : `ip:${ip}`}`, {
       limit: sid ? 3 : 30,
       windowMs: 60 * 60_000,
     }),
-    skipNetworkBucket
-      ? Promise.resolve({ ok: true as const, resetAt: 0 })
-      : rateLimit(`privacy-delete-network:${ip}`, {
-          // Avoid one worker on a shared dormitory/network blocking everyone
-          // else, while retaining a broad abuse ceiling for cookie rotation.
-          limit: 60,
-          windowMs: 60 * 60_000,
-        }),
+    rateLimit(`privacy-delete-network:${ip}`, {
+      limit: networkLimit,
+      windowMs: 60 * 60_000,
+    }),
   ]);
   if (!limited.ok || !networkLimited.ok) {
     const resetAt = Math.max(limited.resetAt, networkLimited.resetAt);
@@ -59,10 +56,14 @@ export async function DELETE(req: NextRequest) {
    */
   if (sid) {
     try {
-      await deleteWorkerSessionData(sid);
-      // Mark the id so an in-flight chat turn that captured it before this
-      // commit cannot re-insert rows the expired cookie could never delete.
+      // Tombstone BEFORE the delete, not after: an in-flight chat/contract turn
+      // checks the tombstone before its own persistence commits, so the marker
+      // must be visible for the whole delete window. Any rows a concurrent turn
+      // inserted before the tombstone landed are still removed by the delete
+      // that follows. (A delete failure after tombstoning is harmless — the
+      // tombstone self-expires in 120s and only suppresses persistence.)
       await tombstoneSession(sid);
+      await deleteWorkerSessionData(sid);
     } catch {
       return Response.json(
         { error: "Could not delete data. Please try again." },

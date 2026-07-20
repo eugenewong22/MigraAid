@@ -107,7 +107,10 @@ export function ContractUpload() {
   return (
     <div aria-busy={busy} className="w-full px-5 py-8 md:px-12 md:py-10">
       <div className="mx-auto flex w-full max-w-[900px] flex-col gap-6">
-        <h1 className="font-display text-[30px] font-[650] leading-[1.1] text-ink md:text-[38px]">
+        {/* On mobile the site header already shows this title; keep the h1 in
+            the a11y tree (page heading) but hide it visually there to avoid a
+            duplicate. On desktop the header shows the wordmark, so it is shown. */}
+        <h1 className="font-display text-[30px] font-[650] leading-[1.1] text-ink sr-only sm:not-sr-only md:text-[38px]">
           {t("title")}
         </h1>
 

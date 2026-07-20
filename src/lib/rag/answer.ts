@@ -218,9 +218,11 @@ function buildMessages(opts: AnswerOptions): ChatCompletionMessageParam[] {
 }
 
 const CITATION_RE = /\[(\d+)\]/g;
-// Sentence terminators across the supported scripts (Latin, CJK, Bengali danda).
-// Thai has no sentence-ending punctuation, so Thai text is checked per-paragraph.
-const SENTENCE_TERMINATOR = /[.!?…。！？။၊။ฯ]/u;
+// Sentence terminators across the supported scripts. Latin (. ! ? …), CJK
+// full-width (。！？), Burmese (၊ ။), Thai's paiyannoi (ฯ), and the Bengali/
+// Devanagari danda + double danda (। ॥, U+0964/U+0965) — the actual sentence
+// enders for `bn`; omitting them let uncited trailing directives slip the gate.
+const SENTENCE_TERMINATOR = /[.!?…。！？၊။ฯ।॥]/u;
 
 /**
  * Grounding-citation gate — a fail-closed, defense-in-depth heuristic. Per paragraph:
@@ -228,8 +230,11 @@ const SENTENCE_TERMINATOR = /[.!?…。！？။၊။ฯ]/u;
  *     whole answer is rejected.
  *  2. A short structural label (markdown heading or a bold-only line, <= 48 chars
  *     after stripping markup, with no sentence-ending punctuation) needs no
- *     citation — but a directive/prose line formatted as a heading or bold DOES
- *     (closes the "## sign this now" / "**pay the agent**" bypass).
+ *     citation — but ONLY when it introduces cited body content (some later
+ *     paragraph carries a valid marker). A standalone or trailing heading/bold
+ *     line is the classic uncited-directive injection ("### Sign now",
+ *     "**Give your passport**"), so it is treated as substantive prose and must
+ *     be cited like anything else.
  *  3. Every other (substantive) paragraph must contain at least one valid marker.
  *  4. A trailing citation legitimately covers the sentences before it, but a NEW
  *     substantive sentence written AFTER the paragraph's last marker is treated
@@ -245,6 +250,8 @@ function hasValidCitationCoverage(text: string, sourceCount: number): boolean {
     const source = Number(match[1]);
     return Number.isInteger(source) && source >= 1 && source <= sourceCount;
   };
+  const hasValidMarker = (paragraph: string) =>
+    [...paragraph.matchAll(CITATION_RE)].some(isValidMarker);
 
   // A single fabricated marker anywhere fails the whole answer.
   for (const match of text.matchAll(CITATION_RE)) {
@@ -258,7 +265,7 @@ function hasValidCitationCoverage(text: string, sourceCount: number): boolean {
     .filter(Boolean);
   if (paragraphs.length === 0) return false;
 
-  return paragraphs.every((paragraph) => {
+  return paragraphs.every((paragraph, index) => {
     const isHeadingOrBold =
       /^#{1,6}\s+/.test(paragraph) || /^\*\*[^*]+\*\*:?$/.test(paragraph);
     if (isHeadingOrBold) {
@@ -267,8 +274,18 @@ function hasValidCitationCoverage(text: string, sourceCount: number): boolean {
         .replace(/^\*\*([^*]+)\*\*:?$/, "$1")
         .replace(CITATION_RE, "")
         .trim();
-      // Exempt only genuine short labels — not a full sentence of guidance.
-      if (label.length <= 48 && !SENTENCE_TERMINATOR.test(label)) return true;
+      // A genuine section label introduces cited prose; a directive injected as
+      // a heading/bold line is standalone or trailing. Exempt only the former.
+      const introducesCitedContent = paragraphs
+        .slice(index + 1)
+        .some(hasValidMarker);
+      if (
+        label.length <= 48 &&
+        !SENTENCE_TERMINATOR.test(label) &&
+        introducesCitedContent
+      ) {
+        return true;
+      }
     }
 
     // Pure punctuation / marker-only paragraphs carry no claim.

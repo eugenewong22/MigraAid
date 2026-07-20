@@ -1,5 +1,6 @@
 /** Fleet-wide fixed-window rate limiting with a local development fallback. */
 import { createHmac, randomBytes } from "node:crypto";
+import { reportError } from "@/lib/observability/sentry";
 
 interface Bucket {
   count: number;
@@ -169,7 +170,36 @@ export function clientKey(
     env.VERCEL === "1"
       ? headers.get("x-vercel-forwarded-for")
       : env.TRUST_PROXY_HEADERS === "true"
-        ? (headers.get("x-real-ip") ?? headers.get("x-forwarded-for"))
+        ? // Take the LAST hop (nearest the trusted proxy). nginx's ubiquitous
+          // `proxy_add_x_forwarded_for` APPENDS the real client, so the leftmost
+          // element is client-supplied and spoofable; the rightmost is written
+          // by our own proxy.
+          rightmost(headers.get("x-real-ip") ?? headers.get("x-forwarded-for"))
         : null;
-  return forwarded?.split(",")[0]?.trim() || UNTRUSTED_CLIENT_KEY;
+  return forwarded || UNTRUSTED_CLIENT_KEY;
+}
+
+function rightmost(headerValue: string | null): string | undefined {
+  const parts = headerValue?.split(",");
+  return parts?.[parts.length - 1]?.trim() || undefined;
+}
+
+let untrustedClientKeyReported = false;
+
+/**
+ * Report — once per process, production only — that a rate limit is running on
+ * the shared untrusted sentinel key, i.e. this deploy has no trusted client-IP
+ * source and every caller shares one bucket. Mirrors how the memory-fallback
+ * degradation is surfaced, so a `TRUST_PROXY_HEADERS` misconfiguration is
+ * visible instead of silently collapsing the per-client quota.
+ */
+export function reportUntrustedClientKey(area: string): void {
+  if (untrustedClientKeyReported || process.env.NODE_ENV !== "production") {
+    return;
+  }
+  untrustedClientKeyReported = true;
+  void reportError(
+    new Error(`Rate limiting degraded: no trusted client IP (${area})`),
+    area,
+  );
 }

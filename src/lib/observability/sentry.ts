@@ -34,10 +34,19 @@ export function sanitizeSentryEvent(
 /**
  * Transaction (performance) events bypass beforeSend in the Sentry SDK, so
  * sampled traces would otherwise export request context (URL/query string, span
- * descriptions) to a third party unscrubbed. Strip the same request/user details.
+ * descriptions/data) to a third party unscrubbed. Strip the same request/user
+ * details AND the span/trace payloads — auto-instrumented fetch/DB spans carry
+ * outbound URLs and query metadata that stripRequestAndUser alone leaves intact.
  */
 export function sanitizeSentryTransaction<T extends Event>(event: T): T {
   stripRequestAndUser(event);
+  // Span descriptions/data can hold outbound URLs, params, and query metadata.
+  for (const span of event.spans ?? []) {
+    delete (span as { data?: unknown }).data;
+  }
+  if (event.contexts?.trace) {
+    delete (event.contexts.trace as { data?: unknown }).data;
+  }
   return event;
 }
 
