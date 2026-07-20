@@ -92,7 +92,9 @@ responds, so configure the rate-limit variables before inviting volunteers.
 
 ### Retention
 
-Set `DATA_RETENTION_DAYS` (30 by default, hard-capped at 90) and a random
+Set `DATA_RETENTION_DAYS` (30 by default, hard-capped at 30 — `MAX_RETENTION_DAYS` in
+`src/lib/privacy/retention.ts` clamps any higher value down, so setting e.g. 60–90 still
+deletes at 30 days) and a random
 32-character-or-longer `CRON_SECRET`. `vercel.json` invokes the authenticated
 cleanup route daily; an external scheduler can instead call
 `POST /api/cron/privacy-cleanup` with `Authorization: Bearer <CRON_SECRET>`.

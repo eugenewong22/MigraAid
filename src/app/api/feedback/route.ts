@@ -46,8 +46,10 @@ export async function POST(req: NextRequest) {
   if (process.env.NODE_ENV === "production" && limited.source === "memory") {
     // Match the chat route: a Redis outage silently downgrades the fleet-wide
     // cap to per-instance quotas; operators need the signal (KPI metrics can
-    // be inflated while degraded).
-    await reportError(
+    // be inflated while degraded). Fire-and-forget — nothing here depends on
+    // the result, and awaiting the ~1.5s Sentry flush would add that latency
+    // to every request while Redis is down.
+    void reportError(
       new Error("Distributed rate limiter unavailable; using local feedback quota"),
       "api.feedback.ratelimit",
     );
@@ -75,7 +77,11 @@ export async function POST(req: NextRequest) {
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
     return Response.json({ error: "Invalid rating" }, { status: 400 });
   }
-  const sid = req.cookies.get("maid_sid")?.value;
+  // A cookie that doesn't match the shape the server mints is never trusted —
+  // treat it exactly like a missing cookie (401), the same as the no-cookie
+  // path, rather than using it verbatim in the ownership lookup below.
+  const rawSid = req.cookies.get("maid_sid")?.value;
+  const sid = rawSid && UUID_PATTERN.test(rawSid) ? rawSid : undefined;
   const conversationId =
     typeof body.conversationId === "string" ? body.conversationId : "";
   const messageId = typeof body.messageId === "string" ? body.messageId : "";

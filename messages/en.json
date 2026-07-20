@@ -46,7 +46,8 @@
     "referralCodeLabel": "Private handoff code",
     "referralCodeHelp": "Give this private handoff code to the organisation after you contact them. It expires on {date}.",
     "referralCodeHelpNoDate": "Give this private handoff code to the organisation after you contact them. It expires in 30 days.",
-    "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it."
+    "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it.",
+    "errorRateLimited": "Too many messages were sent. Please wait a minute and try again."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -122,5 +123,10 @@
     "confirm": "Delete the saved conversations and contract analyses linked to this device? This cannot be undone.",
     "deleted": "Your MigraAid data has been deleted.",
     "error": "We could not delete your data. Please try again."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "We can't find that page. It may have been moved, or the link may be incorrect.",
+    "home": "Home"
   }
 }

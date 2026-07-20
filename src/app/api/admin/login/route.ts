@@ -14,9 +14,53 @@ import {
   UnsupportedMediaTypeError,
 } from "@/lib/http/body";
 import { isSameOriginRequest } from "@/lib/http/origin";
+import { reportError } from "@/lib/observability/sentry";
 
 export const runtime = "nodejs";
 const MAX_LOGIN_BODY_BYTES = 16 * 1024;
+
+// Detection-only: a GLOBAL (cross-IP) failure counter for a single account,
+// keyed on the HMAC'd email alone. This deliberately does NOT block sign-in —
+// gating on email alone was removed from the blocking per-(email,IP) cap
+// below precisely because it let an attacker on other IPs fill a known
+// volunteer's shared bucket and lock them out of their own console (see the
+// comment on `accountLimited`). That fix also means the per-(email,IP) cap
+// has no visibility into failures spread across many IPs against the same
+// account — i.e. distributed credential stuffing. This counter exists only
+// to surface that pattern as a Sentry alert for a human to investigate.
+const ACCOUNT_FAILURE_ALERT_THRESHOLD = 50;
+const ACCOUNT_FAILURE_ALERT_WINDOW_MS = 15 * 60_000;
+// Dedup so a sustained attack fires one alert per window, not one per
+// attempt: `rateLimit`'s in-memory fallback freezes its count once blocked,
+// so every attempt after the threshold would otherwise re-report the same
+// spike. Bounded like the rate limiter's own bucket map.
+const alertedAccountFailureWindows = new Map<string, number>();
+
+/**
+ * Fire a (non-blocking, best-effort) Sentry alert once a single account has
+ * crossed a high global failure threshold within a window. Never throws —
+ * `rateLimit` and `reportError` are both already failure-tolerant — and is
+ * called fire-and-forget so it can never add latency to the login response.
+ */
+async function monitorAccountFailureSpike(email: string): Promise<void> {
+  const key = sensitiveRateLimitKey("admin-login-account-global", email);
+  const result = await rateLimit(key, {
+    limit: ACCOUNT_FAILURE_ALERT_THRESHOLD,
+    windowMs: ACCOUNT_FAILURE_ALERT_WINDOW_MS,
+  });
+  if (result.ok) return;
+  if (alertedAccountFailureWindows.get(key) === result.resetAt) return;
+  if (alertedAccountFailureWindows.size > 1_000) {
+    alertedAccountFailureWindows.clear();
+  }
+  alertedAccountFailureWindows.set(key, result.resetAt);
+  await reportError(
+    new Error(
+      `Admin login: ${ACCOUNT_FAILURE_ALERT_THRESHOLD}+ failed sign-in attempts against a single account within ${ACCOUNT_FAILURE_ALERT_WINDOW_MS / 60_000} minutes — possible distributed credential stuffing`,
+    ),
+    "api.admin-login.account-failure-spike",
+  );
+}
 
 function rateLimited(resetAt: number) {
   return new Response("Too many sign-in attempts", {
@@ -50,7 +94,7 @@ export async function POST(req: NextRequest) {
     // deploy surfaces the TRUST_PROXY_HEADERS misconfiguration loudly instead
     // of as a mystery lockout. (On Vercel the platform always sets the header.)
     return new Response(
-      "Admin sign-in requires a trusted client IP source. Set TRUST_PROXY_HEADERS=true behind a proxy that rewrites x-real-ip/x-forwarded-for.",
+      "Admin sign-in requires a trusted client IP source. Set TRUST_PROXY_HEADERS=true behind a proxy that appends the real client to x-forwarded-for (e.g. nginx's proxy_add_x_forwarded_for).",
       { status: 503 },
     );
   }
@@ -120,12 +164,17 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    const notConfigured = error instanceof AdminAuthError && error.status === 503;
     loginUrl.searchParams.set(
       "error",
-      error instanceof AdminAuthError && error.status === 503
-        ? "not_configured"
-        : "invalid_credentials",
+      notConfigured ? "not_configured" : "invalid_credentials",
     );
+    if (!notConfigured) {
+      // A genuine credential/role failure (not a deployment misconfiguration)
+      // — feed the detection-only global monitor. Fire-and-forget: must never
+      // delay or otherwise affect the redirect below.
+      void monitorAccountFailureSpike(email);
+    }
     return Response.redirect(loginUrl, 303);
   }
 }

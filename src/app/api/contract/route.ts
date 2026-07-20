@@ -32,6 +32,9 @@ import { ContractAnalysisError } from "@/lib/contract/analyze";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
 // Allow room for multipart boundaries and the locale/consent fields while
 // rejecting an oversized request before Next parses it into memory.
@@ -87,7 +90,12 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Multipart form data is required" }, { status: 415 });
   }
 
-  const existingSid = req.cookies.get("maid_sid")?.value;
+  // A cookie that doesn't match the shape the server mints is never trusted
+  // as-is — treat it exactly like a missing cookie rather than writing it
+  // verbatim into `contract_reviews.anonSessionId`.
+  const rawSid = req.cookies.get("maid_sid")?.value;
+  const existingSid =
+    rawSid && UUID_PATTERN.test(rawSid) ? rawSid : undefined;
   const sid = existingSid ?? randomUUID();
 
   let form: FormData;
@@ -179,6 +187,13 @@ export async function POST(req: NextRequest) {
           saved = true;
         }
       } catch (persistenceError) {
+        // Invariant: `saved` is set to `false` here unconditionally, even if
+        // what threw was the compensating `deleteWorkerSessionData` call above
+        // (i.e. the insert committed but its undo failed, leaving the row in
+        // place). The durable cookie below is gated on `saved === true`, so a
+        // failed compensating delete can never leak a cookie that references
+        // a row this response couldn't confirm was removed — and the failure
+        // is still reported to Sentry below for follow-up / manual cleanup.
         saved = false;
         if (process.env.DATABASE_URL) {
           await reportError(persistenceError, "api.contract.persistence");

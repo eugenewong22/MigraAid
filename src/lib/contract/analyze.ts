@@ -93,16 +93,30 @@ const LANGUAGE_NAMES: Record<string, string> = {
   my: "Burmese",
 };
 
+// Defense-in-depth bounds on model output before it is persisted: only
+// `max_completion_tokens` bounds the raw response today, which caps total
+// size but not the shape (an adversarial or malfunctioning response could
+// still return e.g. hundreds of tiny keyTerms). Mirrors the paranoia in
+// src/lib/embeddings/index.ts's validateEmbeddingBatch.
 const AnalysisSchema = z.object({
-  summary: z.string(),
-  keyTerms: z.array(z.object({ label: z.string(), value: z.string() })),
-  flaggedClauses: z.array(
-    z.object({
-      clause: z.string(),
-      concern: z.string(),
-      severity: z.enum(["info", "warning", "serious"]),
-    }),
-  ),
+  summary: z.string().max(4_000),
+  keyTerms: z
+    .array(
+      z.object({
+        label: z.string().max(500),
+        value: z.string().max(500),
+      }),
+    )
+    .max(30),
+  flaggedClauses: z
+    .array(
+      z.object({
+        clause: z.string().max(500),
+        concern: z.string().max(500),
+        severity: z.enum(["info", "warning", "serious"]),
+      }),
+    )
+    .max(30),
 });
 
 /** Hand-authored JSON Schema for OpenAI's strict structured-output mode. */

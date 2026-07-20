@@ -63,7 +63,11 @@ export async function POST(req: NextRequest) {
     windowMs: 60_000,
   });
   if (process.env.NODE_ENV === "production" && rl.source === "memory") {
-    await reportError(
+    // Fire-and-forget: the retrieve+generate pipeline below (or, on the 429
+    // path, nothing user-visible) gives Sentry's flush ample background time,
+    // and awaiting it would add ~1.5s of latency to every request during a
+    // Redis outage for a call whose result nothing here depends on.
+    void reportError(
       new Error("Distributed rate limiter unavailable; using local chat quota"),
       "api.chat.ratelimit",
     );
@@ -108,8 +112,14 @@ export async function POST(req: NextRequest) {
     return new Response("Message too long", { status: 413 });
   }
 
-  // Anonymous, opaque session id (HttpOnly cookie) — no worker PII.
-  const existingSid = req.cookies.get("maid_sid")?.value;
+  // Anonymous, opaque session id (HttpOnly cookie) — no worker PII. A cookie
+  // that doesn't match the shape the server mints (crypto.randomUUID()) is
+  // never trusted as-is — it would otherwise be written verbatim into an
+  // unbounded text column and let a client pick its own (predictable, index-
+  // bloating) session id. Treat it exactly like a missing cookie.
+  const rawSid = req.cookies.get("maid_sid")?.value;
+  const existingSid =
+    rawSid && UUID_PATTERN.test(rawSid) ? rawSid : undefined;
   const sid = existingSid ?? randomUUID();
 
   const encoder = new TextEncoder();
@@ -198,7 +208,12 @@ export async function POST(req: NextRequest) {
         // the deletion response already expired — unreachable by any future
         // deletion request. Skip persistence; the answer itself still streams
         // back (without a conversation/message id, so feedback is disabled).
-        if (!(await isSessionTombstoned(sid))) try {
+        if (await isSessionTombstoned(sid)) {
+          // Tombstoned before persistence even started — don't echo the
+          // client-supplied conversationId back either: it was only pattern-
+          // validated, never confirmed to belong to this (now-erased) session.
+          cid = undefined;
+        } else try {
           const db = getDb();
           const persisted = await db.transaction(async (tx) => {
             let activeConversationId = cid;
@@ -316,6 +331,9 @@ export async function POST(req: NextRequest) {
           // attributed to a session the worker already erased.
           if (await isSessionTombstoned(sid)) {
             await deleteWorkerSessionData(sid);
+            // Same reasoning as the pre-check skip above: leave the response
+            // without ids so nothing is attributed to the erased session.
+            cid = undefined;
           } else {
             cid = persisted.conversationId;
             assistantMessageId = persisted.assistantMessageId;

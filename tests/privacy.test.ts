@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { NextRequest } from "next/server";
 import {
   contractReviews,
   conversations,
@@ -12,6 +13,7 @@ import {
   deleteExpiredWorkerData,
   retentionCutoff,
 } from "@/lib/privacy/retention";
+import { DELETE } from "@/app/api/privacy/route";
 
 describe("retentionCutoff", () => {
   it("uses a bounded day-based retention period", () => {
@@ -189,5 +191,38 @@ describe("deleteWorkerSessionData", () => {
       referrals: 1,
       contractReviews: 1,
     });
+  });
+});
+
+describe("DELETE /api/privacy — malformed maid_sid cookie", () => {
+  function deleteRequest(cookie?: string): NextRequest {
+    const headers: Record<string, string> = { origin: "https://example.test" };
+    if (cookie !== undefined) headers.cookie = `maid_sid=${cookie}`;
+    return new NextRequest(
+      new Request("https://example.test/api/privacy", {
+        method: "DELETE",
+        headers,
+      }),
+    );
+  }
+
+  it("treats a cookie that isn't a server-minted UUID as no session — a no-op success, not an error", async () => {
+    // A malformed/fabricated maid_sid must never be used to query or delete
+    // against the database; there is no valid session to delete, so this
+    // must succeed as a no-op (matching the missing-cookie case) rather than
+    // erroring.
+    const response = await DELETE(deleteRequest("not-a-uuid"));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    // The response still clears whatever malformed cookie the browser held.
+    const setCookie = response.headers.get("set-cookie") ?? "";
+    expect(setCookie).toContain("maid_sid=;");
+    expect(setCookie).toContain("Max-Age=0");
+  });
+
+  it("still succeeds as a no-op with no maid_sid cookie at all", async () => {
+    const response = await DELETE(deleteRequest());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
   });
 });

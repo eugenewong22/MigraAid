@@ -20,7 +20,7 @@
     "primary": "Pangunahing nabigasyon",
     "ask": "Magtanong",
     "contract": "Aking kontrata",
-    "emergency": "Emergency"
+    "emergency": "Emerhensiya"
   },
   "chat": {
     "title": "Magtanong sa MigraAid",
@@ -46,13 +46,14 @@
     "referralCodeLabel": "Pribadong handoff code",
     "referralCodeHelp": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa {date}.",
     "referralCodeHelpNoDate": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa loob ng 30 araw.",
-    "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito."
+    "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito.",
+    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli."
   },
   "emergency": {
     "sms": "SMS {number}",
     "title": "Mga emergency contact",
     "intro": "Kung nasa panganib ka, tumawag sa 999 (Pulisya) o 995 (Ambulansya/Bumbero) ngayon.",
-    "urgent": "Emergency",
+    "urgent": "Emerhensiya",
     "government": "Pamahalaan",
     "ngo": "Mga organisasyong tumutulong",
     "verifyNote": "Pakikumpirma na napapanahon ang mga numerong ito bago umasa sa mga ito.",
@@ -122,5 +123,10 @@
     "confirm": "Burahin ang mga naka-save na usapan at pagsusuri ng kontrata na naka-link sa device na ito? Hindi na ito maibabalik.",
     "deleted": "Nabura na ang iyong MigraAid data.",
     "error": "Hindi namin mabura ang iyong data. Subukan muli."
+  },
+  "notFound": {
+    "title": "Hindi nahanap ang pahina",
+    "body": "Hindi namin mahanap ang pahinang ito. Maaaring nailipat na ito, o mali ang link.",
+    "home": "Home"
   }
 }

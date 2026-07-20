@@ -19,7 +19,12 @@ export default async function AdminLoginPage({
       <p className="text-sm text-neutral-500">
         Sign in with your partner-organisation account.
       </p>
-      {error && ERRORS[error] && (
+      {/* `Object.hasOwn`, not plain indexing: an inherited-property name such
+          as "__proto__", "constructor", or "toString" must fall through to
+          "no message", not return a truthy non-string that crashes React
+          rendering an object child (see src/lib/referral/route.ts for the
+          same guard). */}
+      {error && Object.hasOwn(ERRORS, error) && (
         <p className="rounded-lg bg-red-50 p-3 text-sm text-red-800">
           {ERRORS[error]}
         </p>

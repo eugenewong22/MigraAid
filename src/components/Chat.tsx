@@ -49,6 +49,17 @@ interface ChatMessage {
   feedbackPending?: boolean;
   feedbackFailed?: boolean;
   failed?: boolean;
+  /** Overrides the generic error copy shown for `failed` (e.g. rate limiting). */
+  failedMessage?: string;
+}
+
+/** Distinguishes an HTTP 429 from other send failures so the UI can show
+ * "please wait" guidance instead of the generic error message. */
+class RateLimitedError extends Error {
+  constructor() {
+    super("rate limited");
+    this.name = "RateLimitedError";
+  }
 }
 
 export function Chat() {
@@ -205,6 +216,10 @@ export function Chat() {
         body: JSON.stringify({ message: question, locale, conversationId }),
         signal: controller.signal,
       });
+      // The server sends a `retry-after` header on 429, but a generic error
+      // gives the worker no "please wait" guidance — surface it distinctly
+      // (mirrors contract upload's 429 -> errorRateLimited mapping).
+      if (res.status === 429) throw new RateLimitedError();
       if (!res.ok || !res.body) throw new Error("request failed");
 
       const reader = res.body.getReader();
@@ -255,10 +270,11 @@ export function Chat() {
         }
       }
       if (!completed) throw new Error("incomplete response");
-    } catch {
-      updateLast((m) => ({ ...m, failed: true }));
+    } catch (err) {
+      const message = err instanceof RateLimitedError ? t("errorRateLimited") : t("error");
+      updateLast((m) => ({ ...m, failed: true, failedMessage: message }));
       restoreQuestion(question);
-      announce(t("error"));
+      announce(message);
     } finally {
       clearTimeout(overallTimer);
       clearTimeout(inactivityTimer);
@@ -344,7 +360,7 @@ export function Chat() {
                       role="alert"
                       className="text-[15px] leading-[1.45] text-emergency"
                     >
-                      {t("error")}
+                      {m.failedMessage ?? t("error")}
                     </p>
                   )}
 

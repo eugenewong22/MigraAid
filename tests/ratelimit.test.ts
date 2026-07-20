@@ -81,12 +81,27 @@ describe("clientKey", () => {
     expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("10.0.0.1");
   });
 
-  it("prefers x-real-ip over x-forwarded-for when a proxy is trusted", () => {
+  it("prefers x-forwarded-for's rightmost hop over x-real-ip when a proxy is trusted", () => {
+    // X-Forwarded-For has a proven-safe extraction (the proxy-appended last
+    // hop); X-Real-IP does not (see the comment in clientKey) — a proxy
+    // config that only appends to X-Forwarded-For and never explicitly
+    // rewrites X-Real-IP would otherwise let a client-controlled X-Real-IP
+    // override the safely extracted hop and spoof the rate-limit key.
     const h = new Headers({
       "x-real-ip": "10.0.0.9",
       "x-forwarded-for": "203.0.113.5, 10.0.0.1",
     });
+    expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("10.0.0.1");
+  });
+
+  it("falls back to x-real-ip only when x-forwarded-for is entirely absent, under a trusted proxy", () => {
+    const h = new Headers({ "x-real-ip": "10.0.0.9" });
     expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("10.0.0.9");
+  });
+
+  it("ignores a client-sent x-real-ip without a trusted proxy", () => {
+    const h = new Headers({ "x-real-ip": "203.0.113.5" });
+    expect(clientKey(h, {})).toBe("anon");
   });
 
   it("prefers the Vercel-managed forwarding header", () => {

@@ -13,6 +13,7 @@
  */
 import OpenAI from "openai";
 import type {
+  ChatCompletionChunk,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
   ChatCompletionTool,
@@ -32,6 +33,11 @@ const MODEL = "gpt-5.6-terra";
 const MAX_TOKENS = 1024;
 // normalize (8s) + embed (12s) + answer (35s) = 55s, inside route maxDuration 60s.
 const MODEL_TIMEOUT_MS = 35_000;
+// The SDK `timeout` above only bounds time-to-first-byte; once tokens start
+// arriving a mid-stream provider stall would otherwise hang until the
+// platform kills the function (or never, self-hosted). Must stay comfortably
+// above the route's 10s heartbeat interval and under its 60s maxDuration.
+const STREAM_INACTIVITY_TIMEOUT_MS = 20_000;
 
 const UNGROUNDED_RESPONSES: Record<string, string> = {
   en: "I don't have enough verified source information to answer this safely. Please contact a partner organisation or use the Emergency Contacts page if you are in danger.",
@@ -486,7 +492,33 @@ export function streamAnswer(opts: AnswerOptions): {
         { signal: opts.signal },
       );
 
-      for await (const chunk of stream) {
+      // Race each iterator step against a per-chunk inactivity timer instead of
+      // `for await`, so a mid-stream stall throws instead of hanging until the
+      // platform kills the function. Resetting on every chunk means a healthy
+      // slow answer (many small deltas) never trips it; `opts.signal` still
+      // aborts the underlying request immediately since it was passed to
+      // `.create()` above — this timer is purely for a provider stall with no
+      // client-side abort at all.
+      const iterator = stream[Symbol.asyncIterator]();
+      for (;;) {
+        let inactivityTimer: ReturnType<typeof setTimeout> | undefined;
+        const inactivityTimeout = new Promise<never>((_, reject) => {
+          inactivityTimer = setTimeout(() => {
+            // Cancel the underlying request too, not just this loop, so a
+            // stalled connection doesn't keep running server-side.
+            stream.controller.abort();
+            reject(new Error("LLM stream inactivity timeout"));
+          }, STREAM_INACTIVITY_TIMEOUT_MS);
+        });
+        let step: IteratorResult<ChatCompletionChunk>;
+        try {
+          step = await Promise.race([iterator.next(), inactivityTimeout]);
+        } finally {
+          clearTimeout(inactivityTimer);
+        }
+        if (step.done) break;
+        const chunk = step.value;
+
         if (chunk.usage) {
           usage = {
             inputTokens: chunk.usage.prompt_tokens,

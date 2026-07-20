@@ -6,6 +6,9 @@ import { isSameOriginRequest } from "@/lib/http/origin";
 
 export const runtime = "nodejs";
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 /** Delete all records linkable to the caller's opaque worker session. */
 export async function DELETE(req: NextRequest) {
   // Destructive and cookie-authenticated: require an explicit same-origin
@@ -16,7 +19,11 @@ export async function DELETE(req: NextRequest) {
       { status: 403 },
     );
   }
-  const sid = req.cookies.get("maid_sid")?.value;
+  // A cookie that doesn't match the shape the server mints is never trusted —
+  // there is no valid session to delete, so this is a no-op success (not an
+  // error) rather than an attempt to delete against a fabricated id.
+  const rawSid = req.cookies.get("maid_sid")?.value;
+  const sid = rawSid && UUID_PATTERN.test(rawSid) ? rawSid : undefined;
   const ip = clientKey(req.headers);
   // The network bucket always applies — an unthrottled DB-hitting endpoint is
   // abusable with rotating fabricated cookies (each spawns a fresh per-session
@@ -51,8 +58,9 @@ export async function DELETE(req: NextRequest) {
   }
 
   /*
-   * A missing cookie means there is no server-side worker session to delete,
-   * but the response still expires any stale cookie in the browser.
+   * A missing OR invalid cookie means there is no server-side worker session
+   * to delete, but the response still expires any stale/malformed cookie in
+   * the browser.
    */
   if (sid) {
     try {
