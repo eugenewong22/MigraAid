@@ -73,9 +73,20 @@ describe("rateLimit", () => {
 });
 
 describe("clientKey", () => {
-  it("reads the first x-forwarded-for hop", () => {
+  it("reads the last (trusted-proxy-written) x-forwarded-for hop", () => {
+    // nginx's `proxy_add_x_forwarded_for` APPENDS the real client, so the
+    // leftmost element is attacker-supplied and spoofable; the rightmost is the
+    // hop written by our own trusted proxy.
     const h = new Headers({ "x-forwarded-for": "203.0.113.5, 10.0.0.1" });
-    expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("203.0.113.5");
+    expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("10.0.0.1");
+  });
+
+  it("prefers x-real-ip over x-forwarded-for when a proxy is trusted", () => {
+    const h = new Headers({
+      "x-real-ip": "10.0.0.9",
+      "x-forwarded-for": "203.0.113.5, 10.0.0.1",
+    });
+    expect(clientKey(h, { TRUST_PROXY_HEADERS: "true" })).toBe("10.0.0.9");
   });
 
   it("prefers the Vercel-managed forwarding header", () => {

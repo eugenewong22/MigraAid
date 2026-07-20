@@ -24,6 +24,14 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      // A phone viewport catches mobile-only regressions the desktop project
+      // can't see: the header page-title swap, the locale-pill abbreviation,
+      // and citation-chip / long-URL overflow on the core chat screen.
+      name: "mobile",
+      testMatch: /(chat|contract|emergency)\.spec\.ts/,
+      use: { ...devices["Pixel 5"] },
+    },
   ],
   webServer: {
     command: process.env.CI

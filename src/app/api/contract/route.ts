@@ -7,11 +7,18 @@ import {
   isSupportedImageType,
 } from "@/lib/contract/analyze";
 import { hasExplicitStorageConsent } from "@/lib/contract/privacy";
-import { rateLimit, clientKey } from "@/lib/ratelimit";
+import {
+  rateLimit,
+  clientKey,
+  reportUntrustedClientKey,
+  UNTRUSTED_CLIENT_KEY,
+} from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import { contractReviews } from "@/lib/db/schema";
 import { randomUUID } from "node:crypto";
+import { isSessionTombstoned } from "@/lib/privacy/tombstone";
+import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { scrubPii } from "@/lib/safety/pii";
 import { reportError } from "@/lib/observability/sentry";
 import {
@@ -44,7 +51,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Contracts are expensive (vision) — tighter limit than chat.
-  const rl = await rateLimit(`contract:${clientKey(req.headers)}`, {
+  const clientIp = clientKey(req.headers);
+  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.contract");
+  const rl = await rateLimit(`contract:${clientIp}`, {
     limit: 5,
     windowMs: 60_000,
   });
@@ -138,7 +147,11 @@ export async function POST(req: NextRequest) {
     // Persist derived analysis only after an explicit opt-in. The image and its
     // raw text are never stored, even when the worker opts in.
     let saved: boolean | null = null;
-    if (saveAnalysis) {
+    // A "delete my data" request may have committed during the (up to 60s)
+    // vision analysis. Don't resurrect a contract_reviews row (employment
+    // summary, salary/employer terms) under a session id whose cookie the
+    // deletion already expired — the same race the chat route guards against.
+    if (saveAnalysis && !(await isSessionTombstoned(sid))) {
       try {
         await getDb().insert(contractReviews).values({
           anonSessionId: sid,
@@ -155,22 +168,32 @@ export async function POST(req: NextRequest) {
             severity: clause.severity,
           })),
         });
-        saved = true;
+        // Re-check after commit: the delete may have landed during the insert.
+        if (await isSessionTombstoned(sid)) {
+          await deleteWorkerSessionData(sid);
+          saved = false;
+        } else {
+          saved = true;
+        }
       } catch (persistenceError) {
         saved = false;
         if (process.env.DATABASE_URL) {
           await reportError(persistenceError, "api.contract.persistence");
         }
       }
+    } else if (saveAnalysis) {
+      // Consent given, but the session was already erased — nothing stored.
+      saved = false;
     }
 
     // Extracted contract terms are sensitive personal data — match the chat
     // route's explicit no-store rather than relying on POST-caching defaults.
     const headers: Record<string, string> = { "cache-control": "no-store" };
-    // Only plant a durable session cookie when the worker opted to save the
-    // analysis (so it can later be deleted). A one-off, no-consent analysis
-    // leaves no session identifier behind.
-    if (!existingSid && saveAnalysis) {
+    // Only plant a durable session cookie when an analysis was actually saved
+    // (so it can later be deleted). Gate on `saved`, not merely the consent
+    // flag: a failed or tombstone-skipped save leaves nothing to reference, so
+    // it must not leave a durable identifier behind either.
+    if (!existingSid && saved === true) {
       headers["set-cookie"] =
         `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${
           process.env.NODE_ENV === "production" ? "; Secure" : ""

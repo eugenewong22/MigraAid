@@ -16,6 +16,8 @@ test("the home emergency link reaches callable contacts and navigates back", asy
     "href",
     "tel:999",
   );
+  // The "unsafe to speak" path is an sms: link, not tel: — assert it survives.
+  await expect(page.locator('a[href="sms:70999"]')).toBeVisible();
 
   // The redesigned header replaces the "Back" link with the MigraAid wordmark,
   // which returns to the localized home page.

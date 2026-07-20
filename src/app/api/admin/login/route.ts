@@ -91,10 +91,14 @@ export async function POST(req: NextRequest) {
     return Response.redirect(loginUrl, 303);
   }
 
-  // An account-key quota closes the distributed-IP credential-stuffing gap.
-  // The helper HMACs the normalized address before either limiter backend sees it.
+  // Per-(account, IP) quota. Keying on the email ALONE let an attacker on other
+  // IPs fill a known volunteer's shared bucket and lock them out of their own
+  // console (a self-sustaining DoS). Scoping to the caller's (already trusted —
+  // the anon sentinel is rejected above) IP means an attacker only ever fills
+  // their own bucket; the victim's stays clear. Per-IP volume is still capped by
+  // the 5/15-min bucket above, and Supabase backstops distributed stuffing.
   const accountLimited = await rateLimit(
-    sensitiveRateLimitKey("admin-login-account", email),
+    sensitiveRateLimitKey("admin-login-account", `${email}|${ip}`),
     { limit: 10, windowMs: 15 * 60_000 },
   );
   const accountLimiterUnavailable = requireDistributedLimiter(
