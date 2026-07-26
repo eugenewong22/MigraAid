@@ -22,7 +22,11 @@ pnpm typecheck && pnpm test && pnpm lint
 ## Especially valuable contributions
 
 - **Content review** — verify the legal/procedural accuracy of items in `content/` and the
-  hotline numbers in `src/lib/referral/emergency.ts`. See `content/README.md`.
+  hotline numbers in `src/lib/referral/emergency.ts`. See `content/README.md`. Each item
+  carries a verbatim excerpt of the source it paraphrases, so you can check it against the
+  law without leaving the diff. The error automated checks cannot catch is
+  **overgeneralisation** — a right stated without the condition it depends on — so that is
+  the most valuable thing to look for.
 - **Translation QA** — review the machine-drafted catalogs in `messages/` with a native speaker.
   See `TRANSLATIONS.md`.
 - **Golden eval** — add NGO-verified question/answer pairs to `eval/golden.json` (per domain and
