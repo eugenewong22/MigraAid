@@ -46,7 +46,8 @@
     "referralCodeLabel": "Kode rujukan pribadi",
     "referralCodeHelp": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa pada {date}.",
     "referralCodeHelpNoDate": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa dalam 30 hari.",
-    "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya."
+    "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya.",
+    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -122,5 +123,10 @@
     "confirm": "Hapus percakapan dan analisis kontrak tersimpan yang terkait dengan perangkat ini? Tindakan ini tidak dapat dibatalkan.",
     "deleted": "Data MigraAid Anda telah dihapus.",
     "error": "Data Anda tidak dapat dihapus. Silakan coba lagi."
+  },
+  "notFound": {
+    "title": "Halaman tidak ditemukan",
+    "body": "Kami tidak dapat menemukan halaman ini. Halaman mungkin telah dipindahkan, atau tautannya salah.",
+    "home": "Beranda"
   }
 }

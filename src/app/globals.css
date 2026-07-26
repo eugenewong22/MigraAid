@@ -90,3 +90,14 @@ h2,
 h3 {
   text-wrap: pretty;
 }
+
+/* The Bricolage Grotesque display face is Latin-only (see --font-display
+   above); for Bengali/Tamil/Thai/Burmese it falls back to Noto, whose
+   vertically-stacking marks — Bengali/Tamil conjuncts, Thai tone marks above
+   the baseline, Burmese kinzi — need more headroom than the ~1.06–1.1 leading
+   the hero h1/h2 use for the tighter Latin face. Relax line-height only (no
+   change to font-size/weight/spacing) for these locales so marks don't clip. */
+:is(html[lang="my"], html[lang="th"], html[lang="bn"], html[lang="ta"])
+  :is(h1, h2) {
+  line-height: 1.3;
+}

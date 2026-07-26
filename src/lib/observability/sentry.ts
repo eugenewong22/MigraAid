@@ -41,11 +41,15 @@ export function sanitizeSentryEvent(
 export function sanitizeSentryTransaction<T extends Event>(event: T): T {
   stripRequestAndUser(event);
   // Span descriptions/data can hold outbound URLs, params, and query metadata.
+  // `description` is where auto-instrumented http/fetch spans put the full
+  // outbound URL and DB spans put the SQL statement, so it must go too.
   for (const span of event.spans ?? []) {
     delete (span as { data?: unknown }).data;
+    delete (span as { description?: unknown }).description;
   }
   if (event.contexts?.trace) {
     delete (event.contexts.trace as { data?: unknown }).data;
+    delete (event.contexts.trace as { description?: unknown }).description;
   }
   return event;
 }

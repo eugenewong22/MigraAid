@@ -170,11 +170,25 @@ export function clientKey(
     env.VERCEL === "1"
       ? headers.get("x-vercel-forwarded-for")
       : env.TRUST_PROXY_HEADERS === "true"
-        ? // Take the LAST hop (nearest the trusted proxy). nginx's ubiquitous
-          // `proxy_add_x_forwarded_for` APPENDS the real client, so the leftmost
-          // element is client-supplied and spoofable; the rightmost is written
-          // by our own proxy.
-          rightmost(headers.get("x-real-ip") ?? headers.get("x-forwarded-for"))
+        ? // Take the LAST hop of X-Forwarded-For (nearest the trusted proxy).
+          // nginx's ubiquitous `proxy_add_x_forwarded_for` APPENDS the real
+          // client, so the leftmost element is client-supplied and spoofable;
+          // the rightmost is written by our own proxy — that append-only
+          // behaviour is what makes TRUST_PROXY_HEADERS safe to trust here.
+          //
+          // X-Real-IP gets no such guarantee: it's a single value, not an
+          // append-only list, so there's no "last hop" to fall back on. A
+          // proxy config that enables `proxy_add_x_forwarded_for` (the common
+          // one-liner for "trust my reverse proxy") but never adds the
+          // separate `proxy_set_header X-Real-IP $remote_addr` directive
+          // passes a client-sent X-Real-IP straight through unmodified —
+          // preferring it, as the previous version of this function did,
+          // would let that client-controlled header override the safely
+          // extracted X-Forwarded-For hop. Prefer X-Forwarded-For and only
+          // fall back to X-Real-IP when it's entirely absent (a proxy that
+          // sets only X-Real-IP and not X-Forwarded-For).
+          rightmost(headers.get("x-forwarded-for")) ??
+          singleHeader(headers.get("x-real-ip"))
         : null;
   return forwarded || UNTRUSTED_CLIENT_KEY;
 }
@@ -182,6 +196,10 @@ export function clientKey(
 function rightmost(headerValue: string | null): string | undefined {
   const parts = headerValue?.split(",");
   return parts?.[parts.length - 1]?.trim() || undefined;
+}
+
+function singleHeader(headerValue: string | null): string | undefined {
+  return headerValue?.trim() || undefined;
 }
 
 let untrustedClientKeyReported = false;

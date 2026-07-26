@@ -63,7 +63,11 @@ export async function POST(req: NextRequest) {
     windowMs: 60_000,
   });
   if (process.env.NODE_ENV === "production" && rl.source === "memory") {
-    await reportError(
+    // Fire-and-forget: the retrieve+generate pipeline below (or, on the 429
+    // path, nothing user-visible) gives Sentry's flush ample background time,
+    // and awaiting it would add ~1.5s of latency to every request during a
+    // Redis outage for a call whose result nothing here depends on.
+    void reportError(
       new Error("Distributed rate limiter unavailable; using local chat quota"),
       "api.chat.ratelimit",
     );
@@ -108,8 +112,14 @@ export async function POST(req: NextRequest) {
     return new Response("Message too long", { status: 413 });
   }
 
-  // Anonymous, opaque session id (HttpOnly cookie) — no worker PII.
-  const existingSid = req.cookies.get("maid_sid")?.value;
+  // Anonymous, opaque session id (HttpOnly cookie) — no worker PII. A cookie
+  // that doesn't match the shape the server mints (crypto.randomUUID()) is
+  // never trusted as-is — it would otherwise be written verbatim into an
+  // unbounded text column and let a client pick its own (predictable, index-
+  // bloating) session id. Treat it exactly like a missing cookie.
+  const rawSid = req.cookies.get("maid_sid")?.value;
+  const existingSid =
+    rawSid && UUID_PATTERN.test(rawSid) ? rawSid : undefined;
   const sid = existingSid ?? randomUUID();
 
   const encoder = new TextEncoder();
@@ -135,6 +145,13 @@ export async function POST(req: NextRequest) {
           return false;
         }
       };
+      // The answer is buffered until it clears the safety gate, so nothing
+      // reaches the browser for the whole retrieve+generate window (up to tens
+      // of seconds). Emit a heartbeat so the client can tell a slow-but-alive
+      // stream from a dead socket and keep its inactivity timer from tripping.
+      const heartbeat = setInterval(() => {
+        enqueue(write({ type: "ping" }));
+      }, 10_000);
       try {
         let result = preflightSafetyAnswer(message, locale);
         let normalizedQuery = message;
@@ -182,12 +199,21 @@ export async function POST(req: NextRequest) {
         let assistantMessageId: string | undefined;
         let referralCode: string | undefined;
         let referralExpiresAt: string | undefined;
+        // Captured during persistence, emitted AFTER the answer frame so no
+        // analytics round trip sits between "answer ready" and "answer shown".
+        let startedInfo: { newWorker: boolean } | undefined;
+        let referralOrg: string | undefined;
         // "Delete my data" may have committed while this turn was generating.
         // Persisting now would resurrect rows under a session id whose cookie
         // the deletion response already expired — unreachable by any future
         // deletion request. Skip persistence; the answer itself still streams
         // back (without a conversation/message id, so feedback is disabled).
-        if (!(await isSessionTombstoned(sid))) try {
+        if (await isSessionTombstoned(sid)) {
+          // Tombstoned before persistence even started — don't echo the
+          // client-supplied conversationId back either: it was only pattern-
+          // validated, never confirmed to belong to this (now-erased) session.
+          cid = undefined;
+        } else try {
           const db = getDb();
           const persisted = await db.transaction(async (tx) => {
             let activeConversationId = cid;
@@ -305,27 +331,16 @@ export async function POST(req: NextRequest) {
           // attributed to a session the worker already erased.
           if (await isSessionTombstoned(sid)) {
             await deleteWorkerSessionData(sid);
+            // Same reasoning as the pre-check skip above: leave the response
+            // without ids so nothing is attributed to the erased session.
+            cid = undefined;
           } else {
             cid = persisted.conversationId;
             assistantMessageId = persisted.assistantMessageId;
             referralCode = persisted.handoff?.code;
             referralExpiresAt = persisted.handoff?.expiresAt.toISOString();
-            if (persisted.started) {
-              await track(
-                {
-                  type: "conversation_started",
-                  locale,
-                  newWorker: persisted.started.newWorker,
-                },
-                { sessionId: sid },
-              );
-            }
-            if (persisted.handoff) {
-              await track(
-                { type: "referral_created", org: referrals[0].org },
-                { sessionId: sid },
-              );
-            }
+            startedInfo = persisted.started;
+            if (persisted.handoff) referralOrg = referrals[0].org;
           }
         } catch (persistenceError) {
           // No database configured — skip persistence, still answer the worker.
@@ -348,15 +363,34 @@ export async function POST(req: NextRequest) {
           }),
         );
         if (!delivered) return;
-        await track(
-          {
-            type: "message_sent",
-            locale,
-            escalated: result.escalated,
-            tokens: result.usage?.totalTokens,
-          },
-          { sessionId: sid },
-        );
+        // Analytics run only after the worker has the answer. Batched so a slow
+        // PostHog endpoint can't serialize into added latency, and settled (not
+        // thrown) so an analytics failure never surfaces to the worker.
+        const analytics: Promise<void>[] = [
+          track(
+            {
+              type: "message_sent",
+              locale,
+              escalated: result.escalated,
+              tokens: result.usage?.totalTokens,
+            },
+            { sessionId: sid },
+          ),
+        ];
+        if (startedInfo) {
+          analytics.push(
+            track(
+              { type: "conversation_started", locale, newWorker: startedInfo.newWorker },
+              { sessionId: sid },
+            ),
+          );
+        }
+        if (referralOrg) {
+          analytics.push(
+            track({ type: "referral_created", org: referralOrg }, { sessionId: sid }),
+          );
+        }
+        await Promise.allSettled(analytics);
       } catch (err) {
         if (cancelled || generationAbort.signal.aborted) return;
         await reportError(err, "api.chat");
@@ -364,6 +398,7 @@ export async function POST(req: NextRequest) {
           write({ type: "error", message: "Unable to answer safely right now." }),
         );
       } finally {
+        clearInterval(heartbeat);
         req.signal.removeEventListener("abort", abortGeneration);
         if (!cancelled) {
           try {

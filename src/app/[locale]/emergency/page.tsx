@@ -6,8 +6,13 @@ import {
   type EmergencyCategory,
 } from "@/lib/referral/emergency";
 import { SiteHeader } from "@/components/SiteHeader";
+import { buildAlternates, buildOpenGraph } from "../layout";
 
-/** Localized tab title ("Emergency contacts — MigraAid" per locale). */
+/**
+ * Localized tab title ("Emergency contacts — MigraAid" per locale), plus
+ * canonical alternates and OG. Description reuses `emergency.intro`, the
+ * existing worker-facing summary of this page.
+ */
 export async function generateMetadata({
   params,
 }: {
@@ -15,7 +20,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "emergency" });
-  return { title: t("title") };
+  const title = t("title");
+  const description = t("intro");
+  return {
+    title,
+    description,
+    alternates: buildAlternates(locale, "/emergency"),
+    openGraph: buildOpenGraph(locale, title, description),
+  };
 }
 
 const ORDER: EmergencyCategory[] = ["urgent", "government", "ngo"];

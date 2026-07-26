@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Chat } from "@/components/Chat";
 import { SiteHeader } from "@/components/SiteHeader";
+import { buildAlternates, buildOpenGraph } from "../layout";
 
-/** Localized tab title ("Ask MigraAid — MigraAid" per locale). */
+/**
+ * Localized tab title ("Ask MigraAid — MigraAid" per locale), plus canonical
+ * alternates and OG. No page-specific description key exists for chat, so
+ * this reuses the site-level `home.metaDescription` (also the layout's
+ * inherited default) to keep the description in sync.
+ */
 export async function generateMetadata({
   params,
 }: {
@@ -11,7 +17,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "chat" });
-  return { title: t("title") };
+  const th = await getTranslations({ locale, namespace: "home" });
+  const title = t("title");
+  const description = th("metaDescription");
+  return {
+    title,
+    description,
+    alternates: buildAlternates(locale, "/chat"),
+    openGraph: buildOpenGraph(locale, title, description),
+  };
 }
 
 export default async function ChatPage({

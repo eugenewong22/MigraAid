@@ -1,7 +1,24 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DeleteMyData } from "@/components/DeleteMyData";
+import { buildAlternates, buildOpenGraph } from "./layout";
+
+/** Canonical/hreflang alternates for the home route ("/"). */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  const description = t("metaDescription");
+  return {
+    alternates: buildAlternates(locale, ""),
+    openGraph: buildOpenGraph(locale, "MigraAid", description),
+  };
+}
 
 export default async function Home({
   params,

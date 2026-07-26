@@ -1,12 +1,24 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   answer,
   enforceAnswerSafety,
   parseCompletion,
   preflightSafetyAnswer,
   serializeSources,
+  streamAnswer,
 } from "@/lib/rag/answer";
 import type { RetrievedChunk } from "@/lib/rag/types";
+
+// Hoisted so the "openai" mock factory (which vitest hoists above these
+// imports) can close over it. Only exercised by the inactivity-watchdog test
+// below — every other test in this file resolves via the deterministic
+// preflight/enforcement paths and never touches the network client.
+const { mockCreate } = vi.hoisted(() => ({ mockCreate: vi.fn() }));
+vi.mock("openai", () => ({
+  default: class MockOpenAI {
+    chat = { completions: { create: mockCreate } };
+  },
+}));
 
 const chunks: RetrievedChunk[] = [
   {
@@ -169,6 +181,61 @@ describe("parseCompletion", () => {
     expect(result.escalated).toBe(false);
     expect(result.issueType).toBe("out_of_scope");
     expect(result.text).not.toContain("sign this");
+  });
+
+  it("rejects a directive that opens a new sentence after the citation's terminator", () => {
+    // The natural citation style puts the terminator BEFORE the marker
+    // ("…7 days. [1]"), so the injected directive opens a fresh, uncited
+    // sentence. Verified across scripts whose terminator sits before the marker.
+    for (const text of [
+      "Your salary must be paid within 7 days. [1] Sign this contract now.",
+      "আপনার বেতন বকেয়া আছে। [1] এখন এই চুক্তিতে স্বাক্ষর করুন।",
+      "工资必须在七天内支付。[1] 立即签署合同。",
+    ]) {
+      const result = enforceAnswerSafety(
+        {
+          text,
+          citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
+          escalated: false,
+          model: "test-model",
+        },
+        "en",
+        1,
+      );
+      expect(result.issueType).toBe("out_of_scope");
+      expect(result.text).not.toBe(text);
+    }
+  });
+
+  it("rejects a directive that trails a leading (sentence-opening) marker", () => {
+    const result = enforceAnswerSafety(
+      {
+        text: "[1] Sign this contract now and pay the agent fee.",
+        citations: [{ sourceRef: "Example", sourceNumber: 1, contentItemId: "item-1" }],
+        escalated: false,
+        model: "test-model",
+      },
+      "en",
+      1,
+    );
+    expect(result.text).not.toContain("Sign this contract");
+  });
+
+  it("accepts a mid-sentence citation whose cited clause continues after it", () => {
+    // Regression guard: the marker-opens-sentence check must not over-reject a
+    // citation embedded inside its own sentence.
+    const result = enforceAnswerSafety(
+      {
+        text: "You must be paid [1] within seven days of the salary period.",
+        citations: [{ sourceRef: "Employment Act", sourceNumber: 1, contentItemId: "item-1" }],
+        escalated: false,
+        model: "test-model",
+      },
+      "en",
+      1,
+    );
+    expect(result.escalated).toBe(false);
+    expect(result.text).toContain("within seven days");
   });
 
   it("accepts a paragraph-end citation covering several preceding sentences", () => {
@@ -380,5 +447,55 @@ describe("parseCompletion", () => {
     const result = preflightSafetyAnswer("I was injured at work", "en");
     expect(result?.issueType).toBe("workplace_injury");
     expect(result?.model).toBe("safety-policy");
+  });
+});
+
+describe("streamAnswer inactivity watchdog", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    mockCreate.mockReset();
+  });
+
+  it("aborts and rejects when no chunk arrives within the inactivity window", async () => {
+    vi.useFakeTimers();
+    const abort = vi.fn();
+    // Simulates a provider that stalls mid-stream: the SDK's `.create()`
+    // resolves normally, but the returned stream's iterator never yields a
+    // next chunk (and never resolves/rejects on its own).
+    const fakeStream = {
+      controller: { abort },
+      [Symbol.asyncIterator]() {
+        return { next: () => new Promise(() => {}) };
+      },
+    };
+    mockCreate.mockResolvedValue(fakeStream);
+
+    const { textStream, final } = streamAnswer({
+      query: "What is the minimum wage?",
+      locale: "en",
+      chunks,
+    });
+
+    const iteration = (async () => {
+      const chunks: string[] = [];
+      for await (const piece of textStream) chunks.push(piece);
+      return chunks;
+    })();
+    const iterationOutcome = iteration.then(
+      (value) => ({ ok: true as const, value }),
+      (error) => ({ ok: false as const, error }),
+    );
+
+    // Advance past the 20s inactivity window without waiting on real time.
+    await vi.advanceTimersByTimeAsync(20_000);
+
+    const outcome = await iterationOutcome;
+    expect(outcome.ok).toBe(false);
+    if (!outcome.ok) {
+      expect(String(outcome.error)).toMatch(/inactivity/i);
+    }
+    // The stalled underlying request is actively cancelled, not just abandoned.
+    expect(abort).toHaveBeenCalledTimes(1);
+    await expect(final()).rejects.toThrow(/inactivity/i);
   });
 });

@@ -80,12 +80,24 @@ export function ContractUpload() {
     }
 
     setBusy(true);
+    // A dropped connection would otherwise leave `fetch` pending forever,
+    // stranding `busy` with no retry but a reload (same class of hang as the
+    // chat fetch). Contract analysis legitimately takes up to ~50s, so the
+    // deadline is generous enough for a real slow analysis to finish while
+    // still bounding a black-holed socket.
+    const CONTRACT_TIMEOUT_MS = 70_000;
+    const controller = new AbortController();
+    const timeoutTimer = setTimeout(() => controller.abort(), CONTRACT_TIMEOUT_MS);
     try {
       const fd = new FormData();
       fd.append("file", file);
       fd.append("locale", locale);
       fd.append("saveAnalysis", String(saveAnalysis));
-      const res = await fetch("/api/contract", { method: "POST", body: fd });
+      const res = await fetch("/api/contract", {
+        method: "POST",
+        body: fd,
+        signal: controller.signal,
+      });
       if (!res.ok) {
         setError(t(contractUploadErrorForStatus(res.status)));
         return;
@@ -95,6 +107,7 @@ export function ContractUpload() {
     } catch {
       setError(t("error"));
     } finally {
+      clearTimeout(timeoutTimer);
       input.value = "";
       setBusy(false);
     }

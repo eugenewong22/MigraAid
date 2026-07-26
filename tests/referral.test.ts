@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { describe, it, expect } from "vitest";
 import { isKnownIssueType, referralTargets } from "@/lib/referral/route";
 import { contactHref, telHref } from "@/lib/referral/emergency";
@@ -14,6 +15,15 @@ describe("referralTargets", () => {
     expect(targets[0].org).toContain("TADM");
     expect(targets[0].href).toContain("tal.sg/tadm");
     expect(targets.length).toBeGreaterThan(0);
+  });
+
+  it("exposes a stable org slug so the client can localize the label", () => {
+    // The card renders localized org names keyed on orgKey, not the English
+    // `org` string — so every target must carry a slug.
+    for (const target of referralTargets("unpaid_salary")) {
+      expect(target.orgKey).toMatch(/^[a-z0-9]+$/);
+    }
+    expect(referralTargets("abuse_or_threats")[0].orgKey).toBe("police");
   });
 
   it("routes abuse/threats to the police first", () => {
@@ -81,6 +91,20 @@ describe("privacy-preserving referral handoff codes", () => {
     expect(hashHandoffCode(code)).toBe(hashHandoffCode("ma 2345 6789 abcd"));
     expect(hashHandoffCode(code)).not.toContain(code);
     expect(() => hashHandoffCode("MA-too-short")).toThrow();
+  });
+
+  it("HMACs with a secret so a leaked table can't be offline-brute-forced with a public formula", () => {
+    // Regression guard for the unsalted-SHA-256 finding: the previous scheme
+    // hashed a hardcoded public prefix + the code, so anyone with a DB/backup
+    // leak could brute-force the 60-bit code space entirely offline. The
+    // fixed hash must depend on a server secret the leak alone doesn't give.
+    const code = "MA-2345-6789-ABCD";
+    const hash = hashHandoffCode(code);
+    const oldUnsaltedScheme = createHash("sha256")
+      .update(`migraaid-referral-v1:${code}`)
+      .digest("hex");
+    expect(hash).not.toBe(oldUnsaltedScheme);
+    expect(hash).not.toContain(oldUnsaltedScheme);
   });
 
   it("uses a fixed 30-day expiry", () => {

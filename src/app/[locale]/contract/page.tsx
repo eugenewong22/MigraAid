@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContractUpload } from "@/components/ContractUpload";
 import { SiteHeader } from "@/components/SiteHeader";
+import { buildAlternates, buildOpenGraph } from "../layout";
 
-/** Localized tab title ("Explain my contract — MigraAid" per locale). */
+/**
+ * Localized tab title ("Explain my contract — MigraAid" per locale), plus
+ * canonical alternates and OG. No page-specific description key exists for
+ * contract, so this reuses the site-level `home.metaDescription` (also the
+ * layout's inherited default) to keep the description in sync.
+ */
 export async function generateMetadata({
   params,
 }: {
@@ -11,7 +17,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "contract" });
-  return { title: t("title") };
+  const th = await getTranslations({ locale, namespace: "home" });
+  const title = t("title");
+  const description = th("metaDescription");
+  return {
+    title,
+    description,
+    alternates: buildAlternates(locale, "/contract"),
+    openGraph: buildOpenGraph(locale, title, description),
+  };
 }
 
 export default async function ContractPage({

@@ -9,6 +9,8 @@
 import type { Domain } from "@/lib/rag/types";
 
 export interface ReferralTarget {
+  /** Stable org slug (tadm/mom/home/…) so the client can localize the label. */
+  orgKey: string;
   org: string;
   contact: string;
   href?: string;
@@ -78,6 +80,7 @@ export function referralTargets(issueType: string): ReferralTarget[] {
   return keys.map((key) => {
     const org = ORGS[key];
     return {
+      orgKey: key,
       org: org.name,
       contact: org.contact,
       href: org.href,

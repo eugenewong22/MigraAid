@@ -139,8 +139,14 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   const isDocument = request.mode === "navigate" || request.destination === "document";
-  const isPublicDocument = isDocument && PUBLIC_DOCUMENTS.has(url.pathname) && !url.search;
-  const isEmergency = isPublicDocument && url.pathname.endsWith("/emergency");
+  const isKnownPath = isDocument && PUBLIC_DOCUMENTS.has(url.pathname);
+  const isEmergency = isKnownPath && url.pathname.endsWith("/emergency");
+  // A shared emergency link commonly carries a query string (UTM/tracking
+  // params); match that route on pathname alone so it still hits the cached
+  // offline fallback below. Other public documents keep the no-query
+  // requirement — they are cached under their exact "/" or "/<locale>"
+  // request, matching the PWA start_url.
+  const isPublicDocument = isKnownPath && (isEmergency || !url.search);
   const isImmutableAsset =
     url.pathname.startsWith("/_next/static/") ||
     url.pathname === "/manifest.webmanifest" ||
@@ -158,7 +164,12 @@ self.addEventListener("fetch", (event) => {
       fetchWithTimeout(request)
         .then((response) => cacheDocument(event, request, response))
         .catch(async () => {
-          const cached = await caches.match(request);
+          // ignoreSearch: the canonical page (precached without a query
+          // string) must still answer a request carrying one — otherwise a
+          // shared link with UTM/tracking params would find no exact-URL
+          // cache match and fall straight to the plaintext apology below
+          // even though the real cached page is available.
+          const cached = await caches.match(request, { ignoreSearch: true });
           return (
             cached ??
             new Response(OFFLINE_EMERGENCY[url.pathname.split("/")[1]] ?? OFFLINE_EMERGENCY.en, {
