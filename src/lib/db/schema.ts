@@ -63,6 +63,16 @@ export const contentItems = pgTable(
     sourceRef: text("source_ref").notNull(),
     /** Canonical, reviewer-verified HTTPS source shown alongside the label. */
     sourceUrl: text("source_url"),
+    /** Registry id in `content/sources.json` this item was derived from. */
+    sourceId: text("source_id"),
+    /**
+     * Verbatim excerpt of the source provision the body paraphrases.
+     * Never chunked, never embedded, never retrieved — it exists so a reviewer
+     * can check the paraphrase against the law it claims to restate.
+     */
+    sourceExcerpt: text("source_excerpt"),
+    /** Date the source was read, as recorded on the item. */
+    sourceRetrievedAt: date("source_retrieved_at"),
     /** Canonical language of the source material (the corpus is authored in English). */
     lang: text("lang").notNull().default("en"),
     status: contentStatusEnum("status").notNull().default("draft"),
@@ -87,6 +97,13 @@ export const contentItems = pgTable(
     index("content_items_status_domain_idx").on(table.status, table.domain),
     index("content_items_content_hash_idx").on(table.contentHash),
     uniqueIndex("content_items_source_key_uidx").on(table.sourceKey),
+    index("content_items_source_id_idx").on(table.sourceId),
+    // A verbatim excerpt is meaningless without the registry entry that says
+    // which document it came from and under what licence it may be stored.
+    check(
+      "content_items_excerpt_requires_source",
+      sql`${table.sourceExcerpt} is null or ${table.sourceId} is not null`,
+    ),
   ],
 ).enableRLS();
 

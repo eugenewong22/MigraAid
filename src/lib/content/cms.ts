@@ -7,12 +7,57 @@
  * is written to the audit log.
  */
 import { and, desc, eq, ne, sql } from "drizzle-orm";
-import { createHash } from "node:crypto";
 import { getDb } from "@/lib/db";
 import { contentItems, contentChunks, auditLog } from "@/lib/db/schema";
 import { getEmbedder } from "@/lib/embeddings";
 import { chunkMarkdown } from "@/lib/rag/chunk";
+import { computeContentHash } from "@/lib/content/hash";
+import { getSource } from "@/lib/content/sources";
+import { assertExcerptPermitted } from "@/lib/content/licence";
 import type { Domain } from "@/lib/rag/types";
+
+/** The fields an editor supplies for a knowledge item. */
+export interface ContentDraftInput {
+  domain: Domain;
+  title: string;
+  bodyMd: string;
+  sourceRef: string;
+  sourceUrl?: string;
+  /** Registry id in `content/sources.json`. Required to store an excerpt. */
+  sourceId?: string;
+  /** Verbatim source provision. Never chunked, never embedded. */
+  sourceExcerpt?: string;
+  sourceRetrievedAt?: string;
+}
+
+/**
+ * Normalise an editor's input into database columns, refusing a verbatim
+ * excerpt whose source is not cleared for one. Enforced here as well as in the
+ * server action so the action schema is never the only gate.
+ */
+function draftColumns(input: ContentDraftInput) {
+  const sourceExcerpt = input.sourceExcerpt?.trim() || null;
+  const sourceId = input.sourceId?.trim() || null;
+
+  if (sourceExcerpt) {
+    if (!sourceId) {
+      throw new Error("A verbatim excerpt requires the source it came from");
+    }
+    assertExcerptPermitted(getSource(sourceId));
+  }
+
+  return {
+    domain: input.domain,
+    title: input.title,
+    bodyMd: input.bodyMd,
+    sourceRef: input.sourceRef,
+    sourceUrl: input.sourceUrl ?? null,
+    sourceId,
+    sourceExcerpt,
+    sourceRetrievedAt: input.sourceRetrievedAt?.trim() || null,
+    contentHash: computeContentHash({ bodyMd: input.bodyMd, sourceExcerpt }),
+  };
+}
 
 export function isIndependentReviewer(
   item: { submittedBy: string | null; lastEditedBy: string | null },
@@ -45,25 +90,14 @@ export async function listAudit(limit = 200) {
   return getDb().select().from(auditLog).orderBy(desc(auditLog.at)).limit(limit);
 }
 
-export async function createDraft(
-  input: {
-    domain: Domain;
-    title: string;
-    bodyMd: string;
-    sourceRef: string;
-    sourceUrl?: string;
-  },
-  actor: string,
-) {
-  const contentHash = createHash("sha256").update(input.bodyMd).digest("hex");
+export async function createDraft(input: ContentDraftInput, actor: string) {
+  const columns = draftColumns(input);
   return getDb().transaction(async (tx) => {
     const [item] = await tx
       .insert(contentItems)
       .values({
-        ...input,
-        sourceUrl: input.sourceUrl ?? null,
+        ...columns,
         status: "draft",
-        contentHash,
         lastEditedBy: actor,
       })
       .returning({ id: contentItems.id, version: contentItems.version });
@@ -80,24 +114,16 @@ export async function createDraft(
 
 export async function updateDraft(
   id: string,
-  input: {
-    domain: Domain;
-    title: string;
-    bodyMd: string;
-    sourceRef: string;
-    sourceUrl?: string;
-  },
+  input: ContentDraftInput,
   expectedVersion: number,
   actor: string,
 ) {
-  const contentHash = createHash("sha256").update(input.bodyMd).digest("hex");
+  const columns = draftColumns(input);
   return getDb().transaction(async (tx) => {
     const [item] = await tx
       .update(contentItems)
       .set({
-        ...input,
-        sourceUrl: input.sourceUrl ?? null,
-        contentHash,
+        ...columns,
         version: sql`${contentItems.version} + 1`,
         lastEditedBy: actor,
         submittedBy: null,
