@@ -90,4 +90,20 @@ describe("database security migration", () => {
     );
     expect(sql).toContain('ALTER TABLE "feedback" DROP COLUMN "comment"');
   });
+
+  it("cannot store a verbatim excerpt without the source it came from", async () => {
+    const sql = await readFile(
+      path.join(process.cwd(), "drizzle", "0011_big_drax.sql"),
+      "utf8",
+    );
+    expect(sql).toContain('ADD COLUMN "source_excerpt" text');
+    expect(sql).toContain('ADD COLUMN "source_id" text');
+    expect(sql).toContain('ADD COLUMN "source_retrieved_at" date');
+    expect(sql).toContain(
+      'ADD CONSTRAINT "content_items_excerpt_requires_source"',
+    );
+    expect(sql).toMatch(
+      /"source_excerpt" is null or "content_items"\."source_id" is not null/,
+    );
+  });
 });

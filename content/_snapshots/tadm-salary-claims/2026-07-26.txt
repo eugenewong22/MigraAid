@@ -1,0 +1,205 @@
+# Snapshot of Filing an employment or salary claim with TADM
+# source_id: tadm-salary-claims
+# canonical_url: https://www.tal.sg/tadm/eservices/employees-file-employment-claim
+# final_url: https://www.tal.sg/tadm/eservices/employees-file-employment-claim
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: 25c9d44b9af36e3f8a865eeeecb96fcff5a20a3fc62df9b1622ba8868e09b92d
+
+(For employees) File a claim for mediation | Tripartite Alliance for Dispute Management (TADM) Skip to main content
+
+- About Us
+- Resources
+- FAQs
+- Contact Us Translate Using Chrome
+English 中文 Malay தமிழ் বাংলা
+
+- Search search
+
+Search search
+
+- Getting started https://www.tal.sg/tadm/getting-started
+- Know your options https://www.tal.sg/tadm/know-your-options
+- Mediation guide https://www.tal.sg/tadm/mediation-guide-3
+- eServices https://www.tal.sg/tadm/eservices
+
+Note: The TADM eServices will be undergoing scheduled maintenance from 25 July 2026, 10pm to 26 July 2026, 3am. During this period, the TADM eServices and Chatbot will not be available. Thank you for your understanding.
+You may visit the Ministry of Manpower if you have general queries on the Employment Act .
+
+Note: Use "Ask TADM" chatbot to get immediate answers, claim assessment, and to file your claim. It will offer to make an appointment, if needed.
+You may visit the Ministry of Manpower if you have general queries on the Employment Act .
+
+- Home
+- eServices
+- Employees file employment claim
+
+(For employees) File a claim for mediation
+If you are a non-union member, you may use this service to file a claim for mediation. If you are a union member, you should contact your union to help you file your claim.
+Things to note
+File a salary in lieu of notice claim if you do not dispute your dismissal
+You may file an employment claim for the salary in lieu of notice of termination if:
+- you do not dispute the grounds of your dismissal; and
+- you have not been paid salary in lieu of notice (e.g. notice pay).
+
+File a wrongful dismissal claim if you dispute your dismissal
+You may file a wrongful dismissal claim if you were dismissed without just or sufficient cause for reasons such as discrimination, deprivation of employment benefit, or punishment for exercising your employment right. This includes situations where you resign involuntarily. Valid reasons for dismissal include:
+
+- Misconduct;
+- Poor performance;
+- Redundancy If you dispute the reasons for your dismissal, you are required to support your wrongful dismissal claim with evidence of personal accounts or documents (e.g. a termination letter or emails). After submitting your claim, TADM will assess the claim in accordance with the Tripartite Guidelines on Wrongful Dismissal . TADM will determine whether the case will be mediated at TADM or adjudicated at the Employment Claims Tribunals .
+
+- Download this QRG for detailed instructions on filing a salary-related employment claim and/or a wrongful dismissal claim.
+
+- Download this QRG to learn how to use the dashboard as an employee.
+
+Do not file a claim if your company is under bankruptcy, judicial management or liquidation
+You should file your claim directly with the Insolvency Office , appointed judicial manager or liquidator ; if your company is facing:
+
+- Bankruptcy;
+- Judicial management; or
+- Liquidation Please refer to the Judicial Management Guide for more details. Alternatively, you may use “Ask TADM” chatbot to get immediate answers, claim assessment, and to file your claim. It will offer to make an appointment if needed.
+
+If you are an undischarged bankrupt
+You must inform the Official Assignee (OA) and our case officer of your bankruptcy status upon filing claims with us.
+
+Wrongful Dismissal Claim Who can file
+All employees, except seafarers, domestic workers, statutory board employees and civil servants.
+Note : If you are a statutory board employee or civil servant, you can file a maternity-related wrongful dismissal claim under the Child Development Co-Savings Act .
+
+How much you can file
+
+- Up to $20,000 per claim.
+- Up to $30,000 per claim if your union files on your behalf. If you are filing for both salary-related and wrongful dismissal claims, you may file claims worth up to $40,000 (non-union members) or $60,000 (union members).
+Claim limits apply when entering into a settlement agreement after mediation, or lodging a claim at the Employment Claims Tribunals (ECT) .
+
+What claims are eligible
+If you have been wrongfully dismissed from service (including during pregnancy), you may file a claim for:
+
+- Reinstatement
+- Compensation If you are a manager or executive who has been dismissed with notice or salary in-lieu of notice according to your terms of employment, or have resigned involuntarily, you must have served your employer for at least 6 months to submit a claim for wrongful dismissal. If you have been dismissed while pregnant, you must have served your employer for at least 3 months.
+
+When to file
+
+- Within 1 month after your last day of employment.
+- If you were wrongfully dismissed during pregnancy, within 2 months of the birth of your child.
+
+What you will need
+You need the following to file a claim:
+
+- Singpass
+- Company name, UEN, mailing address and contact number.
+- Contact details, including email address.
+- Employment dates, occupation and monthly salary.
+- Credit or debit card details or internet banking user ID and PIN for payment. Essential supporting documents to upload:
+
+- Employment contract or key employment terms
+- Salary payment records and CPF statements (where available).
+- Termination or resignation letter
+- Other documents relevant to your claim, e.g. time sheet, certification of pregnancy/estimated delivery date by a Singapore medical practitioner. You are required to support your claims with written documents. As such, you should upload the relevant documents to support your claims.
+
+Filing fees
+The non-refundable filing fees are:
+
+- $10 (inclusive of GST) per claim if you are claiming $10,000 or less
+- $20 (inclusive of GST) per claim if you are claiming more than $10,000 For example, if you are filing 2 claims and your salary-related employment claim amount is $12,000 while your wrongful dismissal claim amount is $3,000, the respective filing fees will be $20 (inclusive GST) and $10 (inclusive GST).
+
+Payment methods
+You can pay online by:
+
+- Visa or MasterCard credit or debit cards.
+- eNETS via internet banking from DBS, UOB, OCBC or Standard Chartered Bank OR
+Kiosk at TADM Services Centres during operating hours (Visa or MasterCard credit or debit cards, NETS Card, NETS Flashpay, NETS QR Payment, EZ-Link)
+Note : We do not accept cash payment.
+Payment must be made within 3 days from the date of filing. A claim is successfully filed only upon receipt of payment. If payment is not received within 3 days, the claim will be purged and you will need to refile the claim.
+
+How long it takes to file a claim
+You should be able to complete the process within 20 minutes if you have prepared your documents beforehand.
+
+What happens after
+Within 3 working days of payment, you will receive an email from TADM on the next steps of the dispute resolution process.
+
+Salary-Related Employment Claim Who can file
+All employees, except seafarers, domestic workers, statutory board employees and civil servants.
+
+How much you can file
+
+- Up to $20,000 per claim.
+- Up to $30,000 per claim if your union files on your behalf. If you are filing for both salary-related and wrongful dismissal claims, you may file claims worth up to $40,000 (non-union members) or $60,000 (union members).
+Claim limits apply when entering into a settlement agreement after mediation, or lodging a claim at the Employment Claims Tribunals (ECT) .
+
+What claims are eligible
+Based on the terms of your employment contract, you can file a claim for the following provisions:
+
+- Salary
+- Overtime pay
+- Bonuses, commission or deductions
+- Non-payment of salary while on paid leave, sick leave or maternity leave.
+- 8 or 16 weeks of paid maternity leave benefits (if you were retrenched or assessed to be wrongfully dismissed during pregnancy).
+
+When to file
+
+- If you are still in employment, within 1 year after the dispute arose. For example, if you are claiming for owed salaries for 1 Apr 2024, you should file your claim no later than 1 Apr 2025.
+- If you have left employment, within 6 months from your last date of employment. Your claims cannot be earlier than 1 year from the date of filing. For example, if you left employment on 1 Apr 2025, you should file your claim no later than 1 Oct 2025. You can only claim for owed salaries from 1 Apr 2024 to 1 Apr 2025, if you file on 1 Apr 2025.
+
+What you will need
+You need the following to file a claim:
+
+- Singpass
+- Company name, UEN, mailing address and contact number.
+- Contact details, including email address.
+- Employment dates, occupation and monthly salary.
+- Credit or debit card details or internet banking user ID and PIN for payment. Essential supporting documents to upload:
+
+- Employment contract or key employment terms
+- Salary payment records and CPF statements (where available).
+- Termination or resignation letter
+- Other documents relevant to your claim, e.g. time sheet, certification of pregnancy/estimated delivery date by a Singapore medical practitioner. You are required to substantiate your claims with written documents. As such, you should upload the relevant documents to support your claims.
+
+Filing fees
+The non-refundable filing fees are:
+
+- $10 (inclusive of GST) per claim if you are claiming $10,000 or less
+- $20 (inclusive of GST) per claim if you are claiming more than $10,000 For example, if you are filing 2 claims and your salary-related employment claim amount is $12,000 while your wrongful dismissal claim amount is $3,000, the respective filing fees will be $20 (inclusive GST) and $10 (inclusive GST).
+
+Payment methods
+You can pay online by:
+
+- Visa or MasterCard credit or debit cards.
+- eNETS via internet banking from DBS, UOB, OCBC or Standard Chartered Bank OR
+Kiosk at TADM Services Centres during operating hours (Visa or MasterCard credit or debit cards, NETS Card, NETS Flashpay, NETS QR Payment, EZ-Link)
+Note : We do not accept cash payment.
+Payment must be made within 3 days from the date of filing. A claim is successfully filed only upon receipt of payment. If payment is not received within 3 days, the claim will be purged and you will need to refile the claim.
+
+How long it takes to file a claim
+You should be able to complete the process within 20 minutes if you have prepared your documents beforehand.
+
+What happens after
+Within 3 working days of payment, you will receive an email from TADM on the next steps of the dispute resolution process.
+
+Quick Reference Guide (QRG) Download this QRG for detailed instructions on filing a salary-related employment claim and/or a wrongful dismissal claim.
+Download this QRG to learn how to use the dashboard as an employee.
+
+Note : The TADM eServices will be undergoing scheduled maintenance from 25 July 2026, 10pm to 26 July 2026, 3am.
+Please plan your transactions in advance. Thank you for your understanding.
+
+I acknowledge that I want to file a claim at TADM as a non-union member. Please acknowledge the above if you want to file a claim at TADM as a non-union member. If you are a union member, you may contact NTUC at 6213 8088 or visit NTUC's Workplace Advisory Service for assistance. File using Singpass
+
+- This service is available 24 hours daily.
+- Disable your pop-up blocker first before filing.
+- Don’t have a Singpass? Register or reset your Singpass first before filing.
+- Your employer will be notified of your claim(s) filed so that they can respond to it.
+- If you are a union member, you may contact NTUC at 6213 8008 or visit NTUC's Workplace Advisory Service for assistance.
+
+Button scroll to top
+Tripartite Alliance for Dispute Management
+
+Privacy Statement
+Terms of use
+Sitemap
+
+&copy;2026 Tripartite Alliance for Dispute Management
+All rights reserved. GST Registration No. 201606688Z
+
+Advisory – Beware of scams
+TADM will NEVER ask you to disclose bank log-in details or transfer money over a phone call. If in doubt, call the 24/7 ScamShield Helpdesk at 1799 or visit https://www.scamshield.gov.sg .
+
+Close

@@ -45,14 +45,16 @@ is **Vercel** (app) + **Supabase** (Postgres + pgvector + admin Auth), which fit
    > backstop, `/api/health/ready` compares the migration journal bundled with
    > the running code against `drizzle.__drizzle_migrations` and reports
    > `not_ready` (503) when the database is behind — gate traffic on it.
-5. Have a partner NGO review each checked-in knowledge document and add the
-   required publication metadata described in `content/README.md`. Do not
-   fabricate reviewer names or dates for the illustrative seed corpus.
-6. Run `pnpm ingest` before sending traffic to the new release. The ingester
-   stores any unreviewed or malformed repository content as `draft` and removes
-   legacy vectors for it; only explicitly reviewed `published` files are indexed.
-   Treat a run reporting unverified drafts as a launch blocker for the affected
-   guidance. Migration 0002 marks pre-existing vectors as `legacy`, and retrieval
+5. Confirm the corpus is current: `pnpm sources:check` reports any public source
+   that changed since its snapshot was taken, and names the knowledge items
+   derived from it. Re-verify those items before shipping.
+6. Run `pnpm ingest` before sending traffic to the new release. It indexes every
+   `content/` file marked `status: published` that carries a canonical source
+   reference, and stores anything malformed as `draft` while removing its
+   vectors. Treat a run reporting unexpected drafts as a launch blocker for the
+   affected guidance. Each published item is attributed to the commit that last
+   touched its file, so deploy from a full clone (`fetch-depth: 0`) rather than
+   a shallow one. Migration 0002 marks pre-existing vectors as `legacy`, and retrieval
    intentionally ignores them until they are regenerated in the configured
    provider/model vector space. Keep the embedding provider configuration stable;
    rerun ingestion whenever it changes.

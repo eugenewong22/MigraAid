@@ -22,7 +22,7 @@ describe("verifyContentFrontmatter", () => {
     });
   });
 
-  it("fails closed for the legacy seed frontmatter shape", () => {
+  it("holds the legacy seed frontmatter shape for its missing publication decision", () => {
     const result = verifyContentFrontmatter(
       {
         title: "When must my salary be paid?",
@@ -33,13 +33,28 @@ describe("verifyContentFrontmatter", () => {
 
     expect(result.status).toBe("draft");
     expect(result.publishable).toBe(false);
-    expect(result.reasons).toEqual(
-      expect.arrayContaining([
-        'frontmatter status must explicitly be "published"',
-        "reviewed_by must identify a reviewer or review team",
-        "reviewed_at must be a valid, non-future YYYY-MM-DD date",
-      ]),
+    expect(result.reasons).toEqual([
+      'frontmatter status must explicitly be "published"',
+    ]);
+  });
+
+  it("publishes without reviewer metadata — accountability comes from git", () => {
+    const result = verifyContentFrontmatter(
+      {
+        title: "When must my salary be paid?",
+        status: "published",
+        source_ref: "Employment Act 1968, s. 21",
+      },
+      NOW,
     );
+
+    expect(result).toMatchObject({
+      status: "published",
+      publishable: true,
+      reasons: [],
+      reviewedBy: undefined,
+      reviewedAt: undefined,
+    });
   });
 
   it("keeps an explicit draft de-indexed even when review fields are present", () => {
@@ -55,7 +70,7 @@ describe("verifyContentFrontmatter", () => {
     );
   });
 
-  it("fails closed when reviewer evidence is missing or placeholder text", () => {
+  it("drops placeholder reviewer evidence without blocking publication", () => {
     const missing = verifyContentFrontmatter(
       { ...REVIEWED, reviewed_by: "" },
       NOW,
@@ -65,25 +80,26 @@ describe("verifyContentFrontmatter", () => {
       NOW,
     );
 
-    expect(missing.status).toBe("draft");
-    expect(placeholder.status).toBe("draft");
-    expect(missing.reasons).toContain(
-      "reviewed_by must identify a reviewer or review team",
-    );
+    // Publishable, but the bogus evidence must not survive as if it were real:
+    // resolveProvenance falls back to git attribution when reviewedBy is unset.
+    expect(missing).toMatchObject({ publishable: true, reviewedBy: undefined });
+    expect(placeholder).toMatchObject({
+      publishable: true,
+      reviewedBy: undefined,
+    });
   });
 
   it.each(["2026-02-30", "14 July 2026", "2026-07-15"])(
-    "rejects an invalid or future review date: %s",
+    "drops an invalid or future review date without blocking publication: %s",
     (reviewedAt) => {
       const result = verifyContentFrontmatter(
         { ...REVIEWED, reviewed_at: reviewedAt },
         NOW,
       );
 
-      expect(result.status).toBe("draft");
-      expect(result.reasons).toContain(
-        "reviewed_at must be a valid, non-future YYYY-MM-DD date",
-      );
+      expect(result.status).toBe("published");
+      expect(result.publishable).toBe(true);
+      expect(result.reviewedAt).toBeUndefined();
     },
   );
 

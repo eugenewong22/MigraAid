@@ -1,0 +1,131 @@
+# Snapshot of What is the foreign worker levy
+# source_id: mom-foreign-worker-levy
+# canonical_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/foreign-worker-levy/what-is-the-foreign-worker-levy
+# final_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/foreign-worker-levy/what-is-the-foreign-worker-levy
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: 78407306f9e6e110a38f8c30d4bac2384af14e2aa8ab808828d302cd8af93b30
+
+Foreign worker quota and levy requirements
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Foreign worker quota and levy Home Work passes Work Permit for migrant worker Foreign worker quota and levy Foreign worker quota and levy requirements
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+Foreign worker quota and levy requirements
+
+The number of Work Permit holders you can hire is limited by a quota. You must also pay a monthly levy for these foreign workers.
+
+Quota requirement
+A dependency ratio ceiling (DRC), or quota, is the maximum ratio of foreign workers to the total workforce that a company in a given sector can employ.
+Sector
+DRC
+
+Construction
+83.3%
+
+Process
+83.3%
+
+Marine shipyard
+75%
+
+Manufacturing
+60%
+
+Services
+35%
+
+If the DRC for the services sector is 35%, the total number of Work Permit and S Pass holders employed by a services company cannot exceed 35% of its total workforce.
+In addition, the number of PRC Work Permit holders your company can hire is limited by a PRC sub-quota and is capped at:
+
+- 8% of your company’s total workforce if your company is in the services sector.
+- 25% of your company’s total workforce if your company is in the manufacturing sector.
+We use information from your company’s CPF account to compute the number of local employees hired by your company, which determines the foreign worker quota. To ensure your quota is calculated correctly, please declare the paid salaries and CPF contributions of your local employees promptly and accurately.
+The Local Qualifying Salary (LQS) determines the number of local employees who can be used to calculate your Work Permit and S Pass quota entitlement.
+A Singaporean or Permanent Resident employee employed under a contract of service , including the company’s director, is counted as:
+
+- 1 local employee if they earn at least $1,800 per month.
+- 0.5 local employee if they earn at least $900 to below $1,800 per month. The number of local employees will be updated every Saturday and you can check the quota balance on the next working day.
+Any late or non-payment of CPF contributions and salaries declaration will affect your quota and may cause your workers to be allocated higher levy tiers.
+You may:
+
+- Refer to this for guidelines on how to calculate your quota and levy bill .
+- Log on to WP Online to check your company's current workforce and quota.
+- Use the quota calculator below to plan how many Work Permits and S Pass holders your company can hire. Calculate your quota
+If you have never applied for a Work Permit or S Pass, you need to first declare your business activity . Based on your declaration, we will assign your company to the most relevant sector, which determines the number of Work Permit and S Pass holders you can hire.
+Levy
+The foreign worker levy, commonly known as “levy”, is a pricing mechanism to regulate the number of foreigners in Singapore.
+You must pay a monthly levy for Work Permit holders. The levy liability will start from the day the Temporary Work Permit or Work Permit is issued, whichever is earlier. It ends when the permit is cancelled or expires.
+Levy rate
+The levy you pay generally depends on two factors:
+
+- The worker’s qualifications.
+- The number of Work Permit or S Pass holders hired. Find out the levy requirements by sector:
+
+- Construction
+- Manufacturing
+- Marine Shipyard
+- Process
+- Service Worker’s qualifications
+Workers who possess relevant years of working experience in Singapore, fixed monthly salary, academic qualifications or skills-based test certificates may be considered as higher-skilled workers and qualify for higher-skilled worker levy .
+What's next Paying the levy
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 1 July 2026
+
+Related questions
+
+- Do I need to notify MOM if my Work Permit holder gets new educational qualifications?
+
+More on Foreign worker quota and levy
+
+- Paying the levy
+- Higher-skilled worker levy
+- Apply for levy waiver
+
+- Calculate foreign employee quota
+- Calculate foreign worker levy penalty
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

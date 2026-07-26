@@ -1,0 +1,218 @@
+# Snapshot of Hours of work, overtime and rest days
+# source_id: mom-hours-and-rest-days
+# canonical_url: https://www.mom.gov.sg/employment-practices/hours-of-work-overtime-and-rest-days
+# final_url: https://www.mom.gov.sg/employment-practices/hours-of-work-overtime-and-rest-days
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: 485d88d6b191b6e5c84bc972c2bfa136b47d541bc155ffbf450afd44922356f1
+
+Hours of work, overtime and rest day
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Employment practices Home Employment practices Hours of work, overtime and rest day
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+Jump To Select
+
+- Who is covered
+- Definitions
+- Break times
+- Normal hours of work
+- Overtime pay
+- Calculate your overtime pay
+- Maximum hours of work
+- Rest day
+- Calculate your pay for work on a rest day
+- Related questions
+
+Hours of work, overtime and rest day
+
+If you are covered under Part 4 of the Employment Act , your hours of work are regulated and you are entitled to breaks, overtime pay and rest day.
+
+Who is covered
+The hours of work guidelines apply only to those covered under Part 4 of the Employment Act .
+Note: Part 4 of the Employment Act does not cover managers and executives.
+If you are not covered under Part 4 of the Employment Act, your terms and conditions of employment will be according to your employment contract.
+Use this self-assessment tool to assess your coverage under Part 4 of the Employment Act.
+
+Definitions
+Week – A continuous period of 7 days starting from Monday and ending on Sunday.
+Hours of work – The period during which employees are expected to carry out the duties assigned by their employers. It does not include any intervals allowed for rest and meals.
+Employers are not required to pay for rest and meal hours.
+
+Break times
+You are generally not required to work more than 6 consecutive hours without a break.
+However, if the nature of the work requires continuous work for up to 8 hours, breaks must be provided for meals. The breaks should be at least 45 minutes long.
+Normal hours of work
+Contractual working hours are the hours that you and your employer have agreed to in the contract of service .
+For common work arrangements , your contractual hours of work are as follows:
+If you work
+Your contractual hours of work are
+
+5 days or less a week
+Up to 9 hours per day or 44 hours a week
+
+More than 5 days a week
+Up to 8 hours a day or 44 hours a week
+
+For other work arrangements , your contractual hours of work are as follows:
+If you work
+Your contractual hours of work are
+
+Less than 44 hours every alternate week
+Up to 48 hours a week, but capped at 88 hours in any continuous 2-week period.
+Example:
+If week 1 = 40 hours; week 2 = 48 hours; week 3 = 40 hours:
+
+- Average for weeks 1 and 2 = 44 hours
+- Average for weeks 2 and 3 = 44 hours
+
+Shifts of up to 12 hours a day
+Up to an average of 44 hours over a continuous 3-week period.
+Example:
+If week 1 = 40 hours; week 2 = 44 hours; week 3 = 48 hours; week 4 = 40 hours:
+
+- Average for weeks 1, 2 and 3 = 44 hours
+- Average for weeks 2, 3 and 4 = 44 hours
+
+Note: If you are not a shift worker but agree to work up to 12 hours a day, and not exceeding an average of 44 hours over any 3 continuous weeks, you must:
+
+- Give your consent in writing.
+- Have the provisions of Sections 38 and 40 of the Employment Act explained to you.
+- Be informed of your daily working hours, number of working days in each week and weekly rest day. Overtime pay
+Overtime work is all work in excess of the normal hours of work (excluding breaks).
+You can claim overtime if you are:
+
+- A non-workman earning a monthly basic salary of $2,600 or less.
+- A workman earning a monthly basic salary of $4,500 or less. Generally, a workman is someone whose work involves mainly manual labour. Find out if you fall under this category .
+The overtime rate payable for non-workmen is capped at the salary level of $2,600, or an hourly rate of $13.60 .
+Get your correct overtime pay on time . Work done beyond the contractual hours is considered overtime hours.
+For overtime work, your employer must pay you at least 1.5 times the hourly basic rate of pay. Payment must be made within 14 days after the last day of the salary period.
+A non-workman earns $2,600 a month and works 2 hours of overtime. The overtime pay is:
+$13.60 &times; 1.5 &times; 2 hours = $40.80
+Calculate your overtime pay
+Calculate your overtime pay
+Find out how to prevent overtime pay disputes or claims .
+How overtime pay is calculated
+Overtime pay is calculated as follows:
+
+- Hourly basic rate of pay &times; 1.5 &times; number of hours worked overtime The hourly basic rate of pay is calculated as follows:
+For this category of employee
+Hourly basic rate of pay is
+
+Monthly-rated employee
+(12 x Monthly basic rate of pay) / (52 x 44)
+
+Daily-rated employee
+Daily pay at the basic rate / Working hours per day
+
+Piece-rated employee
+Total weekly pay at the basic rate of pay / Total number of hours worked in the week
+
+Maximum hours of work
+As an employee, you are not allowed to work more than 12 hours a day .
+However, your employer can ask you to work more than 12 hours a day in the following circumstances:
+
+- An accident or threat of accident.
+- Work that is essential to the life of the community, national defence or security.
+- Urgent work to be done to machinery or plant.
+- An interruption of work that was impossible to foresee. Working more than 12 hours a day (overtime exemption)
+If an employer requires employees to work more than 12 hours a day (up to a maximum of 14 hours), they must apply for an overtime exemption .
+Maximum hours of overtime
+An employee can only work up to 72 overtime hours in a month.
+Employers can apply for an exemption if they require employees to work more than the 72 hours of overtime in a month.
+Note: these work activities will not be granted exemption.
+Work on rest day or public holidays is not counted in the 72-hour overtime limit, except for work done beyond the usual daily working hours on those days. Such extra hours are included in the 72-hour limit.
+Overtime on a rest day or public holiday is calculated as follows:
+
+- (Hourly basic rate of pay &times; 1.5 &times; Number of hours worked overtime) + (Rest day or public holiday pay) Rest day
+Your employer must provide 1 rest day per week .
+A rest day comprises 1 whole day (midnight to midnight). It is not a paid day.
+For shift workers , the rest day can be a continuous period of 30 hours . A 30-hour rest period that starts before 6pm on a Sunday is considered as 1 rest day within the week, even if it extends into the Monday of the following week.
+A week is continuous period of 7 days starting from Monday and ending on Sunday.
+Your employer cannot compel you to work on a rest day, unless under exceptional circumstances.
+When rest day can fall
+The employer determines the rest day, which can be on a Sunday, or any other day of the week.
+Other than the rest day, the other days of the week which you don’t need to work are not considered rest days.
+If the rest day is not a Sunday, your employer should prepare a monthly roster and inform you of the rest days before the start of each month.
+The maximum interval allowed between 2 rest days is 12 days .
+Calculate your pay for work on a rest day
+Calculate your pay for work on a rest day
+How pay for work on a rest day is calculated
+Payment for work on a rest day is calculated as follows:
+If work is done
+For up to half your normal daily working hours
+For more than half your normal daily working hours
+Beyond your normal daily working hours
+
+At the employer’s request
+1 day’s salary
+2 days’ salary
+2 days’ salary + overtime pay
+
+At the employee’s request
+Half day’s salary
+1 day’s salary
+1 day’s salary + overtime pay
+
+Related
+
+- Salary
+- Public holidays: entitlement and pay
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 24 July 2025
+
+Related questions
+
+- Must my rest day be on a Sunday?
+- My rest day is a weekday. How much should I be paid for working on Sunday?
+- Can female workmen be employed for night work?
+- Is there a salary limit for overtime pay entitlement?
+- If an employee works overtime without company approval, are they eligible for overtime pay?
+- Can my employer give me time off instead of overtime pay?
+- Can an employee bring a rest day forward to the next week?
+- If my employer asks me to work on a rest day, can they give me a day off instead of pay?
+- What is a fixed monthly salary? View all
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

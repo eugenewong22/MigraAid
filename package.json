@@ -18,7 +18,12 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "ingest": "tsx scripts/ingest/run.ts",
+    "sources:fetch": "tsx scripts/sources/fetch.ts",
+    "sources:check": "tsx scripts/sources/check.ts",
+    "content:draft": "tsx scripts/content/draft.ts",
+    "content:rollback": "tsx scripts/content/rollback.ts",
     "eval": "tsx scripts/eval/run.ts",
+    "eval:offline": "tsx scripts/eval/offline.ts",
     "icons": "tsx scripts/icons/generate.ts",
     "privacy:cleanup": "tsx scripts/privacy/cleanup.ts"
   },

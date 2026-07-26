@@ -13,13 +13,20 @@ import { confirmReferral } from "@/lib/referral/admin";
 import { requireAdmin } from "@/lib/content/auth";
 import { z } from "zod";
 
+/** An empty form field means "not provided", not "the empty string". */
+function emptyToUndefined<T extends z.ZodTypeAny>(schema: T) {
+  return z.preprocess(
+    (value) =>
+      typeof value === "string" && value.trim() === "" ? undefined : value,
+    schema,
+  );
+}
+
 const DraftSchema = z.object({
   domain: z.enum(["legal_rights", "healthcare", "housing", "financial", "settlement"]),
   title: z.string().trim().min(3).max(200),
   sourceRef: z.string().trim().min(3).max(500),
-  sourceUrl: z.preprocess(
-    (value) =>
-      typeof value === "string" && value.trim() === "" ? undefined : value,
+  sourceUrl: emptyToUndefined(
     z
       .string()
       .trim()
@@ -31,6 +38,32 @@ const DraftSchema = z.object({
       .optional(),
   ),
   bodyMd: z.string().trim().min(20).max(50_000),
+  sourceId: emptyToUndefined(
+    z
+      .string()
+      .trim()
+      .regex(/^[a-z0-9][a-z0-9-]*$/, "Source id must be a lowercase slug")
+      .max(120)
+      .optional(),
+  ),
+  sourceExcerpt: emptyToUndefined(z.string().trim().max(5_000).optional()),
+  sourceRetrievedAt: emptyToUndefined(
+    z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Retrieved date must be YYYY-MM-DD")
+      .optional(),
+  ),
+}).superRefine((input, ctx) => {
+  // The database enforces this too; failing here gives the editor a message
+  // instead of a constraint violation.
+  if (input.sourceExcerpt && !input.sourceId) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["sourceId"],
+      message: "A verbatim excerpt requires the source it came from",
+    });
+  }
 });
 const IdSchema = z.string().uuid();
 const VersionSchema = z.coerce.number().int().positive();
@@ -49,6 +82,9 @@ export async function createDraftAction(formData: FormData) {
     sourceRef: formData.get("sourceRef"),
     sourceUrl: formData.get("sourceUrl"),
     bodyMd: formData.get("bodyMd"),
+    sourceId: formData.get("sourceId"),
+    sourceExcerpt: formData.get("sourceExcerpt"),
+    sourceRetrievedAt: formData.get("sourceRetrievedAt"),
   });
   await createDraft(input, actor.id);
   revalidatePath("/[locale]/admin", "page");
@@ -62,6 +98,9 @@ export async function updateDraftAction(formData: FormData) {
     sourceRef: formData.get("sourceRef"),
     sourceUrl: formData.get("sourceUrl"),
     bodyMd: formData.get("bodyMd"),
+    sourceId: formData.get("sourceId"),
+    sourceExcerpt: formData.get("sourceExcerpt"),
+    sourceRetrievedAt: formData.get("sourceRetrievedAt"),
   });
   await updateDraft(
     IdSchema.parse(formData.get("id")),

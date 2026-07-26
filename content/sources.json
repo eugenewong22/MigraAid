@@ -1,0 +1,1158 @@
+[
+  {
+    "id": "sg-employment-act-1968",
+    "title": "Employment Act 1968",
+    "issuingAuthority": "Attorney-General's Chambers, Singapore Statutes Online",
+    "citationLabel": "Employment Act 1968",
+    "tier": "statute",
+    "domains": [
+      "legal_rights",
+      "financial"
+    ],
+    "canonicalUrl": "https://sso.agc.gov.sg/Act/EmA1968",
+    "licence": {
+      "id": "sg-agc-sso-terms-of-use",
+      "name": "Singapore Statutes Online Terms of Use",
+      "url": "https://sso.agc.gov.sg/Help/TermsOfUse",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "manual",
+    "crawlDelaySeconds": 6,
+    "robotsNote": "robots.txt: User-agent * allowed except /search; Crawl-delay 6s. Act pages are not disallowed. However the server returns 403 Forbidden to this project's identified user-agent, so it is not fetched automatically. Save snapshots by hand instead; do not disguise the client.",
+    "snapshotScope": "sections",
+    "sections": [
+      "s.20A",
+      "s.21",
+      "s.22",
+      "s.25",
+      "s.36",
+      "s.38"
+    ],
+    "recheckAfter": "2027-01-26"
+  },
+  {
+    "id": "sg-efma-1990",
+    "title": "Employment of Foreign Manpower Act 1990",
+    "issuingAuthority": "Attorney-General's Chambers, Singapore Statutes Online",
+    "citationLabel": "Employment of Foreign Manpower Act 1990",
+    "tier": "statute",
+    "domains": [
+      "legal_rights",
+      "settlement"
+    ],
+    "canonicalUrl": "https://sso.agc.gov.sg/Act/EFMA1990",
+    "licence": {
+      "id": "sg-agc-sso-terms-of-use",
+      "name": "Singapore Statutes Online Terms of Use",
+      "url": "https://sso.agc.gov.sg/Help/TermsOfUse",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "manual",
+    "crawlDelaySeconds": 6,
+    "robotsNote": "robots.txt: User-agent * allowed except /search; Crawl-delay 6s. Act pages are not disallowed. However the server returns 403 Forbidden to this project's identified user-agent, so it is not fetched automatically. Save snapshots by hand instead; do not disguise the client.",
+    "snapshotScope": "sections",
+    "sections": [
+      "s.5",
+      "s.7",
+      "s.22"
+    ],
+    "recheckAfter": "2027-01-26"
+  },
+  {
+    "id": "sg-efm-work-passes-regulations",
+    "title": "Employment of Foreign Manpower (Work Passes) Regulations 2012",
+    "issuingAuthority": "Attorney-General's Chambers, Singapore Statutes Online",
+    "citationLabel": "Employment of Foreign Manpower (Work Passes) Regulations 2012",
+    "tier": "statute",
+    "domains": [
+      "legal_rights",
+      "settlement",
+      "housing",
+      "healthcare"
+    ],
+    "canonicalUrl": "https://sso.agc.gov.sg/SL/EFMA1990-RG1",
+    "licence": {
+      "id": "sg-agc-sso-terms-of-use",
+      "name": "Singapore Statutes Online Terms of Use",
+      "url": "https://sso.agc.gov.sg/Help/TermsOfUse",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "manual",
+    "crawlDelaySeconds": 6,
+    "robotsNote": "robots.txt: User-agent * allowed except /search; Crawl-delay 6s. Act pages are not disallowed. However the server returns 403 Forbidden to this project's identified user-agent, so it is not fetched automatically. Save snapshots by hand instead; do not disguise the client.",
+    "snapshotScope": "sections",
+    "sections": [
+      "Fourth Schedule",
+      "Fifth Schedule"
+    ],
+    "recheckAfter": "2027-01-26"
+  },
+  {
+    "id": "sg-wica-2019",
+    "title": "Work Injury Compensation Act 2019",
+    "issuingAuthority": "Attorney-General's Chambers, Singapore Statutes Online",
+    "citationLabel": "Work Injury Compensation Act 2019",
+    "tier": "statute",
+    "domains": [
+      "legal_rights",
+      "healthcare"
+    ],
+    "canonicalUrl": "https://sso.agc.gov.sg/Act/WICA2019",
+    "licence": {
+      "id": "sg-agc-sso-terms-of-use",
+      "name": "Singapore Statutes Online Terms of Use",
+      "url": "https://sso.agc.gov.sg/Help/TermsOfUse",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "manual",
+    "crawlDelaySeconds": 6,
+    "robotsNote": "robots.txt: User-agent * allowed except /search; Crawl-delay 6s. Act pages are not disallowed. However the server returns 403 Forbidden to this project's identified user-agent, so it is not fetched automatically. Save snapshots by hand instead; do not disguise the client.",
+    "snapshotScope": "sections",
+    "sections": [
+      "s.11",
+      "s.14",
+      "s.16",
+      "s.23",
+      "s.36"
+    ],
+    "recheckAfter": "2027-01-26"
+  },
+  {
+    "id": "sg-feda-2015",
+    "title": "Foreign Employee Dormitories Act 2015",
+    "issuingAuthority": "Attorney-General's Chambers, Singapore Statutes Online",
+    "citationLabel": "Foreign Employee Dormitories Act 2015",
+    "tier": "statute",
+    "domains": [
+      "housing"
+    ],
+    "canonicalUrl": "https://sso.agc.gov.sg/Act/FEDA2015",
+    "licence": {
+      "id": "sg-agc-sso-terms-of-use",
+      "name": "Singapore Statutes Online Terms of Use",
+      "url": "https://sso.agc.gov.sg/Help/TermsOfUse",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "manual",
+    "crawlDelaySeconds": 6,
+    "robotsNote": "robots.txt: User-agent * allowed except /search; Crawl-delay 6s. Act pages are not disallowed. However the server returns 403 Forbidden to this project's identified user-agent, so it is not fetched automatically. Save snapshots by hand instead; do not disguise the client.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26"
+  },
+  {
+    "id": "mom-employment-act-coverage",
+    "title": "Who is covered by the Employment Act",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Who is covered by the Employment Act",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/employment-act/who-is-covered",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-employment-act-coverage/2026-07-26.txt",
+    "snapshotSha256": "b8388891b688277c7314d8094afc398c4828c311b607666695f5552036c8a481"
+  },
+  {
+    "id": "mom-hours-and-rest-days",
+    "title": "Hours of work, overtime and rest days",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Hours of work, overtime and rest days",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/hours-of-work-overtime-and-rest-days",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-hours-and-rest-days/2026-07-26.txt",
+    "snapshotSha256": "485d88d6b191b6e5c84bc972c2bfa136b47d541bc155ffbf450afd44922356f1"
+  },
+  {
+    "id": "mom-termination-what-is",
+    "title": "What is termination of employment",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — What is termination",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/termination-of-employment/what-is-termination",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-termination-what-is/2026-07-26.txt",
+    "snapshotSha256": "e1ba73a6c81c57a81b0a49e17399f8d2e3b677b1ac6c0c8fbed121b4ac58d73d"
+  },
+  {
+    "id": "mom-termination-with-notice",
+    "title": "Termination with notice",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Termination with notice",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/termination-of-employment/termination-with-notice",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-termination-with-notice/2026-07-26.txt",
+    "snapshotSha256": "2dab8c70d0e88923123924f6abad5f017ffe0f5b1332c04743b1f9a2d1eeb2b1"
+  },
+  {
+    "id": "mom-termination-without-notice",
+    "title": "Termination without notice",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Termination without notice",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/termination-of-employment/termination-without-notice",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-termination-without-notice/2026-07-26.txt",
+    "snapshotSha256": "5128b4d2988cc8422a3e796e99a1b1276ea774badeaa2a8a86913e0da8e741e9"
+  },
+  {
+    "id": "mom-wrongful-dismissal",
+    "title": "Wrongful dismissal",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Wrongful dismissal",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/termination-of-employment/wrongful-dismissal",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wrongful-dismissal/2026-07-26.txt",
+    "snapshotSha256": "8cf68a6c32a35db36e3d2fe535e6f4c19aa641181429736ad72764e008bc2437"
+  },
+  {
+    "id": "mom-termination-misconduct",
+    "title": "Termination due to misconduct",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Termination due to misconduct",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/termination-of-employment/termination-due-to-misconduct",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-termination-misconduct/2026-07-26.txt",
+    "snapshotSha256": "c9afa96d09702b9d71c2a6209df26bc99c239d1571fecadb0293e8d5cd1e7892"
+  },
+  {
+    "id": "mom-transfer-of-employment",
+    "title": "Transfer of employment",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Transfer of employment",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights",
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/transfer-of-employment",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-transfer-of-employment/2026-07-26.txt",
+    "snapshotSha256": "3ea766af9de32098b8481f5fb04b6fa80f00f416355b8f690201aaf107374b50"
+  },
+  {
+    "id": "mom-workright",
+    "title": "WorkRight — knowing your employment rights",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — WorkRight",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/employment-act/workright",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-workright/2026-07-26.txt",
+    "snapshotSha256": "f32f8a2477563aa27ed0daa4b0b62360eb61fbd7233e4754094f5c18e2af0536"
+  },
+  {
+    "id": "mom-paying-salary",
+    "title": "Paying salary — periods and deadlines",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Paying salary",
+    "tier": "government_guidance",
+    "domains": [
+      "financial",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/paying-salary",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-paying-salary/2026-07-26.txt",
+    "snapshotSha256": "cf45849ef039c93b4a8024432c6ba9be951b5ef4e09c2be64338e5c4287e86b6"
+  },
+  {
+    "id": "mom-itemised-payslips",
+    "title": "Itemised pay slips",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Itemised pay slips",
+    "tier": "government_guidance",
+    "domains": [
+      "financial",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/itemised-payslips",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-itemised-payslips/2026-07-26.txt",
+    "snapshotSha256": "41843fd97348e9d84ceb63874aea27f27def16a664b7449291e3514dbc95f0fe"
+  },
+  {
+    "id": "mom-salary-deductions",
+    "title": "Allowable salary deductions",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Salary deductions",
+    "tier": "government_guidance",
+    "domains": [
+      "financial",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/salary-deductions",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-salary-deductions/2026-07-26.txt",
+    "snapshotSha256": "11b6d123321db8593ebd17837a65fe704354d1750707622f73a36c9255d7d7fd"
+  },
+  {
+    "id": "mom-overtime-pay",
+    "title": "Calculating overtime pay",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Overtime pay",
+    "tier": "government_guidance",
+    "domains": [
+      "financial"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/calculate-overtime-pay",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-overtime-pay/2026-07-26.txt",
+    "snapshotSha256": "82dbaca9c30b7eccfcdafeeeae34ec7c702c3803d37c7808e80712ada154e9a4"
+  },
+  {
+    "id": "mom-rest-day-pay",
+    "title": "Pay for work on a rest day",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Pay for work on a rest day",
+    "tier": "government_guidance",
+    "domains": [
+      "financial"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/calculate-pay-for-work-on-rest-day",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-rest-day-pay/2026-07-26.txt",
+    "snapshotSha256": "8fd3bc23b7fa2803a0ff13bc6e4c4bc2885e0903c884ab96adee27b94091281e"
+  },
+  {
+    "id": "mom-incomplete-month-pay",
+    "title": "Pay for an incomplete month of work",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Incomplete month of work",
+    "tier": "government_guidance",
+    "domains": [
+      "financial"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/salary/calculate-pay-for-incomplete-month",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-incomplete-month-pay/2026-07-26.txt",
+    "snapshotSha256": "6a6a7275306a9239555af73864acb50a20002881281b2e3f70b9026b8af26205"
+  },
+  {
+    "id": "mom-foreign-worker-levy",
+    "title": "What is the foreign worker levy",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Foreign worker levy",
+    "tier": "government_guidance",
+    "domains": [
+      "financial",
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/foreign-worker-levy/what-is-the-foreign-worker-levy",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-foreign-worker-levy/2026-07-26.txt",
+    "snapshotSha256": "78407306f9e6e110a38f8c30d4bac2384af14e2aa8ab808828d302cd8af93b30"
+  },
+  {
+    "id": "mom-wp-medical-insurance",
+    "title": "Medical insurance for Work Permit holders",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Medical insurance",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/medical-insurance",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-medical-insurance/2026-07-26.txt",
+    "snapshotSha256": "a7f71726afe732d38563875ad09667349bba7466f44f6e4a59e4a255cd9b86be"
+  },
+  {
+    "id": "mom-wp-medical-examination",
+    "title": "Medical examination for Work Permit holders",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Medical examination",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/medical-examination",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-medical-examination/2026-07-26.txt",
+    "snapshotSha256": "9ee1227e8bb0f860e919085ae4e6f62b8b23c150bb43f4e74cf3c05106a8a888"
+  },
+  {
+    "id": "mom-wp-six-monthly-medical",
+    "title": "Six-monthly medical examination",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Six-monthly medical examination",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/six-monthly-medical-examination",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-six-monthly-medical/2026-07-26.txt",
+    "snapshotSha256": "1e9eb25ebb4ef164f2b197a2a516b6dfc37fb3fdb36226b04b2b8a59a8f97de8"
+  },
+  {
+    "id": "mom-sick-leave-entitlement",
+    "title": "Sick leave eligibility and entitlement",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Sick leave entitlement",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/leave/sick-leave/eligibility-and-entitlement",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-sick-leave-entitlement/2026-07-26.txt",
+    "snapshotSha256": "2d0140e59804de06967fcecb4cfbda9fba7f19e34497781912a697e74d566d0d"
+  },
+  {
+    "id": "mom-medical-reimbursements",
+    "title": "Medical reimbursements and salary during sick leave",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Medical reimbursements",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "financial"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/leave/sick-leave/medical-reimbursements-and-salary",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-medical-reimbursements/2026-07-26.txt",
+    "snapshotSha256": "d18ccd618b377ab91d640657571cd63c9669543cbd0e2b365160b34801a1d83a"
+  },
+  {
+    "id": "mom-wica-what-is",
+    "title": "What is the Work Injury Compensation Act",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — What is WICA",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/what-is-wica",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-what-is/2026-07-26.txt",
+    "snapshotSha256": "9e9c62c8d514e151db030a7800647e132f806f9da3f2f833f1ba654802b8caa7"
+  },
+  {
+    "id": "mom-wica-who-is-covered",
+    "title": "Who is covered by WICA",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Who is covered by WICA",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/who-is-covered",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-who-is-covered/2026-07-26.txt",
+    "snapshotSha256": "f8b628d6aa2fd630edcc432fb8cc6ab7c8350f4d80e0bcd4984b88e8fa1a5922"
+  },
+  {
+    "id": "mom-wica-how-to-claim",
+    "title": "How an employee makes a work injury claim",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — How to claim work injury compensation",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/employees-how-to-claim",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-how-to-claim/2026-07-26.txt",
+    "snapshotSha256": "bf3cf526cce188f039a7107c1eafdfe28bcff5a2faee941ddc09ea9d1b243479"
+  },
+  {
+    "id": "mom-wica-types-of-compensation",
+    "title": "Types of work injury compensation",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Types of compensation",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "financial"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/types-of-compensation",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-types-of-compensation/2026-07-26.txt",
+    "snapshotSha256": "ef1f45000a43510995ffe30aadd18cbf0b847e61d6b4f48fead4d40f073a1bd4"
+  },
+  {
+    "id": "mom-wica-eligible-claims",
+    "title": "Eligible work injury claims",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Eligible claims",
+    "tier": "government_guidance",
+    "domains": [
+      "healthcare",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/eligible-claims",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-eligible-claims/2026-07-26.txt",
+    "snapshotSha256": "bf1d0db3095c52c5ceb0d2f9c30c5f7efee4f11b7841ca6d62a19c01b3bbfa35"
+  },
+  {
+    "id": "mom-wica-disputing-a-claim",
+    "title": "Disputing a work injury claim",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Disputing a claim",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/disputing-a-claim",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wica-disputing-a-claim/2026-07-26.txt",
+    "snapshotSha256": "4201d024965294cb8b6b131c55ee0a1aa7991ae384195d5166b05edaa8baad19"
+  },
+  {
+    "id": "mom-housing-overview",
+    "title": "Housing for Work Permit holders",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Housing for migrant workers",
+    "tier": "government_guidance",
+    "domains": [
+      "housing"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/housing",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-housing-overview/2026-07-26.txt",
+    "snapshotSha256": "16b2ca8b861436c91414cc46172ad1dfa3e2236bd946270af8ecf86f9aec75c5"
+  },
+  {
+    "id": "mom-housing-employers-responsibilities",
+    "title": "Employers' housing responsibilities",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Employers' housing responsibilities",
+    "tier": "government_guidance",
+    "domains": [
+      "housing"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/housing/employers-responsibilities",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-housing-employers-responsibilities/2026-07-26.txt",
+    "snapshotSha256": "3974b6da33bcddcf117db503b84124222b1f95240779077ffc4211104a07d544"
+  },
+  {
+    "id": "mom-housing-types",
+    "title": "Types of housing for migrant workers",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Types of housing",
+    "tier": "government_guidance",
+    "domains": [
+      "housing"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/housing/various-types-of-housing",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-housing-types/2026-07-26.txt",
+    "snapshotSha256": "5f6e6caf6dfd72d83edbad90385190770fd7382909f05c6cb8fa82bfd3a3168f"
+  },
+  {
+    "id": "mom-wp-apply",
+    "title": "Applying for a Work Permit",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Apply for a Work Permit",
+    "tier": "government_guidance",
+    "domains": [
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/apply-for-work-permit",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-apply/2026-07-26.txt",
+    "snapshotSha256": "d801f3b66124e112db3f65a07f0fabd7535b8463b01da914bccc36b48c31f1d8"
+  },
+  {
+    "id": "mom-wp-renew",
+    "title": "Renewing a Work Permit",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Renew a Work Permit",
+    "tier": "government_guidance",
+    "domains": [
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/renew-a-work-permit",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-renew/2026-07-26.txt",
+    "snapshotSha256": "fd0926b1bc52850d2b3edef057db79eb01095e798238a6b2430b4d356e97a41b"
+  },
+  {
+    "id": "mom-wp-cancel",
+    "title": "Cancelling a Work Permit",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Cancel a Work Permit",
+    "tier": "government_guidance",
+    "domains": [
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/cancel-a-work-permit",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-wp-cancel/2026-07-26.txt",
+    "snapshotSha256": "fc9b9bfb679ad392ee0a8a6f230197759fb32cbbfb12e8512b094941f87e49ad"
+  },
+  {
+    "id": "mom-settling-in-programme",
+    "title": "Settling-In Programme",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Settling-In Programme",
+    "tier": "government_guidance",
+    "domains": [
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/settling-in-programme",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-settling-in-programme/2026-07-26.txt",
+    "snapshotSha256": "6568132ee1c39fae03cad6b076ff38a8f5a057354f585e402484bf513da9bb53"
+  },
+  {
+    "id": "mom-onboard-centre",
+    "title": "Onboard Centre for new migrant workers",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Onboard Centre",
+    "tier": "government_guidance",
+    "domains": [
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/onboard-centre",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-onboard-centre/2026-07-26.txt",
+    "snapshotSha256": "aceb33f96dafd41f57f33b9483f0b77e8f17bd6d884d94e8e894818d9628ddc8"
+  },
+  {
+    "id": "tadm-salary-claims",
+    "title": "Filing an employment or salary claim with TADM",
+    "issuingAuthority": "Tripartite Alliance for Dispute Management",
+    "citationLabel": "TADM — Filing an employment claim",
+    "tier": "government_guidance",
+    "domains": [
+      "financial",
+      "legal_rights"
+    ],
+    "canonicalUrl": "https://www.tal.sg/tadm/eservices/employees-file-employment-claim",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.tal.sg/tadm/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "No robots.txt published (the path returns a Page Not Found document).",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/tadm-salary-claims/2026-07-26.txt",
+    "snapshotSha256": "25c9d44b9af36e3f8a865eeeecb96fcff5a20a3fc62df9b1622ba8868e09b92d"
+  },
+  {
+    "id": "mas-remittance-licensees",
+    "title": "Financial institutions licensed for cross-border money transfer",
+    "issuingAuthority": "Monetary Authority of Singapore",
+    "citationLabel": "MAS — Financial institutions directory",
+    "tier": "public_information",
+    "domains": [
+      "financial"
+    ],
+    "canonicalUrl": "https://eservices.mas.gov.sg/fid",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mas.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "No robots.txt published (the path returns an application error page).",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mas-remittance-licensees/2026-07-26.txt",
+    "snapshotSha256": "e089744b2ddc8cde959e89e8d2262304dc7360061c648b3e5a5a7d8941c3b79c"
+  },
+  {
+    "id": "healthhub-clinic-services",
+    "title": "HealthHub — public healthcare services and clinics",
+    "issuingAuthority": "Ministry of Health / Synapxe, Singapore",
+    "citationLabel": "HealthHub — Healthcare services",
+    "tier": "public_information",
+    "domains": [
+      "healthcare"
+    ],
+    "canonicalUrl": "https://www.healthhub.sg/",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.healthhub.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: Allow /, disallows only /contact-us-form and a vaccination path. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/healthhub-clinic-services/2026-07-26.txt",
+    "snapshotSha256": "8aa4676e7e1a22291d2c0e5b98d2a63853d26a237f28d6ceed9d98baf3a17b3b"
+  },
+  {
+    "id": "mom-what-is-contract-of-service",
+    "title": "What is a contract of service",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — What is a contract of service",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights",
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/contract-of-service/what-is-a-contract-of-service",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-what-is-contract-of-service/2026-07-26.txt",
+    "snapshotSha256": "3495f1cd3721715f3e3c7073fc853275d1e01fc95299dd53467b9d1a9c3655e4"
+  },
+  {
+    "id": "mom-key-employment-terms",
+    "title": "Key employment terms (KETs)",
+    "issuingAuthority": "Ministry of Manpower, Singapore",
+    "citationLabel": "MOM — Key employment terms",
+    "tier": "government_guidance",
+    "domains": [
+      "legal_rights",
+      "settlement"
+    ],
+    "canonicalUrl": "https://www.mom.gov.sg/employment-practices/contract-of-service/key-employment-terms",
+    "licence": {
+      "id": "sg-gov-website-terms-of-use",
+      "name": "Singapore Government website Terms of Use",
+      "url": "https://www.mom.gov.sg/terms-of-use",
+      "note": "Not yet verified. Until a human reads these terms and records the outcome, items from this source are paraphrase-only with attribution."
+    },
+    "fetchPolicy": "automated",
+    "robotsCheckedAt": "2026-07-26",
+    "robotsNote": "robots.txt: User-agent * disallows only subscription/faq-query/beta paths; the cited pages are not disallowed. No crawl-delay stated.",
+    "snapshotScope": "full",
+    "recheckAfter": "2027-01-26",
+    "retrievedAt": "2026-07-26",
+    "snapshotPath": "content/_snapshots/mom-key-employment-terms/2026-07-26.txt",
+    "snapshotSha256": "ce9f80bea677af675dd715efc13889e679c90f1e2897961ba856194c08f888ad"
+  }
+]

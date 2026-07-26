@@ -1,0 +1,147 @@
+# Snapshot of Allowable salary deductions
+# source_id: mom-salary-deductions
+# canonical_url: https://www.mom.gov.sg/employment-practices/salary/salary-deductions
+# final_url: https://www.mom.gov.sg/employment-practices/salary/salary-deductions
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: 11b6d123321db8593ebd17837a65fe704354d1750707622f73a36c9255d7d7fd
+
+Allowable salary deductions
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Salary Home Employment practices Salary Salary deductions
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+Jump To Select
+
+- When deductions may be required
+- Types of deductions allowed
+- Maximum amount of deductions
+- Deducting salaries of migrant workers
+- Related questions
+
+Allowable salary deductions
+
+If you are covered by the Employment Act , your employer can deduct your salary only for specific reasons. If you are a work permit holder, your employer must also inform MOM before increasing or making new deductions to your salary.
+
+When deductions may be required
+Your employer may be required to deduct your salary:
+
+- By court order, or other valid authority.
+- If your employer is declared an agent for the recovery of income tax, property tax or goods and services tax (GST) payable by you. Any compensation should generally be recovered directly from you, rather than through a salary deduction.
+Types of deductions allowed
+Your employer can deduct your salary only for the following reasons:
+
+- For absence from work. For a monthly-rated employee, your salary may be deducted for absences. Calculate your deductions for:
+- For authorised absence (incomplete month) .
+- For unauthorised absence (gross rate of pay) .
+- For damage or loss of money or goods including work gear, tools, equipment, and vehicles. Your salary will be deducted if you damage or lose such goods or money that you are responsible for. Before deducting your salary, your employer should:
+- Hold an inquiry to determine if you are directly at fault.
+- Not make any deductions until you have had the opportunity to explain the cause of the damage or loss.
+- Not deduct more than 25% of your 1 month’s salary. The deduction must be made as a one-time lump sum payment.
+- For supplying accommodation that you have accepted.
+- For supplying amenities and services that the Commissioner for Labour has authorised and you have accepted. For example, childcare services, recreation facilities, etc, that are beyond what your employer is reasonably required to provide for you.
+
+Your employer must get approval from the Commissioner for Labour before deducting your salary.
+
+Note: The total deductions for supplying accommodation, and amenities and services must not exceed the value of the accommodation, amenities or services supplied. It should also not exceed 25% of your salary for the salary period.
+- For recovering advances, loans, overpaid salary or unearned employment benefits.
+- For advances, your employer can deduct your salary in instalments spread over not more than 12 months. Each instalment should not exceed 25% of your salary for the salary period.
+- For loans, your employer can deduct your salary in instalments. Each instalment should not exceed 25% of your salary for the salary period.
+- For overpaid salary and unearned employment benefits, your employer can recover the full amount from you.
+- For CPF contributions.
+- Under the CPF Act, deductions for the employee’s share of CPF contributions must be from the correct month’s salary.
+- For payments to any registered co-operative society with your written consent.
+- For other purposes for which you consent in writing and your employer allows you to withdraw your written consent at any time.
+- This is meant for deductions that would benefit the employee, and which the employer is in a position to collect the payment.
+- Other than the deductions mentioned above, employers must not deduct an employee’s salary for items which are not to the benefit of the employee, such as for liquidated damages.
+- The deduction also cannot contravene any other law. For example, if you are a foreign worker, your employer is not allowed to deduct your salary to recover levy costs.
+- For deductions approved by the Minister for Manpower before 1 April 2019, the deductions continue to be an authorised deduction up till the approved specified expiry date.
+- For deductions approved without a specified period, the expiry date is 30 September 2019.
+- Employers who wish to continue making the authorised salary deductions after 30 September 2019 should get written consent from their employees.
+Maximum amount of deductions
+Your employer cannot deduct more than 50% of your total salary payable in any one salary period.
+This does not include deductions made for:
+
+- Absence from work.
+- Recovery of advances, loans, overpaid salary or unearned employment benefits.
+- Payments, with your consent, to registered co-operative societies for subscriptions, entrance fees, loan instalments, interest and other dues payable. However, when your contract of service is terminated, the total authorised deduction may exceed 50% of your final salary payment.
+Deducting salaries of migrant workers
+Your employer can only reduce your salaries, or increase or make new deductions to your salaries, if:
+
+- They get your written consent.
+- They inform MOM of the change in your salary using WP Online (for Work Permit holders) or submit the request to MOM through EP eService one month before the salary is reduced (for EP or S Pass holders). Your employer is not allowed to change your salary if your Work Permit is not yet issued.
+
+Your employer is not allowed to make deductions to your salaries under any circumstances, for the following purposes as specified in the Employment of Foreign Manpower Act:
+
+- As a condition for employing or continuing to employ you.
+- For costs related to your employment:
+- Work pass renewal
+- Security bond
+- Medical insurance
+- Repatriation costs
+- Compulsory training
+- Medical fees
+- Levy payment What's next Monthly and daily salary: definitions and calculation
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 16 December 2024
+
+Related questions
+
+- My employer hasn't paid my salary, or has made an unauthorised deduction. What can I do?
+- Can I deduct an employee's salary if they've received a legal fine (for example, a parking ticket)?
+
+More on Salary
+
+- Paying salary
+- Itemised pay slips
+- Monthly and daily salary: definitions and calculation
+- Variable wage components: AWS, bonus, variable pay
+
+- Calculate pay for an incomplete month of work
+- Calculate public holiday pay
+- Calculate overtime pay for a monthly-rated employee
+- Calculate pay for work on a rest day
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

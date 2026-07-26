@@ -1,0 +1,71 @@
+name: Source drift
+
+# Guidance and legislation get amended. This checks the public documents the
+# knowledge base derives from against the snapshots they were written against.
+#
+# On failure it opens an issue rather than failing anyone's pull request: a
+# source changing is news to act on, not a reason to block unrelated work.
+on:
+  schedule:
+    - cron: "0 2 1 * *" # 02:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - id: check
+        run: |
+          set +e
+          pnpm sources:check 2>&1 | tee sources-check.log
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - if: steps.check.outputs.exit_code != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.readFileSync('sources-check.log', 'utf8').slice(0, 60000);
+            const title = 'Source drift detected in the knowledge base';
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'source-drift',
+            });
+            const body = [
+              'A public source the knowledge base cites has changed, or could not be read.',
+              '',
+              'Re-read the affected sources, refresh their snapshots with `pnpm sources:fetch <id>`,',
+              'and re-verify every knowledge item listed below against the updated text.',
+              '',
+              '```',
+              log,
+              '```',
+            ].join('\n');
+            if (existing.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['source-drift'],
+              });
+            }

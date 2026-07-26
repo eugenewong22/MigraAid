@@ -1,0 +1,272 @@
+# Snapshot of Types of work injury compensation
+# source_id: mom-wica-types-of-compensation
+# canonical_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/types-of-compensation
+# final_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/types-of-compensation
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: ef1f45000a43510995ffe30aadd18cbf0b847e61d6b4f48fead4d40f073a1bd4
+
+Types of compensation under WICA
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Work injury compensation Home Workplace safety and health Work injury compensation Types of compensation
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+Types of compensation under WICA
+
+The Work Injury Compensation Act lets employees claim for medical leave wages, medical expenses and lump sum compensation for permanent incapacity, if any, or death. There are limits to each type of compensation.
+
+What you can claim
+If you are covered by the Work Injury Compensation Act (WICA), you can claim for the following types of compensation benefits:
+
+- Medical leave wages for days you were issued with medical leave or light duty, due to the work injury or disease.
+- Medical expenses , including your hospital bills, medication and other charges, due to the work injury.
+- Lump sum compensation for permanent incapacity , current incapacity or death . Temporary incapacity refer to an injured employee being temporarily unable to perform work and earn their usual wages after being placed on medical leave.
+Compensation for such work injuries consists of:
+
+- Medical leave wages for working days covered by doctor-granted MC, light duty or hospitalisation leave, up to one year from the date of the accident.
+- Medical expenses related to work accident for medical treatment received within one year from the date of the accident, or up to a maximum of $53,000, whichever is reached first. Medical leave wages
+Medical leave wages are payable only for working days covered by MC, hospitalisation leave or light duty granted by Singapore-registered doctor or dentist. It is not payable for non-working days (e.g. rest days and public holidays).
+Medical leave wages are compensation and not income. Compensation is not taxable, and both employers and employees don't need to contribute to CPF.
+For light duties, medical leave wages refer to any shortfall between the actual wages and the average monthly earnings (AME). Employers and employees should still contribute CPF, for the actual wages paid while on light duties.
+
+WICA entitles you to medical leave wages according to the following rates and limits.
+For hospitalisation leave
+Days
+Employee gets
+Employer pays
+
+Up to 60 days
+Full AME
+Full AME
+
+61 st day to 1 year of accident
+2/3 AME
+2/3 AME
+
+For outpatient MC or light duties
+Days
+Employee gets
+Employer pays
+
+Up to 14 days
+Full AME
+For light duties: Full AME or actual wages, whichever is higher
+
+For MC: Full AME
+For light duties: Employee’s actual wages + any shortfall
+Shortfall = AME &minus; actual wages for that period
+
+15 th day to 1 year of accident
+2/3 AME
+For light duties: 2/3 AME or actual wages, whichever is higher
+
+For MC: 2/3 AME
+For light duties: Employee’s actual wages + any shortfall
+Shortfall = 2/3 AME &minus; actual wages for that period
+
+You should be resting during your medical leave period. If you wish to return to work, please consult your treating doctor that you are fit for work. Once you have returned to work, your subsequent medical leave will no longer be claimable.
+
+Use the light duty calculator to find out your wages during light duties.
+
+For light duty wages, if AME is higher than actual wages, employers can claim the difference from their insurers.
+Injured worker takes
+Injured worker should be paid
+
+10 days outpatient medical leave
++
+71 days hospitalisation leave
+
+10 days outpatient medical leave: Full AME
+First 60 days hospitalisation leave: Full AME
+Remaining 11 days hospitalisation leave: 2/3 of AME
+
+5 days outpatient leave
++
+15 days light duties
+
+5 days outpatient leave: Full AME
+9 days light duties: Full AME
+Remaining 6 days light duties: 2/3 AME
+
+If you are given light duties, you must return to work for light duties or take leave. If you are absent from work without leave, you won't be able to get compensation under WICA.
+If the employer has no suitable light duties for you, you should inform your doctor.
+Don’t work for employer anymore
+If you no longer work for your employer , you are still entitled to medical leave wages for:
+
+- MC or hospitalisation leave for the work injury.
+- Light duties issued when you were working for that employer. How it’s calculated
+Medical leave wages are calculated based on your average monthly earnings (AME). This may be different from your gross monthly salary.
+AME is computed based on your earnings over the past 12 months before the accident date.
+Generally, it includes overtime pay and bonuses, but excludes transport allowances and reimbursements.
+Calculate your AME
+When to pay
+Medical leave wages must be paid by your employer by your next pay day .
+Calculate your medical leave wages
+Medical expenses
+Your employer will be required to pay for medical expenses related to a work accident up to the maximum limit or 1 year from the date of the accident, whichever comes first.
+
+Accidents before 1 Nov 2025
+Accidents from 1 Nov 2025
+
+Maximum Limit
+$45,000
+$53,000
+
+Examples of eligible medical expenses include:
+
+- Medical consultation fees
+- Ward charges
+- Treatment fees
+- Medical report fees
+- Emergency medical transport charges (e.g. ambulance)
+- Cost of medicine
+- Artificial limbs
+- Surgical appliances
+- Treatments that facilitate early return to work, claimable charges include those for case management, functional capacity evaluation and worksite assessment
+- Dental charges You can claim these medical expenses only if your treatment is prescribed and billed by a Singapore-registered doctor or dentist :
+
+- Physiotherapy
+- Occupational therapy
+- Traditional Chinese Medicine (TCM) Singapore-registered medical doctors are medical practitioners registered under the Medical Registration Act 1997 .
+For accidents from 1 September 2020, employers must compensate for any medical treatment and leave issued by dentists registered under the Dental Registration Act 1999 .
+Type of treatment
+
+- Physiotherapy
+- Occupational therapy
+- Traditional Chinese Medicine (TCM)
+
+Medical expenses claimable under WICA
+
+- Treatment is performed at restructured and private hospitals, which are licensed under the Healthcare Services Act 2020 .
+- Treatment that is performed at other locations by a registered medical practitioner (Medical Registration Act 1997) and registered dentist (Dental Registration Act 1999) recognised under WICA.
+
+Lump sum compensation
+If you are covered by WICA, you or your family can claim a lump sum in the event of permanent incapacity , current incapacity or death .
+Permanent incapacity and current incapacity
+When a claim is payable
+When an injury or illness has a permanent effect on an employee's ability to work
+
+Who receives the compensation
+Injured employee
+
+How compensation is calculated
+Amount payable = Employee’s average monthly earnings &times; age multiplying factor &times; % permanent incapacity
+Estimate compensation for permanent incapacity
+
+Changes to compensation limits
+
+Accidents before 1 Nov 2025
+Accidents from 1 Nov 2025
+
+Minimum compensation
+$97,000 &times; (% permanent incapacity)
+$116,000 &times; (% permanent incapacity)
+
+Maximum compensation
+$289,000 &times; (% permanent incapacity)
+$346,000 &times; (% permanent incapacity)
+
+- If the doctor or dentist awards 100% PI , an additional 25% will be added on top of the compensation amount.
+- A notice of assessment (NOA) or notice of computation (NOC) will be issued to notify all parties involved of the lump sum compensation.
+- The insurer must pay the employee within 21 days from the date of service on the NOA or NOC.
+Permanent incapacity vs current incapacity
+Permanent incapacity (% PI) is based on a doctor’s assessment after the medical condition has stabilised. It is based on the assessment guide on traumatic injuries and occupational diseases for WIC .
+As most injuries stabilise within 6 months from the date of accident, compensation may be based on the extent of incapacity at the 6-month mark. This is known as current incapacity.
+Death
+When a claim is payable
+When an injury causes death
+
+Who receives the compensation
+Family or dependants of deceased employee
+
+How compensation is calculated
+Amount payable = Employee’s average monthly earnings &times; age multiplying factor
+Estimate compensation for death
+
+Changes to compensation limits
+
+Accidents before 1 Nov 2025
+Accidents from 1 Nov 2025
+
+Minimum compensation
+$76,000
+$91,000
+
+Maximum compensation
+$225,000
+$269,000
+
+What's next WICA versus common law
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 29 December 2025
+
+Related questions
+
+- What should I do if my company does not have light duties for my injured employee?
+- What is the difference between MC and light duty?
+- Under WICA, can I claim for medical bills and certificates from Traditional Chinese Medicine (TCM) practitioners?
+- Which hospitals or wards can my injured employee be admitted to for claiming compensation under WICA?
+- What should I do if I have a workplace accident and don’t have enough sick leave?
+- Must I pay my injured employee their medical leave wages and medical expenses if their employment is terminated after the work accident?
+- When will employers be able to claim reimbursement for light duty compensation from insurers?
+
+More on Work injury compensation
+
+- What is the Work Injury Compensation Act (WICA)
+- Who is covered in accordance with WICA
+- WICA versus common law
+- Eligible claims under WICA
+- Work injury compensation insurance
+
+- Check the status of a work injury claim
+- Disputing a work injury claim
+- For employees: how to claim work injury compensation
+- For employers: what to do during a work injury claim
+- Resources and tools for work injury compensation
+
+- Work injury compensation eServices and forms
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

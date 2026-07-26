@@ -1,0 +1,137 @@
+# Snapshot of Medical insurance for Work Permit holders
+# source_id: mom-wp-medical-insurance
+# canonical_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/medical-insurance
+# final_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/sector-specific-rules/medical-insurance
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: a7f71726afe732d38563875ad09667349bba7466f44f6e4a59e4a255cd9b86be
+
+Medical insurance requirements for migrant workers
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Sector-specific rules Home Work passes Work Permit for migrant worker Sector-specific rules Medical insurance
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+Medical insurance requirements for migrant workers
+
+You must buy and maintain medical insurance (MI) for each migrant worker you employ. The insurance cost cannot be passed on to your workers. You also need to submit the insurance details online before the Work Permit can be issued.
+
+What it should cover
+As an employer, you must buy and maintain MI with coverage for inpatient care and day surgery, including hospital bills for conditions that may not be work-related. The coverage for each Work Permit holder has to be at least $60,000 per year .
+If the MI plan has sub-limits (e.g. inpatient care, day surgery or ‘per disability/medical condition’), each sub-limit needs to meet the minimum annual claim limit as stated above.
+
+Enhanced MI
+Since 1 July 2023 , we have enhanced the minimum MI required for all new and existing Work Permit holders (including migrant domestic workers). The enhanced MI will better protect employers against large medical bills incurred by your workers, and will be implemented in two stages as shown in the table below.
+Engage insurers offering the enhanced MI early to understand the products available. We encourage you to buy an MI with all the enhanced requirements early for better peace of mind.
+
+To implement for MI policies, renewals or extensions with start date effective from
+Enhanced MI requirements
+
+1 July 2023 (Stage 1)
+Higher annual claim limit of at least $60,000, with a co-payment of 75% by insurers and 25% by employers for claim amounts above $15,000.
+
+1 July 2025 (Stage 2)
+
+- Standardisation of allowable exclusion clauses
+- Age-differentiated premiums by two age bands (50 years old and below; and above 50 years old)
+- Direct payment by insurers to hospitals upon the admissibility of the claim
+
+You do not need to buy MI if the Work Permit holder is also holding a Dependant’s Pass and already has an MI plan that meets the minimum coverage required for Work Permit holders. The insurance plan must cover the full period of the Work Permit validity.
+You can have a co-pay arrangement with the Work Permit holder (excluding migrant domestic workers) for their medical bills, only if all of the following are met:
+
+- The co-pay amount is reasonable and does not exceed 10% of the worker’s fixed monthly salary.
+- The duration of co-payment does not exceed 6 months (for every 2 years of employment).
+- The co-payment option is explicitly in the employment contract or collective agreement and has the worker’s full consent. Submit insurance details
+You need to submit MI details online before you request to issue or renew a Work Permit, and when the details change.
+To update the information, log in to WP Online .
+You need to keep the following information up to date:
+
+- Name of insurer
+- Insurance policy number
+- Insurance policy commencement date
+- Insurance policy expiry date What's next Medical examination
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 1 July 2025
+
+Related questions
+
+- Do I need to buy a new enhanced medical insurance (as announced by MOM on 31 March 2023) for my Work Permit or S Pass holders if they already have an existing policy? If so, when must I do this?
+- Are the enhanced medical insurance (MI) requirements announced by MOM on 31 March 2023 compulsory?
+- How would I be affected by the enhanced medical insurance requirements announced by MOM on 31 March 2023?
+- Where can I buy medical insurance for migrant workers?
+- How can I guarantee that the medical insurance (MI) for migrant worker or MDW meets MOM's requirements?
+- If my migrant worker has an individual insurance plan that meets MOM's requirements, do I still need to buy medical insurance?
+- Does MOM accept medical insurance policies bought overseas?
+- Can employers buy riders or plans that offer 100% buyback of the 25% co-payment component by employers?
+
+More on Sector-specific rules for Work Permit
+
+- Work Permit conditions
+- Non-Traditional Sources Occupation List
+- Construction sector requirements
+- Manufacturing sector requirements
+- Marine shipyard sector requirements
+- Process sector requirements
+- Settling-in Programme for Work Permit holders
+- Services sector requirements
+- Prior approval for marine shipyard sector
+- Basic-skilled workers for construction sector
+- Higher-Skilled workers for construction sector
+- Higher-skilled workers for process sector
+
+- Security bond
+- Medical examination
+- In-principle approval (IPA) for migrant worker
+- Paying the salary
+- Six-monthly medical examination for female migrant workers
+- Hiring existing worker for construction sector
+- Hiring existing worker in marine shipyard sector
+- Hiring existing worker in process sector
+- Hiring an existing manufacturing or services worker
+- Cross-deploy a worker
+- Driving occupations in the construction, marine shipyard and process sectors
+- Onboard centre
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

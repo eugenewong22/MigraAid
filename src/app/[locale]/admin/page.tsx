@@ -1,6 +1,8 @@
 import { Link } from "@/i18n/navigation";
 import { requireAdminPage } from "@/lib/content/auth";
 import { listContent } from "@/lib/content/cms";
+import { getSource, loadSourceRegistry } from "@/lib/content/sources";
+import { excerptPermitted } from "@/lib/content/licence";
 import {
   archiveAction,
   createDraftAction,
@@ -18,6 +20,142 @@ const STATUS_STYLES: Record<string, string> = {
   published: "bg-green-200 text-green-900",
   archived: "bg-neutral-100 text-neutral-400",
 };
+
+/**
+ * Source-provenance fields, shared by the create and edit forms.
+ *
+ * The excerpt box is disabled unless some registry source is actually cleared
+ * for verbatim reproduction, so an editor is told why rather than having a
+ * server action reject their work after they have typed it.
+ */
+function SourceFields({
+  defaults,
+  compact,
+}: {
+  defaults?: {
+    sourceId: string | null;
+    sourceExcerpt: string | null;
+    sourceRetrievedAt: string | null;
+  };
+  compact?: boolean;
+}) {
+  const registry = loadSourceRegistry();
+  const anyExcerptPermitted = registry.some(
+    (source) => excerptPermitted(source).permitted,
+  );
+  const field = compact
+    ? "rounded border px-2 py-1 text-sm"
+    : "rounded-lg border px-3 py-2";
+  const label = compact ? "flex flex-col gap-1 text-xs" : "flex flex-col gap-1 text-sm";
+
+  return (
+    <>
+      <label className={label}>
+        Source document
+        <select
+          name="sourceId"
+          defaultValue={defaults?.sourceId ?? ""}
+          className={field}
+        >
+          <option value="">— none —</option>
+          {registry.map((source) => (
+            <option key={source.id} value={source.id}>
+              {source.citationLabel} ({source.issuingAuthority})
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className={label}>
+        Date the source was read (YYYY-MM-DD)
+        <input
+          name="sourceRetrievedAt"
+          defaultValue={defaults?.sourceRetrievedAt ?? ""}
+          pattern="\d{4}-\d{2}-\d{2}"
+          placeholder="2026-07-26"
+          className={field}
+        />
+      </label>
+      <label className={label}>
+        Verbatim source provision (never indexed)
+        <textarea
+          name="sourceExcerpt"
+          defaultValue={defaults?.sourceExcerpt ?? ""}
+          rows={compact ? 3 : 5}
+          maxLength={5000}
+          disabled={!anyExcerptPermitted}
+          className={field}
+        />
+        {!anyExcerptPermitted && (
+          <span className="text-xs text-neutral-500">
+            No source is currently cleared for verbatim excerpts. Someone must read
+            the source&apos;s licence terms, record that in{" "}
+            <code>content/sources.json</code>, and add its licence id to the
+            allowlist in <code>src/lib/content/licence.ts</code>.
+          </span>
+        )}
+      </label>
+    </>
+  );
+}
+
+/**
+ * The verbatim source provision, shown to a reviewer *above* the paraphrase so
+ * they read the law before the restatement of it. Never indexed — see
+ * lib/content/excerpt.ts.
+ */
+function SourceAnchor({
+  item,
+}: {
+  item: {
+    sourceId: string | null;
+    sourceExcerpt: string | null;
+    sourceRetrievedAt: string | null;
+  };
+}) {
+  const source = item.sourceId ? getSource(item.sourceId) : undefined;
+
+  if (!item.sourceExcerpt) {
+    return (
+      <div className="mt-3 rounded border border-amber-300 bg-white p-3 text-sm">
+        <p className="font-semibold">Paraphrase-only item</p>
+        <p className="mt-1 text-neutral-700">
+          {source
+            ? `No verbatim excerpt is stored: the licence for "${source.licence.name}" has not been cleared for reproducing source text. Verify this guidance against the canonical source directly.`
+            : "No source excerpt is stored. Verify this guidance against the canonical source directly."}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 rounded border border-amber-300 bg-white p-3 text-sm">
+      <p className="font-semibold">
+        Verbatim source provision — for verification only, not indexed
+      </p>
+      <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-neutral-900">
+        {item.sourceExcerpt}
+      </pre>
+      <p className="mt-2 text-xs text-neutral-600">
+        {source?.issuingAuthority ?? "Unknown authority"}
+        {item.sourceRetrievedAt ? ` · read ${item.sourceRetrievedAt}` : ""}
+        {source ? ` · ${source.licence.name}` : ""}
+        {source && (
+          <>
+            {" · "}
+            <a
+              href={source.canonicalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-700 underline"
+            >
+              canonical source
+            </a>
+          </>
+        )}
+      </p>
+    </div>
+  );
+}
 
 export default async function AdminPage({
   params,
@@ -92,6 +230,7 @@ export default async function AdminPage({
             Canonical HTTPS source URL (recommended)
             <input name="sourceUrl" type="url" maxLength={2000} className="rounded-lg border px-3 py-2" />
           </label>
+          <SourceFields />
           <label className="flex flex-col gap-1 text-sm">
             Guidance (Markdown)
             <textarea name="bodyMd" required minLength={20} maxLength={50000} rows={8} className="rounded-lg border px-3 py-2" />
@@ -148,6 +287,7 @@ export default async function AdminPage({
                         placeholder="https://official-source.example/..."
                         className="rounded border px-2 py-1 text-sm"
                       />
+                      <SourceFields compact defaults={it} />
                       <textarea name="bodyMd" defaultValue={it.bodyMd} required minLength={20} maxLength={50000} rows={6} className="rounded border px-2 py-1 text-sm" />
                       <button className="self-start rounded bg-blue-600 px-3 py-1 text-sm text-white">Save changes</button>
                     </form>
@@ -174,6 +314,7 @@ export default async function AdminPage({
                         </a>
                       </p>
                     )}
+                    <SourceAnchor item={it} />
                     <div className="mt-3 max-h-96 overflow-auto rounded border bg-white p-3 text-sm text-neutral-900">
                       <p className="mb-2 font-semibold">Full guidance body</p>
                       <div className="whitespace-pre-wrap break-words">{it.bodyMd}</div>

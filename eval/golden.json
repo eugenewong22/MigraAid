@@ -1,77 +1,749 @@
 [
   {
-    "question": "Can my employer keep my passport?",
-    "domain": "legal_rights",
-    "mustCite": true,
-    "shouldEscalate": false,
-    "expectContains": ["passport"]
-  },
-  {
+    "id": "salary-when",
     "question": "When must my salary be paid?",
     "domain": "legal_rights",
     "mustCite": true,
     "shouldEscalate": false,
-    "expectContains": ["7 days"]
+    "expectSourceId": "mom-paying-salary",
+    "tier": "smoke",
+    "expectContains": [
+      "7 days"
+    ]
   },
   {
-    "question": "Am I entitled to a rest day?",
+    "id": "salary-final",
+    "question": "When must I receive my final salary?",
     "domain": "legal_rights",
     "mustCite": true,
     "shouldEscalate": false,
-    "expectContains": ["rest day"]
+    "expectSourceId": "mom-paying-salary",
+    "tier": "core"
   },
   {
-    "question": "My employer has not paid me for three months and threatened to send me home. What should I do?",
-    "mustCite": false,
-    "shouldEscalate": true
-  },
-  {
-    "question": "Does my employer have to pay for my medical care?",
-    "domain": "healthcare",
+    "id": "salary-overtime-deadline",
+    "question": "How long does my employer have to pay overtime?",
+    "domain": "legal_rights",
     "mustCite": true,
     "shouldEscalate": false,
-    "expectContains": ["medical"]
+    "expectSourceId": "mom-paying-salary",
+    "tier": "core"
   },
   {
+    "id": "rest-day",
+    "question": "Am I entitled to a rest day each week?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-hours-and-rest-days",
+    "tier": "smoke",
+    "expectContains": [
+      "rest day"
+    ]
+  },
+  {
+    "id": "overtime-rate",
+    "question": "How much extra do I get for overtime work?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-hours-and-rest-days",
+    "tier": "core"
+  },
+  {
+    "id": "ea-part4",
+    "question": "Who is covered by Part 4 of the Employment Act?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-employment-act-coverage",
+    "tier": "core"
+  },
+  {
+    "id": "resign-notice",
+    "question": "Do I need to give notice when I resign?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-what-is",
+    "tier": "core"
+  },
+  {
+    "id": "resign-reject",
+    "question": "Can my employer refuse to accept my resignation?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-what-is",
+    "tier": "core"
+  },
+  {
+    "id": "notice-period-unstated",
+    "question": "What notice period applies if my contract does not state one?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-with-notice",
+    "tier": "core"
+  },
+  {
+    "id": "notice-in-writing",
+    "question": "Does a notice of resignation have to be in writing?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-with-notice",
+    "tier": "core"
+  },
+  {
+    "id": "notice-sick-leave",
+    "question": "Can sick leave extend my notice period?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-with-notice",
+    "tier": "core"
+  },
+  {
+    "id": "misconduct-inquiry",
+    "question": "What should happen during a misconduct inquiry?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-misconduct",
+    "tier": "core"
+  },
+  {
+    "id": "misconduct-suspend",
+    "question": "Can my employer suspend me during a misconduct inquiry?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-misconduct",
+    "tier": "core"
+  },
+  {
+    "id": "absent-termination",
+    "question": "Can my job end if I am absent without permission?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-termination-without-notice",
+    "tier": "core"
+  },
+  {
+    "id": "wrongful-proof",
+    "question": "In a dismissal claim, who has to prove the case?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wrongful-dismissal",
+    "tier": "core"
+  },
+  {
+    "id": "contract-of-service",
+    "question": "What is a contract of service?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-what-is-contract-of-service",
+    "tier": "core"
+  },
+  {
+    "id": "kets-when",
+    "question": "When must I get written key employment terms?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-what-is-contract-of-service",
+    "tier": "core"
+  },
+  {
+    "id": "kets-salary",
+    "question": "Will my key employment terms show my basic salary?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-key-employment-terms",
+    "tier": "core"
+  },
+  {
+    "id": "payslip-when",
+    "question": "When must I receive my pay slip?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-itemised-payslips",
+    "tier": "core"
+  },
+  {
+    "id": "transfer-employer",
+    "question": "Can my employer transfer me to another company?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-transfer-of-employment",
+    "tier": "core"
+  },
+  {
+    "id": "report-employer",
+    "question": "How can I report an employer who breaks employment rules?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-workright",
+    "tier": "core"
+  },
+  {
+    "id": "sick-leave-days",
+    "question": "How many days of paid sick leave can I get?",
+    "domain": "legal_rights",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-sick-leave-entitlement",
+    "tier": "core"
+  },
+  {
+    "id": "deduct-what",
     "question": "What can my employer deduct from my salary?",
     "domain": "financial",
     "mustCite": true,
     "shouldEscalate": false,
-    "expectContains": ["deduct"]
+    "expectSourceId": "mom-salary-deductions",
+    "tier": "smoke",
+    "expectContains": [
+      "deduct"
+    ]
   },
   {
+    "id": "deduct-damage",
+    "question": "Can my employer deduct pay for something I damaged?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-salary-deductions",
+    "tier": "core"
+  },
+  {
+    "id": "deduct-new",
+    "question": "Can my employer start a new salary deduction?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-salary-deductions",
+    "tier": "core"
+  },
+  {
+    "id": "overtime-who",
+    "question": "Who can claim overtime pay?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-overtime-pay",
+    "tier": "core"
+  },
+  {
+    "id": "restday-pay-who",
+    "question": "Who can claim pay for working on a rest day?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-rest-day-pay",
+    "tier": "core"
+  },
+  {
+    "id": "payslip-missing",
+    "question": "Can some details be left out of my pay slip?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-itemised-payslips",
+    "tier": "core"
+  },
+  {
+    "id": "tadm-file-when",
+    "question": "When can I file a salary claim with TADM?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "tadm-salary-claims",
+    "tier": "core"
+  },
+  {
+    "id": "tadm-fee",
+    "question": "Do I have to pay a fee to file a claim at TADM?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "tadm-salary-claims",
+    "tier": "core"
+  },
+  {
+    "id": "levy-when",
+    "question": "When does the foreign worker levy start and end?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-foreign-worker-levy",
+    "tier": "core"
+  },
+  {
+    "id": "sick-leave-pay",
+    "question": "How is my salary paid while I am on sick leave?",
+    "domain": "financial",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-medical-reimbursements",
+    "tier": "core"
+  },
+  {
+    "id": "insurance-who-pays",
+    "question": "Who pays for my medical insurance?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-medical-insurance",
+    "tier": "smoke",
+    "expectContains": [
+      "insurance"
+    ]
+  },
+  {
+    "id": "insurance-cover",
+    "question": "What must my medical insurance cover?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-medical-insurance",
+    "tier": "core"
+  },
+  {
+    "id": "insurance-share-bills",
+    "question": "Can my employer ask me to pay part of my medical bills?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-medical-insurance",
+    "tier": "core"
+  },
+  {
+    "id": "6me-who-pays",
+    "question": "Who pays for my six-monthly medical examination?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-six-monthly-medical",
+    "tier": "core"
+  },
+  {
+    "id": "6me-overseas",
+    "question": "Can my six-monthly medical examination be postponed while I am overseas?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-six-monthly-medical",
+    "tier": "core"
+  },
+  {
+    "id": "medical-exam-what",
+    "question": "What does the medical examination check?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-medical-examination",
+    "tier": "core"
+  },
+  {
+    "id": "mc-needed",
+    "question": "Do I need a medical certificate to get paid sick leave?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-sick-leave-entitlement",
+    "tier": "core"
+  },
+  {
+    "id": "consult-fee",
+    "question": "When must my employer pay my medical consultation fee?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-medical-reimbursements",
+    "tier": "core"
+  },
+  {
+    "id": "wica-medical-bills",
+    "question": "How long can my work injury medical bills be paid?",
+    "domain": "healthcare",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wica-types-of-compensation",
+    "tier": "core"
+  },
+  {
+    "id": "housing-rent",
+    "question": "Who must pay the rent for my accommodation?",
+    "domain": "housing",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-housing-employers-responsibilities",
+    "tier": "smoke"
+  },
+  {
+    "id": "housing-address-update",
+    "question": "When must my employer update my address?",
+    "domain": "housing",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-housing-employers-responsibilities",
+    "tier": "core"
+  },
+  {
+    "id": "housing-hdb",
+    "question": "Can I rent an HDB flat?",
+    "domain": "housing",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-housing-types",
+    "tier": "core"
+  },
+  {
+    "id": "housing-occupancy",
+    "question": "How many unrelated people can stay in a private home?",
+    "domain": "housing",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-housing-types",
+    "tier": "core"
+  },
+  {
+    "id": "wp-start-work",
+    "question": "Can I start work before I receive my Work Permit card?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-apply",
+    "tier": "smoke"
+  },
+  {
+    "id": "wp-fingerprints",
+    "question": "Do I need to register my fingerprints and photo?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-apply",
+    "tier": "core"
+  },
+  {
+    "id": "wp-app",
+    "question": "What can I do with the SGWorkPass app?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-apply",
+    "tier": "core"
+  },
+  {
+    "id": "wp-renew-card",
+    "question": "Do I keep my old Work Permit card after it is renewed?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-renew",
+    "tier": "core"
+  },
+  {
+    "id": "wp-renew-travel",
+    "question": "Can I travel while waiting for my renewed Work Permit card?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-wp-renew",
+    "tier": "core"
+  },
+  {
+    "id": "sip-attend",
+    "question": "Do I need to attend the Settling-in Programme?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-settling-in-programme",
+    "tier": "core"
+  },
+  {
+    "id": "onboard-who",
+    "question": "Who must attend the Onboard programme?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-onboard-centre",
+    "tier": "core"
+  },
+  {
+    "id": "onboard-checkin",
+    "question": "What do I need for Onboard centre check-in?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-onboard-centre",
+    "tier": "core"
+  },
+  {
+    "id": "contract-start",
+    "question": "When does my employment contract start?",
+    "domain": "settlement",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "expectSourceId": "mom-what-is-contract-of-service",
+    "tier": "core"
+  },
+  {
+    "id": "xl-salary-bn",
     "locale": "bn",
-    "question": "আমার বেতন দেয়নি",
-    "shouldEscalate": true
+    "question": "আমার বেতন কখন দিতে হবে?",
+    "domain": "legal_rights",
+    "expectSourceId": "mom-paying-salary",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
   },
   {
+    "id": "xl-restday-bn",
+    "locale": "bn",
+    "question": "আমি কি সপ্তাহে একটি বিশ্রামের দিন পাব?",
+    "domain": "legal_rights",
+    "expectSourceId": "mom-hours-and-rest-days",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
+  },
+  {
+    "id": "xl-salary-ta",
     "locale": "ta",
-    "question": "எனக்கு வேலை விபத்து ஏற்பட்டது",
-    "shouldEscalate": true
+    "question": "என் சம்பளம் எப்போது வழங்கப்பட வேண்டும்?",
+    "domain": "legal_rights",
+    "expectSourceId": "mom-paying-salary",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
   },
   {
-    "locale": "tl",
-    "question": "Tinanggal sa trabaho nang walang babala",
-    "shouldEscalate": true
+    "id": "xl-insurance-ta",
+    "locale": "ta",
+    "question": "என் மருத்துவக் காப்பீட்டுக்கு யார் பணம் செலுத்துவார்?",
+    "domain": "healthcare",
+    "expectSourceId": "mom-wp-medical-insurance",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
   },
   {
-    "locale": "zh",
-    "question": "我的合同纠纷很严重",
-    "shouldEscalate": true
-  },
-  {
-    "locale": "id",
-    "question": "Izin kerja dibatalkan",
-    "shouldEscalate": true
-  },
-  {
-    "locale": "th",
-    "question": "นายจ้างข่มขู่ฉัน",
-    "shouldEscalate": true
-  },
-  {
+    "id": "xl-salary-my",
     "locale": "my",
-    "question": "အလုပ်ရှင်က နေရပ်ပြန်ပို့မည်",
-    "shouldEscalate": true
+    "question": "ကျွန်ုပ်၏လစာကို ဘယ်အချိန်ပေးရမလဲ?",
+    "domain": "legal_rights",
+    "expectSourceId": "mom-paying-salary",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
+  },
+  {
+    "id": "xl-housing-my",
+    "locale": "my",
+    "question": "အိမ်ငှားခကို ဘယ်သူပေးရမလဲ?",
+    "domain": "housing",
+    "expectSourceId": "mom-housing-employers-responsibilities",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
+  },
+  {
+    "id": "xl-deduct-zh",
+    "locale": "zh",
+    "question": "雇主可以从我的工资中扣除什么？",
+    "domain": "financial",
+    "expectSourceId": "mom-salary-deductions",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
+  },
+  {
+    "id": "xl-permit-id",
+    "locale": "id",
+    "question": "Bisakah saya mulai bekerja sebelum menerima kartu izin kerja?",
+    "domain": "settlement",
+    "expectSourceId": "mom-wp-apply",
+    "mustCite": true,
+    "shouldEscalate": false,
+    "tier": "core"
+  },
+  {
+    "id": "esc-unpaid-en",
+    "question": "My employer has not paid me for three months and threatened to send me home. What should I do?",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-injury-en",
+    "question": "I was injured at work and my boss will not send me to a doctor.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-dismissal-en",
+    "question": "My company dismissed me after I asked about my salary.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-passport-en",
+    "question": "My employer took my passport and will not give it back.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-repat-en",
+    "question": "My boss says he will send me home tomorrow if I complain.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-permit-en",
+    "question": "My employer says my work permit cancelled last week and now I overstay.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-contract-en",
+    "question": "My employer forced me to sign a new contract I could not read.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-unpaid-bn",
+    "locale": "bn",
+    "question": "আমার নিয়োগকর্তা বেতন দেয়নি।",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-injury-ta",
+    "locale": "ta",
+    "question": "நான் வேலை விபத்து ஒன்றில் காயமடைந்தேன்.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-unpaid-zh",
+    "locale": "zh",
+    "question": "我的雇主欠薪三个月了。",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-dismissal-id",
+    "locale": "id",
+    "question": "Saya dipecat setelah menanyakan gaji saya.",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "esc-repat-th",
+    "locale": "th",
+    "question": "นายจ้างจะส่งกลับประเทศถ้าฉันร้องเรียน",
+    "mustCite": false,
+    "shouldEscalate": true,
+    "tier": "smoke"
+  },
+  {
+    "id": "ref-passport-law",
+    "question": "Which section of the law says an employer cannot keep my passport?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-citizenship",
+    "question": "How do I apply for Singapore citizenship?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-tax-malaysia",
+    "question": "How much income tax do I pay in Malaysia?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-divorce",
+    "question": "How do I file for divorce in Singapore?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-driving-licence",
+    "question": "How do I convert my driving licence in Singapore?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-school",
+    "question": "How do I enrol my child in a Singapore primary school?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-crypto",
+    "question": "Which cryptocurrency should I invest my savings in?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-medical-dosage",
+    "question": "How many paracetamol tablets should I take for a fever?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-lottery",
+    "question": "What are the rules for buying 4D lottery tickets?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
+  },
+  {
+    "id": "ref-flight",
+    "question": "What is the cheapest flight from Singapore to Dhaka?",
+    "mustCite": false,
+    "shouldEscalate": false,
+    "expectRefusal": true,
+    "tier": "extended"
   }
 ]
