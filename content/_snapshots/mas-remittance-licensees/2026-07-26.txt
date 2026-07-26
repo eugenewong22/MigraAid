@@ -1,0 +1,230 @@
+# Snapshot of Financial institutions licensed for cross-border money transfer
+# source_id: mas-remittance-licensees
+# canonical_url: https://eservices.mas.gov.sg/fid
+# final_url: https://eservices.mas.gov.sg/fid
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: e089744b2ddc8cde959e89e8d2262304dc7360061c648b3e5a5a7d8941c3b79c
+
+Financial Institutions Directory A Singapore Government Agency Website How to identify
+
+Official website links end with .gov.sg
+Government agencies communicate via .gov.sg websites (e.g. go.gov.sg/open). Trusted websites
+
+Secure websites use HTTPS
+Look for a lock ( ) or https:// as an added precaution. Share sensitive information only on official, secure websites.
+
+- EMAIL-SUBSCRIPTION
+- FAQs
+- CONTACT INFORMATION
+- FEEDBACK
+
+HOME
+ABOUT MAS
+REGULATIONS AND FINANCIAL STABILITY
+MONETARY POLICY AND ECONOMICS
+SINGAPORE FINANCIAL CENTER
+CURRENCY
+STATISTICS
+NEWS
+CAREERS
+
+Financial Institutions Directory
+
+Find a financial institution, licence or activity in Singapore.
+See All Financial Institutions
+
+All Licence Type/Status
+
+Banking
+- Local Bank
+6
+
+- Qualifying Full Bank
+10
+
+- Full Bank
+20
+
+- Wholesale Bank
+95
+
+- Merchant Bank
+21
+
+- Finance Company
+3
+
+- Representative Office (Banking)
+27
+
+- Financial Holding Company (Banking)
+1
+
+- SGS Primary Dealer
+12
+
+Capital Markets
+- Capital Markets Services Licensee
+1571
+
+- Approved CIS Trustee
+16
+
+- Exempt Capital Markets Services Entity
+124
+
+- Licensed Trust Company
+67
+
+- Exempt Trust Company
+27
+
+- Approved Exchange
+4
+
+- Approved Holding Company
+6
+
+- Approved Clearing House
+5
+
+- Recognised Market Operator
+79
+
+- Recognised Clearing House
+9
+
+- Licensed Trade Repository
+1
+
+- Central Depository System
+1
+
+Financial Advisory
+- Licensed Financial Adviser
+72
+
+- Exempt Financial Adviser
+573
+
+Insurance
+- Direct Insurer (Life)
+16
+
+- Direct Insurer (General)
+52
+
+- Direct Insurer (Composite)
+9
+
+- Reinsurer (Life)
+2
+
+- Reinsurer (General)
+22
+
+- Reinsurer (Composite)
+9
+
+- Captive Insurer (Life)
+1
+
+- Captive Insurer (General)
+79
+
+- Captive Insurer (Composite)
+7
+
+- Lloyd's Asia Scheme
+19
+
+- Authorised Reinsurer (General)
+4
+
+- Authorised Reinsurer (Life)
+1
+
+- Authorised Reinsurer (Composite)
+3
+
+- Registered Insurance Broker
+110
+
+- Exempt Insurance Broker
+48
+
+- Representative Office (Insurance)
+2
+
+- Financial Holding Company (Insurance)
+2
+
+- Approved Insurance Broker
+1
+
+Payments
+- Credit and Charge Card Licensee
+4
+
+- Money-changing Licensee
+231
+
+- Standard Payment Institution
+13
+
+- Major Payment Institution
+246
+
+- Designated Payment System Operator
+6
+
+- Designated Payment System Settlement Institution
+6
+
+- Licensed Credit Bureau
+1
+
+- Local Bank
+6
+
+- Qualifying Full Bank
+10
+
+- Full Bank
+20
+
+- Wholesale Bank
+95
+
+- Merchant Bank
+21
+
+- Finance Company
+3
+
+- Representative Office (Banking)
+27
+
+- Financial Holding Company (Banking)
+1
+
+- SGS Primary Dealer
+12
+See More
+
+- Home
+- About MAS
+- Regulations and Financial Stability
+- Monetary Policy and Economics
+- Singapore Financial Centre
+- Currency
+- Statistics
+- News
+- Careers
+- Privacy Statement
+- Terms of Use
+
+Report Vulnerability
+
+Copyright &copy; 2026 Monetary Authority of Singapore
+Last Updated : 24 Jul 2026

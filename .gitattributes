@@ -1,0 +1,5 @@
+# Source snapshots are machine-written copies of public documents, kept so an
+# anchor can be verified against what the source actually said. They are
+# evidence, not code — collapse them in diffs and exclude them from language
+# statistics so pull requests stay reviewable.
+content/_snapshots/** -diff linguist-generated

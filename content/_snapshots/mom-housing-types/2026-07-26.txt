@@ -1,0 +1,220 @@
+# Snapshot of Types of housing for migrant workers
+# source_id: mom-housing-types
+# canonical_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/housing/various-types-of-housing
+# final_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/housing/various-types-of-housing
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: 5f6e6caf6dfd72d83edbad90385190770fd7382909f05c6cb8fa82bfd3a3168f
+
+Various types of housing and their specific requirements
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Housing Home Work passes Work Permit for migrant worker Housing Various types of housing
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+There are updates on this page. Read more
+
+Various types of housing and their specific requirements
+
+There are various types of housing that your foreign employees can live in, each with its own set of requirements. Employers must carry out due diligence to ensure these requirements are met. Employers who fail to do so may be prosecuted, and disallowed to hire foreign employees.
+
+Purpose-Built Dormitories (PBDs) Show
+
+What are PBDs
+PBDs are specially designed and built with features to meet the needs of foreign employees:
+
+- Amenities, e.g. minimarts, dedicated cooking areas, etc.
+- Services, e.g. laundry, remittance, etc.
+- Recreational facilities, e.g. gym, outdoor games courts, etc.
+
+We highly recommend you to:
+
+- Sign a written tenancy agreement with the dormitory operator.
+- Provide ways for employees to highlight problems with the housing to the dormitory operator, and work with the dormitory operator to rectify them.
+Factory-Converted Dormitories (FCDs) Show
+
+What are FCDs
+Industrial or warehouse developments which have been partially converted to dormitories.
+
+Types of FCDs allowed
+
+- Ancillary FCDs: Houses workers employed by the owner or lessee of the factory or sub-contractors' workers (whether workers are working on site at the factory or off-site) or workers who work on site at the factory.
+- Single employer-operated secondary FCDs (i.e. new secondary FCDs set up on 22 June 2020 or later): Houses employer's own workers or sub-contractors' workers (whether workers are working on site at the factory or off-site). The employer should not be the owner or lessee of the factory.
+
+Construction Temporary Quarters (CTQ): Standalone Temporary Quarters Show
+
+What are Standalone Temporary Quarters
+Any structure used for housing employees within a construction site that will eventually be demolished or removed.
+
+Allowed to house
+Construction sector foreign employees working at that particular construction project
+
+Temporary Occupation Licence quarters (TOLQ) Show
+
+What are TOL quarters
+TOLs are temporary occupation licences issued by a government agency (or their managing agents) owning the land. They allow employers to establish temporary quarters on a plot of land that's typically near a construction site to support a specific project.
+TOLQ can be:
+
+- Pre-fabricated temporary buildings
+- Refurnished buildings
+
+Allowed to house
+Construction sector foreign employees working at that particular construction project
+
+Workers' Quarters at Farms (WQFs) Show
+
+What are WQFs
+Living quarters for workers working and residing on farm premises.
+
+Allowed to house
+Workers employed by the farm owner
+
+HDB flats Show
+
+What are HDB flats
+Public housing flats managed by the Housing and Development Board (HDB), which may be rented out as a whole flat or by rooms, subject to HDB's approval.
+
+Allowed to house
+The following foreign employees are allowed to rent HDB flats:
+- Employment Pass holders
+- EntrePass holders
+- Personalised Employment Pass holders
+- S Pass holders
+- Work Permit (WP) holders who either:
+- Are Malaysians, or
+- Work in the services sector.
+- Non-Malaysian WP holders from the manufacturing sector are allowed to rent bedrooms, but not the whole flat.
+
+The number of bedrooms that flat owners can rent out and the maximum number of tenants and occupants allowed in each flat depends on the flat type as shown below.
+Whole flat
+Flat type
+Max number of occupants
+
+1-room or 2-room
+4
+
+3-room
+6
+
+4-room or bigger
+6
+
+From 22 January 2024 to 31 December 2028, HDB will raise the occupancy cap from 6 to 8 occupants for 4-room or bigger HDB flats .
+
+Bedrooms
+Flat type
+Max number of bedrooms
+
+1-room or 2-room
+Not allowed
+
+3-room
+1
+
+4-room or bigger
+2
+
+Note: Flats rented from HDB cannot be sublet.
+For more info, refer to the HDB website .
+What you need to do
+Before you can register your employee's address using OFWAS or EP eService , you must:
+
+- Ensure that the HDB flat owner registers your employees as tenants with HDB before they move in. Your employees can use HDB's eService to check if the flat owner has registered them as tenants of the flat. We highly recommend you to:
+
+- Sign a written tenancy agreement with the flat owner.
+- If your employees rent the place themselves, encourage them to sign a written tenancy agreement with the flat owner.
+- Get a copy of the HDB rental approval letter from the flat owner.
+- Conduct regular checks on the state of the HDB flat. Use the checklist for HDB as a guide.
+- Educate your employees on the expected level of housing standards.
+- Provide ways for employees to highlight problems with the housing, and make arrangements with the flat owner to rectify them. If video recording devices are installed in the unit, you must inform your employees of the devices and where they are placed. You should further ensure that they are not installed in areas that will compromise their privacy or modesty, such as bathrooms and sleeping areas.
+Avoid falling for rental scams . If you are engaging a property agent, check his or her mobile number with CEA's Public Registry to verify the identity of your property agent. Scammers are putting up fake property listings online and impersonating property agents to scam victims into making payment to secure an appointment to view or rent properties.
+
+Private residential premises (PRPs) Show
+
+What are PRPs
+Private properties such as condominiums, landed residential properties, terrace houses, semi-detached houses, bungalows, residential units in shop houses, etc.
+
+Allowed to house
+All foreign employees
+
+PRP owners don't need to register their tenants with URA. For PRP owners who are renting out their property for the first time, they are required to login to Foreign Worker Tenant Enquiry Service (FWTES) to complete a one-time declaration process.
+All types of private residential property are subjected to an occupancy cap of 6 unrelated persons per property .
+
+- Unrelated persons refer to anyone who is not part of the same family unit.
+- Domestic helpers are considered part of the same family unit.
+- The occupancy cap also applies to tenants who sublet the property. For example, a family of six with domestic helpers are considered part of the same family unit and will not be subjected to the occupancy cap.
+However, A family of four who stays and rent out part of the property will be subjected to the occupancy cap. They are allowed to accommodate a maximum of two additional unrelated persons on the property.
+From 22 January 2024 to 31 December 2028, URA will raise the occupancy cap from 6 to 8 occupants, per PRP 90sm or bigger subject to URA's approvals. Please note that it may take up to 5 working days for the higher occupancy load to be reflected at the correct address in MOM's records.
+
+What you need
+If you're unable to update your employee's address in OFWAS or EP eService , you must:
+
+- Ask the homeowner to check and remove the work pass holders who are not staying at their premises using Foreign Worker Tenant Enquiry Service (FWTES) .
+- After the homeowner has removed the work pass holders, you can update your employee's address in OFWAS or EP eService .
+We highly recommend you to:
+
+- Sign a written tenancy agreement with the homeowner.
+- If your employees rent the place themselves, encourage them to sign a written tenancy agreement with the homeowner.
+- Conduct regular checks on the state of the PRP, to ensure no overcrowding and that the living conditions are satisfactory. Use the checklist for PRP as a guide. The latest approved use of the premises can be verified on URA Space .
+- Educate your employees on the expected level of housing standards.
+- Provide ways for employees to highlight problems with their housing, and make arrangements with the homeowner to rectify them. If video recording devices are installed in the unit, you must inform your employees of the devices and where they are placed. You should further ensure that they are not installed in areas that will compromise their privacy or modesty, such as bathrooms and sleeping areas.
+Avoid falling for rental scams . If you are engaging a property agent, check his or her mobile number with CEA's Public Registry to verify the identity of your property agent. Scammers are putting up fake property listings online and impersonating property agents to scam victims into making payment to secure an appointment to view or rent properties.
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 2 June 2026
+
+Related questions
+
+- How do I report housing violations for migrant workers?
+- Must employers house their workers at the dormitories listed on the MOM website?
+
+More on Housing
+
+- Employer's responsibilities
+- Pre-entry housing check for CMP Work Permit holders
+
+- Requirements for dormitory operators
+- List of migrant worker dormitories
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

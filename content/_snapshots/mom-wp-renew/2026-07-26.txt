@@ -1,0 +1,186 @@
+# Snapshot of Renewing a Work Permit
+# source_id: mom-wp-renew
+# canonical_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/renew-a-work-permit
+# final_url: https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/renew-a-work-permit
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: fd0926b1bc52850d2b3edef057db79eb01095e798238a6b2430b4d356e97a41b
+
+Renew a Work Permit
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Work Permit for migrant worker Home Work passes Work Permit for migrant worker Renew a Work Permit
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+Renew a Work Permit
+
+You can renew a Work Permit online 7 to 12 weeks before it expires. Before renewing, you also need to complete certain steps, such as checking your quota and extending the worker's security bond and medical insurance.
+
+At a glance
+When to renew
+7 to 12 weeks before the permit expires. You can go to WP Online to view the list of workers eligible for renewal
+
+Who can renew
+Employer or appointed employment agent (EA)
+
+How much it costs
+$35 per renewal
+
+How long it takes
+The outcome is immediate
+
+You can make an appeal if your worker is not eligible to get a renewal. However, your appeal is unlikely to be successful unless you provide new information when you appeal.
+When to renew
+You should renew the Work Permit 7 to 12 weeks before it expires . Otherwise, an overstaying fine will be imposed.
+If your worker plans to travel overseas just before the Work Permit expiry date, you should renew the Work Permit before he leaves Singapore.
+You can go to WP Online to:
+
+- View the list of workers eligible for renewal.
+- Print a copy of the renewal letter if you didn’t receive it.
+Late renewals
+If you renew the Work Permit late, you’re still liable for the levy after it expires. Levy penalties or overstaying fine, if applicable, may also be imposed.
+You can request for an extension if you’re unable to renew the Work Permit on time.
+Renewal requirements
+You will need the following documents and information for renewal:
+Documents and information
+Instructions
+
+Scanned copy of the personal particulars page of the worker’s passport (including pages that have amendments)
+
+Check that the worker’s passport has enough validity to cover the intended period of employment. To get a 2-year Work Permit, the passport needs to be valid for at least 25 months .
+
+Security bond (for non-Malaysian workers)
+Get a new security bond and complete the Security Bond Form .
+The bank or insurance company must send us the new security bond details before you renew the permit.
+The effective date of the security bond can be post-dated up to 1 day after the expiry date of the existing Work Permit.
+
+Medical insurance
+Extend your worker’s existing medical insurance or get a new policy.
+You can buy the medical insurance from the same bank or insurance company where you buy the security bond.
+
+Work Permit renewal notice and application form
+Print this form in WP Online.
+
+Full medical examination form
+Check your renewal notice and application form to see if your worker needs to complete a full medical examination for their Work Permit renewal.
+
+Details for card delivery (only if the notification letter states that the worker will be getting a new card)
+You will need:
+
+- An address (home or office) where the card will be delivered.
+- The names, NRIC, FIN or passport numbers, mobile numbers and email addresses of up to 3 authorised recipients to receive the card.
+
+If your workers require the Primary Care Plan (PCP) , you need to complete the following steps before renewing:
+
+- After receiving the Work Permit renewal notice, buy the PCP for workers who either stay in dormitories (that can accommodate 7 or more workers) or work in the CMP sectors.
+- Before the Work Permit can be renewed, declare the PCP purchase on WP Online .
+
+How to renew
+Processing time: Immediate
+You can renew the Work Permit online.
+To renew the permit:
+
+- Register the worker’s residential address and mobile number using the Online Foreign Workers Address Service (OFWAS) – at least an hour before renewing the pass online.
+- Log in to WP Online to submit the application and upload the required documents. You may be asked to upload more or fewer documents during online renewal depending on what you have entered.
+
+Print and refer to the renewal notice and application form in WP Online under the “Renew” function for specific instructions.
+- Pay $35 for each renewal. You can pay by GIRO, VISA, Master Card or eNETS debit. After the Work Permit is renewed
+After the Work Permit is renewed, print and check the notification letter to see:
+If notification letter states
+The existing card
+
+Continue using the existing card.
+
+Must be kept by the worker.
+Note: If you return it when you don’t need to, you have to pay $65.40 (including GST) to replace the pass .
+
+Getting a new card .
+Must be cut in half and discarded to prevent misuse.
+
+Guide your worker to set up their SGWorkPass app. They will need a Singpass account. They can view their digital work pass and employment information in the app.
+
+The notification letter:
+
+- Is valid for 1 month from the date of issue. Request to extend the validity if you have a change of travel plans.
+- Should be given to the worker. It allows the worker to travel in and out of Singapore while waiting for the Work Permit card. [For CMP workers or those staying in dormitories] Before their passes can be renewed, ensure that you have:
+
+- Completed the purchase of the Primary Care Plan (PCP).
+- Declared on WP Online that you have bought the PCP. Duration of renewal
+The Work Permit is usually valid for 2 years . However, it may be shorter depending on:
+
+- The expiry of the worker’s passport. If it expires in less than 2 years, the duration will be until 1 month before the expiry date.
+- The validity of the security bond. If it is less than 26 months, the duration until 2 months before the security bond expires.
+- The validity of the prior approval (if applicable).
+- The maximum employment period of your workers (see Work Permit requirements for your sector ). To get the full 2-year duration, you should renew your worker’s passport and security bond before you renew the Work Permit. Embassies may impose requirements on the renewal of passports.
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 30 April 2026
+
+Related questions
+
+- Can I renew my migrant worker's Work Permit early?
+- How do I check the expiry date of a Work Pass or Long-Term Pass?
+- For pass holders who entered Singapore using the SG Arrival Card, how do I enter their immigration details when getting the pass issued or renewed?
+
+More on Work Permit for migrant worker
+
+- Key facts
+- Sector-specific rules
+- Foreign worker levy
+- Apply for Work Permit
+- Appeal against a rejected application
+- Appeal for renewal
+- Cancel a Work Permit
+
+- Replace a card
+- Notify MOM of updates
+- Get a short Work Permit extension
+- Overseas leave
+- Housing
+- Recreation, well-being and other resources for migrant workers
+- Enhancements to Work Permit eService on myMOM Portal
+
+- eServices and forms
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

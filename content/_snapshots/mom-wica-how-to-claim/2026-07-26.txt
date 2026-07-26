@@ -1,0 +1,207 @@
+# Snapshot of How an employee makes a work injury claim
+# source_id: mom-wica-how-to-claim
+# canonical_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/employees-how-to-claim
+# final_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/employees-how-to-claim
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: bf3cf526cce188f039a7107c1eafdfe28bcff5a2faee941ddc09ea9d1b243479
+
+For employees: how to claim work injury compensation
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Work injury compensation Home Workplace safety and health Work injury compensation Employees: how to claim
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+For employees: how to claim work injury compensation
+
+To claim for work injury compensation, you need to notify your employer of the accident. For permanent incapacity claims, you need to go for a medical assessment.
+
+At a glance
+Who can claim
+Injured employee.
+Report the accident to your employer as soon as possible.
+
+When to claim
+For accidents from 1 September 2020: the claim is made once your employer is notified.
+For accidents before 1 September 2020: for permanent incapacity, file a claim within 1 year from the date of accident.
+
+How long it takes
+Within 8 months for most cases. Some cases may need more time to stabilise before a doctor can assess for permanent incapacity.
+
+Temporary incapacity
+For temporary incapacity cases, report the accident to your employer and seek compensation for medical leave wages and medical treatment related to the work accident.
+Temporary incapacity refers to an injured employee being temporarily unable to perform work and earn their usual wages after being placed on medical leave.
+Permanent incapacity
+For permanent incapacity cases, follow these steps for filing a claim:
+Step
+Outcome
+
+Report the accident to employer
+Employer reports the accident to MOM and pays medical leave wages and medical expenses.
+For accidents from 1 September 2020: You will receive a claim processing form and a letter from your designated insurer or MOM stating that your claim is being processed under WICA 2019.
+For accidents before 1 September 2020: You will receive a claim application form from MOM.
+
+Submit claim processing form or claim application form
+For accidents from 1 September 2020: Submit claim processing form to your designated insurer or MOM to confirm your AME, injury site and other details.
+For accidents before 1 September 2020: Submit claim application form to MOM and we will process your claim after we received your application.
+
+Go for a medical assessment
+Degree of permanent incapacity is assessed.
+
+Receive the notice of assessment (NOA) or notice of computation (NOC)
+Know the compensation amount.
+
+- You remain eligible to claim compensation even if you no longer work for the employer or your work pass is cancelled.
+- Your employer may be waiting for the lump sum compensation from their insurance company. Nevertheless, they are required to pay medical leave wages and medical expenses to you first, and seek reimbursement from their insurance company later.
+- If you are a Work Permit holder , seek help from MOM if your employer doesn’t provide you with housing or food, or if your employer is trying to send you home before your claim is settled.
+Report the accident to employer
+You should report all work-related accidents and illnesses to your employer as soon as possible .
+To report an accident:
+
+- Seek medical treatment and inform your employer or supervisor as soon as possible. If you don’t, they may dispute whether your injury or illness is work-related.
+- You can also keep us informed by making an incident report , so we can help with any disputes.
+- Your employer is required to report your accident if you have been given any leave or light duty due to the accident.
+- Give your original MC to your employer to claim medical leave wages . Keep a photocopy for your records.
+- Give your original medical bills to your employer. Your employer should pay the hospital or clinic directly. If you have paid first, your employer is required to pay you back.
+- Alert MOM if your employer doesn’t pay your medical bills or medical leave wages, or does not inform us of your condition (for serious injuries). You will receive the notification letter (by post) when MOM has been notified of your accident. The notification letter will include your case reference number , which you can use to check the status of your claim .
+If you wish to withdraw your WICA claim (e.g. to claim under common law), please complete the claim withdrawal form (attached to the letter) and submit a withdrawal request .
+You can make a claim under WICA or under common law, but not both. Find out the key differences .
+
+Submit claim processing form or claim application form
+From 1 September 2020 Before 1 September 2020 For accidents from 1 September 2020
+Once the designated insurer has been notified of your accident, the claims processing form will be sent to you by post, unless you submit a withdrawal request within 2 weeks.
+It will ask you to confirm your average monthly earnings (AME), injury site and other details.
+Calculate your average month earnings .
+
+Complete the form and submit to the designated insurer by email or mail to the designated insurer's address .
+
+For accidents before 1 September 2020
+Once MOM has been notified of your accident, we will send the claim application form by post to you.
+If you wish to claim for permanent incapacity under WICA, you must complete and submit the form to us within 1 year from the date of the accident. You can do so by:
+
+- Log in and upload the scanned copy.
+- Post to MOM Services Centre , 1500 Bendemeer Road, Singapore 339946. Attention the letter to the case officer. We will only be able to process your claim after we receive your application form.
+You may not be able to claim after 1 year.
+
+Go for a medical assessment
+The doctor that is treating you will assess your injuries:
+
+- You must attend all medical appointments . Your claim may be suspended if you don’t.
+- After your injury stabilises, the doctor will assess you and inform us of the extent of your injuries (i.e. % of permanent incapacity). You can seek treatment from any hospital or medical institution. There are no restrictions on the types of hospitals and medical institutions.
+However, your employer can request for you to be treated or assessed by the company-approved hospital or medical institutions.
+
+Receive the notice of assessment (NOA) or notice of computation (NOC)
+For policies that started from 1 January 2021
+When your designated insurer receives the hospital’s medical report:
+
+- Your designated insurer will calculate the compensation amount.
+- Your designated insurer will issue a notice of computation (NOC) with attached the medical report and objection form, to inform you and your employer of the compensation payable.
+- If no one objects, your employer or the designated insurer is required to issue the compensation cheque within 21 days from the date of service of the NOC. Any party can object to the computation . They must complete and submit the objection as instructed in the NOC to MOM. Injured employees, relatives and legal representatives may submit their objections via any of the following methods:
+
+- Complete the objection form in using Singpass.
+- Mail a hardcopy of the objection form to MOM.
+- Log in and upload the scanned hardcopy objection completed form. All objection forms must be submitted within 14 days from the NOC service date to MOM.
+
+For policies that started before 1 January 2021
+
+When MOM receives the hospital’s medical report:
+
+- We will calculate the compensation amount.
+- We will issue a notice of assessment (NOA) to inform you, your employer and your employer’s insurer of the compensation payable.
+- If no one objects, your employer or the employer's insurer is required to issue the compensation cheque within 21 days from the date of service of the NOA. Any party can object to the assessment , but they must complete and submit the objection as instructed in the NOA.
+
+Withdrawing a WICA claim
+If you have filed a WICA claim but want to withdraw it to file a civil suit, you need to do so within these timeframes:
+
+- Within 14 days from the date of service of the NOA or NOC, if there are no objections.
+- Within 28 days from the date of service of the NOA or NOC, if there are objections.
+- At any time before the NOA or NOC is issued. If you don’t withdraw your claim within these timeframes, the Court may not accept your civil suit.
+If all parties accept the NOA or NOC and your employer or designated insurer has paid the compensation, the case is considered resolved and you will no longer be able to file a civil suit.
+
+How to withdraw a claim
+For policies that started from 1 January 2021
+You or your representatives should:
+
+- Get withdrawal form from your designated insurer.
+- Complete the form and submit it to your designated insurer. Refer to the list of designated insurers .
+After the NOC is objected, the objection will be processed by MOM. You can notify MOM if you decide to withdraw the claim.
+
+For policies that started before 1 January 2021
+Only you or your legal representative can notify MOM of the decision to withdraw a claim.
+You can write or email to your claims officer.
+
+Claim for permanent incapacity instead of temporary incapacity
+If your claim is only processed for temporary incapacity, but you wish to claim for permanent incapacity, you need to:
+
+- Contact your designated insurer to obtain the application form and blank doctor's memo to claim for permanent incapacity.
+- Get doctor to fill up the memo certifying that you’re likely to have suffered permanent incapacity.
+- Submit the application form and doctor's memo within 1 year from the date of accident.
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 27 January 2025
+
+Related questions
+
+- As an employee, do I need to immediately report work injury to my employer?
+- Am I allowed to have my permanent incapacity assessment done by a doctor different from the one chosen by my employer?
+- How can I be assured of the objectivity of permanent incapacity assessments if the assessing doctor is chosen by my employer or insurer?
+- Do employees or their representatives still need to file claim for work injury compensation with MOM?
+- How can employees be assured that their claims are being processed or that their employers have reported their injuries?
+
+More on Work injury compensation
+
+- What is the Work Injury Compensation Act (WICA)
+- Who is covered in accordance with WICA
+- WICA versus common law
+- Eligible claims under WICA
+- Types of compensation under WICA
+
+- Work injury compensation insurance
+- Check the status of a work injury claim
+- Disputing a work injury claim
+- For employers: what to do during a work injury claim
+- Resources and tools for work injury compensation
+
+- Work injury compensation eServices and forms
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-

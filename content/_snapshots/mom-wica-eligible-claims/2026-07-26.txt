@@ -1,0 +1,114 @@
+# Snapshot of Eligible work injury claims
+# source_id: mom-wica-eligible-claims
+# canonical_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/eligible-claims
+# final_url: https://www.mom.gov.sg/workplace-safety-and-health/work-injury-compensation/eligible-claims
+# retrieved_at: 2026-07-26
+# sha256_of_raw_response: bf1d0db3095c52c5ceb0d2f9c30c5f7efee4f11b7841ca6d62a19c01b3bbfa35
+
+Eligible claims under WICA
+
+You are using a version of browser which will not be supported after 27 May 2018. To continue to transact with MOM securely, please follow these steps to enable the Transport Layer Security (TLS) of your web browser, or upgrade to the latest version of your browser.
+
+Skip to main content
+
+Ministry of Manpower Homepage About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+myMOM Portal
+
+- About us
+- Work passes
+- Employment practices
+- Workplace safety and health
+- More
+- Statistics and publications
+- eServices
+- Calculators
+- Forms
+- Newsroom
+
+Work injury compensation Home Workplace safety and health Work injury compensation Eligible claims
+
+PH pay, COMPASS, Primary Care Plan, myMOM Portal, paying salary, annual leave
+
+Eligible claims under WICA
+
+The Work Injury Compensation Act lets you claim for injuries and occupational diseases that happen at work or as a result of work.
+
+When you can claim
+If you are an eligible employee or platform worker, you can make a claim under the Work Injury Compensation Act (WICA) if you have:
+
+- Been injured by an accident arising out of and in the course of employment.
+- Been injured while on an overseas assignment.
+- Contracted an Occupational Disease .
+- Contracted a disease from exposure to biological or chemical agents at work. What accidents does WICA cover
+WICA covers accidents arising out of and in the course of employment .
+Unless there is evidence to prove otherwise, an accident in the course of employment is regarded as arising out of employment.
+The following are general positions, and each accident or incident should be considered in accordance with its specific facts and circumstances.
+Scenarios covered under WICA
+You are covered under WICA if you:
+
+- Meet with a traffic accident while taking company transport between home and workplace. The vehicle is not a public transport.
+- Meet with a traffic accident when travelling during work and for work purpose (e.g. travel from workplace to venue for meeting), regardless of the mode of transport. You did not make any personal detour.
+- Are employed by a local employer during your course of employment, suffers a work-related injury during an overseas assignment.
+- Are a seafarer who suffers a work-related injury while on board a Singapore-registered vessel, regardless of the location of the vessel.
+- Injure yourself in a work-related fight where you were a victim and did not participate in the fight, or were injured while exercising private defence, or instructed to break up the fight, safeguard life or property, or maintain law and order.
+- Suffer medical conditions such as heart attack or stroke that are caused by a triggering event arising out and in the course of work.
+- Sustain an injury while performing work related duties while on flexible work arrangements, including working from home, which is approved by your employer. Scenarios not covered under WICA
+You are not covered under WICA if you:
+
+- Meet with a traffic accident while travelling in your own car, your friend’s car, or public transport between home and workplace.
+- Meet with a traffic accident while making a personal detour when travelling during work (e.g. detour for personal errand while travelling from workplace to venue for meeting), regardless of the mode of transport.
+- Injure yourself while under the influence of alcohol or a prescription drug which was not prescribed by a doctor.
+- Deliberately injure yourself or deliberately aggravate an existing injury.
+- Injure yourself while doing non-work-related activities such as household chores, while on flexible work arrangements, including working from home. What's next Types of compensation under WICA
+
+Share this page Share this page on facebook Tweet this page Email this page Print this page
+
+Last Updated: 7 April 2026
+
+Related questions
+
+- Can a migrant worker claim WICA compensation for COVID-19 infection if it was contracted while staying in dormitory?
+- If my employee suffers serious side effects related to the COVID-19 vaccine, can they make a work-injury compensation claim?
+- Can employees claim compensation for injuries resulting from work-related fights, especially if the fight was due to dispute over work-related matters?
+- If I suffer injury or illness due to hazy conditions, can I claim WIC compensation?
+
+More on Work injury compensation
+
+- What is the Work Injury Compensation Act (WICA)
+- Who is covered in accordance with WICA
+- WICA versus common law
+- Types of compensation under WICA
+- Work injury compensation insurance
+
+- Check the status of a work injury claim
+- Disputing a work injury claim
+- For employees: how to claim work injury compensation
+- For employers: what to do during a work injury claim
+- Resources and tools for work injury compensation
+
+- Work injury compensation eServices and forms
+
+Information and Services
+Ministry of Manpower
+Social media
+About us Careers Contact us Feedback Share your views @ Reach
+Ministry of Manpower Facebook page Ministry of Manpower LinkedIn page Ministry of Manpower Telegram Ministry of Manpower youtube channel
+
+- Report vulnerability
+- Privacy
+- Terms of use
+- Legislation
+- Sitemap
+- Supported browsers
+
+- &copy; 2026 Government of Singapore
+-
