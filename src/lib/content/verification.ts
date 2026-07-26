@@ -1,11 +1,18 @@
 /**
- * Fail-closed governance checks for repository-managed knowledge content.
+ * Fail-closed provenance checks for repository-managed knowledge content.
  *
- * A checked-in Markdown file is not evidence that a partner NGO reviewed it.
- * The seed ingester may publish/index a file only when its frontmatter carries
- * an explicit publication decision, reviewer identity, review date, and a
- * canonical source reference or URL.
+ * The repository is the source of truth for the corpus: the seed ingester may
+ * publish/index a file when its frontmatter carries an explicit publication
+ * decision and a canonical source reference or URL. Accountability for what was
+ * published comes from git authorship (see `git-provenance.ts`), which the
+ * ingester records on every item, rather than from hand-typed reviewer metadata.
+ *
+ * `reviewed_by` / `reviewed_at` remain *optional evidence*: an item that did get
+ * an expert review can still record it, and it is surfaced in the admin CMS.
+ * They are no longer required for publication.
  */
+
+import { parsePastCalendarDate } from "@/lib/content/dates";
 
 export type ContentFrontmatter = Record<string, string | undefined>;
 
@@ -20,27 +27,16 @@ export interface ContentVerification {
   sourceUrl?: string;
 }
 
-const PLACEHOLDER = /^(?:todo|tbd|unknown|n\/a|none)$/i;
-const REVIEW_DATE = /^\d{4}-\d{2}-\d{2}$/;
+export const PLACEHOLDER = /^(?:todo|tbd|unknown|n\/a|none)$/i;
 
-function nonPlaceholder(value: string | undefined): string | undefined {
+/** Trimmed value, unless it is empty or obvious placeholder text. */
+export function nonPlaceholder(value: string | undefined): string | undefined {
   const normalized = value?.trim();
   return normalized && !PLACEHOLDER.test(normalized) ? normalized : undefined;
 }
 
 function validReviewDate(value: string | undefined, now: Date): string | undefined {
-  const normalized = value?.trim();
-  if (!normalized || !REVIEW_DATE.test(normalized)) return undefined;
-
-  const parsed = new Date(`${normalized}T00:00:00.000Z`);
-  if (
-    Number.isNaN(parsed.getTime()) ||
-    parsed.toISOString().slice(0, 10) !== normalized ||
-    parsed.getTime() > now.getTime()
-  ) {
-    return undefined;
-  }
-  return normalized;
+  return parsePastCalendarDate(value, now) ? value?.trim() : undefined;
 }
 
 function validCanonicalUrl(value: string | undefined): string | undefined {
@@ -66,6 +62,10 @@ function validCanonicalUrl(value: string | undefined): string | undefined {
  * Evaluate Markdown frontmatter for publication. Every failed check returns a
  * draft status, so callers cannot accidentally turn malformed metadata into a
  * published vector.
+ *
+ * Invalid `reviewed_by` / `reviewed_at` values are dropped rather than treated
+ * as fatal — they are optional evidence, so malformed evidence must not be able
+ * to masquerade as real evidence, but it also must not block publication.
  */
 export function verifyContentFrontmatter(
   metadata: ContentFrontmatter,
@@ -80,12 +80,6 @@ export function verifyContentFrontmatter(
 
   if (metadata.status?.trim() !== "published") {
     reasons.push('frontmatter status must explicitly be "published"');
-  }
-  if (!reviewedBy) {
-    reasons.push("reviewed_by must identify a reviewer or review team");
-  }
-  if (!reviewedAt) {
-    reasons.push("reviewed_at must be a valid, non-future YYYY-MM-DD date");
   }
   if (!sourceRef && !sourceUrl) {
     reasons.push("source_ref or source_url must identify the canonical source");
