@@ -32,8 +32,16 @@ const TOLERANT: Array<[EscalationTrigger, MatchRule]> = [
       { terms: ["pay", "months"], maxGap: 3 },
     ],
     coOccurrences: [{
-      subjects: ["salary", "wage", "pay", "工资", "gaji", "সম্পল", "বেতন", "சம்பளம்", "เงินเดือน", "လစာ"],
-      predicates: ["not", "never", "owe", "withhold", "late", "short", "refus", "没", "belum", "hindi", "ไม่", "မ"],
+      // "paid" is not a prefix of "pay", so both stems are needed — a gap the
+      // recall fixture caught on the single most common phrasing there is.
+      subjects: [
+        "salary", "wage", "pay", "paid", "paying", "overtime",
+        "工资", "gaji", "বেতন", "সম্পল", "சம்பளம்", "เงินเดือน", "လစာ",
+      ],
+      predicates: [
+        "not", "never", "no", "owe", "withhold", "late", "short", "refus",
+        "没", "belum", "hindi", "ไม่", "မ",
+      ],
     }],
   }],
   ["workplace_injury", {
@@ -87,6 +95,9 @@ const TOLERANT: Array<[EscalationTrigger, MatchRule]> = [
     sequences: [
       { terms: ["work permit", "cancel"] },
       { terms: ["work permit", "expir"] },
+      // Workers say "my permit", not "my work permit", at least as often.
+      { terms: ["permit", "expir"] },
+      { terms: ["permit", "cancel"] },
       { terms: ["permit", "revok"] },
       { terms: ["overstay"] },
       { terms: ["ipa", "cancel"] },
