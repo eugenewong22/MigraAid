@@ -48,7 +48,13 @@
     "referralCodeHelp": "联系机构后，请向对方提供此私人转介代码。代码将于 {date} 到期。",
     "referralCodeHelpNoDate": "联系机构后，请向对方提供此私人转介代码。代码将在 30 天内到期。",
     "privacy": "请勿填写姓名、身份证或护照号码、电话号码或电子邮箱。您的问题会发送给 AI 服务提供商。MigraAid 会尽可能在发送或存储前移除常见身份信息。",
-    "errorRateLimited": "合同检查请求过多。请等待一分钟后重试。"
+    "errorRateLimited": "合同检查请求过多。请等待一分钟后重试。",
+    "statusSearching": "正在搜索可靠资料…",
+    "statusReading": "正在阅读资料…",
+    "statusWriting": "正在撰写您的回答…",
+    "statusChecking": "正在核对资料是否相符…",
+    "cancel": "取消",
+    "errorBusy": "MigraAid 目前非常繁忙，请一分钟后再试。"
   },
   "emergency": {
     "sms": "短信 {number}",
@@ -112,7 +118,8 @@
     "severity": "严重程度",
     "severityInfo": "信息",
     "severityWarning": "警告",
-    "severitySerious": "严重"
+    "severitySerious": "严重",
+    "errorUnavailable": "MigraAid 目前无法检查合同，请稍后再试。"
   },
   "common": {
     "language": "语言",

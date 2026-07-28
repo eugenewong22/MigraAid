@@ -48,7 +48,13 @@
     "referralCodeHelp": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa {date}.",
     "referralCodeHelpNoDate": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa loob ng 30 araw.",
     "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito.",
-    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli."
+    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli.",
+    "statusSearching": "Naghahanap ng beripikadong sanggunian…",
+    "statusReading": "Binabasa ang mga sanggunian…",
+    "statusWriting": "Isinusulat ang sagot mo…",
+    "statusChecking": "Sinusuri kung tugma ang mga sanggunian…",
+    "cancel": "Kanselahin",
+    "errorBusy": "Napakaabala ng MigraAid ngayon. Subukan ulit pagkatapos ng isang minuto."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -112,7 +118,8 @@
     "severity": "Antas ng panganib",
     "severityInfo": "Impormasyon",
     "severityWarning": "Babala",
-    "severitySerious": "Seryoso"
+    "severitySerious": "Seryoso",
+    "errorUnavailable": "Hindi masuri ng MigraAid ang mga kontrata ngayon. Subukan ulit mamaya."
   },
   "common": {
     "language": "Wika",

@@ -48,7 +48,13 @@
     "referralCodeHelp": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa pada {date}.",
     "referralCodeHelpNoDate": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa dalam 30 hari.",
     "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya.",
-    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi."
+    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi.",
+    "statusSearching": "Mencari sumber terverifikasi…",
+    "statusReading": "Membaca sumber…",
+    "statusWriting": "Menulis jawaban Anda…",
+    "statusChecking": "Memeriksa kecocokan sumber…",
+    "cancel": "Batal",
+    "errorBusy": "MigraAid sedang sangat sibuk. Coba lagi dalam satu menit."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -112,7 +118,8 @@
     "severity": "Tingkat",
     "severityInfo": "Informasi",
     "severityWarning": "Peringatan",
-    "severitySerious": "Serius"
+    "severitySerious": "Serius",
+    "errorUnavailable": "MigraAid tidak dapat memeriksa kontrak saat ini. Coba lagi nanti."
   },
   "common": {
     "language": "Bahasa",

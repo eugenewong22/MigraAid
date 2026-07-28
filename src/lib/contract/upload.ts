@@ -11,7 +11,8 @@ export type ContractUploadErrorKey =
   | "error"
   | "errorInvalidFile"
   | "errorTooLarge"
-  | "errorRateLimited";
+  | "errorRateLimited"
+  | "errorUnavailable";
 
 export function validateContractUpload(file: {
   type: string;
@@ -30,5 +31,10 @@ export function contractUploadErrorForStatus(
   if (status === 413) return "errorTooLarge";
   if (status === 429) return "errorRateLimited";
   if (status === 400 || status === 415) return "errorInvalidFile";
+  // 503 is the service stopping itself — a degraded limiter, a spend ceiling,
+  // a flag. The generic copy tells the worker to retake the photo, which is
+  // both wrong and expensive: each retry burns another of their five per
+  // minute for a problem no photo can fix.
+  if (status === 503) return "errorUnavailable";
   return "error";
 }

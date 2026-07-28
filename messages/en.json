@@ -48,7 +48,13 @@
     "referralCodeHelp": "Give this private handoff code to the organisation after you contact them. It expires on {date}.",
     "referralCodeHelpNoDate": "Give this private handoff code to the organisation after you contact them. It expires in 30 days.",
     "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it.",
-    "errorRateLimited": "Too many messages were sent. Please wait a minute and try again."
+    "errorRateLimited": "Too many messages were sent. Please wait a minute and try again.",
+    "statusSearching": "Searching verified sources…",
+    "statusReading": "Reading the sources…",
+    "statusWriting": "Writing your answer…",
+    "statusChecking": "Checking the sources match…",
+    "cancel": "Cancel",
+    "errorBusy": "MigraAid is very busy right now. Please try again in a minute."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -112,7 +118,8 @@
     "severity": "Severity",
     "severityInfo": "Information",
     "severityWarning": "Warning",
-    "severitySerious": "Serious"
+    "severitySerious": "Serious",
+    "errorUnavailable": "MigraAid can't check contracts right now. Please try again later."
   },
   "common": {
     "language": "Language",

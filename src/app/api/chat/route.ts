@@ -142,9 +142,14 @@ export async function POST(req: NextRequest) {
       const heartbeat = setInterval(() => {
         enqueue(write({ type: "ping" }));
       }, 10_000);
+      // The answer is buffered until it clears the citation gate, so the only
+      // honest thing to show meanwhile is *where we are*, not what was written.
+      const status = (stage: string, extra: Record<string, unknown> = {}) =>
+        enqueue(write({ type: "status", stage, ...extra }));
       try {
         let result = preflightSafetyAnswer(message, locale);
         let normalizedQuery = message;
+        status("searching");
         if (!result && locale !== "en") {
           // Reuse the English translation retrieval needs anyway to run the
           // deterministic high-stakes / injection checks on English text — the
@@ -161,6 +166,7 @@ export async function POST(req: NextRequest) {
             locale,
             normalizedQuery: locale === "en" ? undefined : normalizedQuery,
           });
+          status("reading", { sourceCount: chunks.length });
 
           // Claim a slot before spending anything. The cap bounds how many
           // requests can be mid-flight and therefore unreconciled, which is
@@ -188,11 +194,27 @@ export async function POST(req: NextRequest) {
               signal: generationAbort.signal,
             });
             // Generation stays buffered until its citations/tool calls pass the
-            // safety gate. The browser receives one atomic terminal payload.
-            for await (const _delta of generated.textStream) {
-              // Draining completes the provider stream and resolves final().
+            // safety gate. The browser receives one atomic terminal payload —
+            // but it can honestly be told *how much* has been written without
+            // being shown *what*, which is a real progress signal at no cost to
+            // the gate.
+            let written = 0;
+            let lastReport = 0;
+            let announcedWriting = false;
+            for await (const delta of generated.textStream) {
+              written += delta.length;
+              if (!announcedWriting) {
+                announcedWriting = true;
+                status("writing");
+              }
+              const now = Date.now();
+              if (now - lastReport >= 500) {
+                lastReport = now;
+                enqueue(write({ type: "progress", chars: written }));
+              }
             }
             result = await generated.final();
+            status("checking");
             const actual = result.usage
               ? estimateCostMicros(result.usage)
               : reserved;
