@@ -123,7 +123,10 @@
   },
   "common": {
     "language": "语言",
-    "back": "返回"
+    "back": "返回",
+    "errorTitle": "出了一点问题",
+    "errorBody": "此页面无法加载。您可以重试，如需立即帮助，请使用任意页面底部的紧急联络方式。",
+    "retry": "重试"
   },
   "privacy": {
     "delete": "删除我的 MigraAid 数据",

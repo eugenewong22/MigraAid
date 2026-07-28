@@ -123,7 +123,10 @@
   },
   "common": {
     "language": "Wika",
-    "back": "Bumalik"
+    "back": "Bumalik",
+    "errorTitle": "May naging problema",
+    "errorBody": "Hindi ma-load ang pahinang ito. Subukan ulit, o gamitin ang emergency contacts sa ibaba ng alinmang pahina kung kailangan mo ng tulong ngayon.",
+    "retry": "Subukan ulit"
   },
   "privacy": {
     "delete": "Burahin ang aking MigraAid data",

@@ -1,0 +1,79 @@
+name: Security audit
+
+# Weekly dependency audit at high severity, reported as an issue rather than as
+# a failed build.
+#
+# The PR gate in ci.yml stops at critical on purpose: the high-severity
+# advisories outstanding at any moment are usually in build-time transitives
+# that no request to the deployed app can reach. Blocking every pull request on
+# those trains a solo maintainer to ignore the gate, which is worse than not
+# having one. This surfaces them where they can be triaged instead.
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - id: audit
+        run: |
+          set +e
+          pnpm audit --audit-level high 2>&1 | tee audit.log
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - if: steps.audit.outputs.exit_code != '0'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.0.1
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.readFileSync('audit.log', 'utf8').slice(0, 60000);
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependencies',
+            });
+            const body = [
+              'Weekly `pnpm audit` found high-severity advisories.',
+              '',
+              'Triage question for each: **is it reachable from a request to the',
+              'deployed app**, or only from build tooling and local scripts?',
+              'Runtime-reachable ones should be fixed now; build-time ones can wait',
+              'for the Dependabot PR.',
+              '',
+              '```',
+              log,
+              '```',
+            ].join('\n');
+            if (existing.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Dependency advisories need triage',
+                body,
+                labels: ['dependencies'],
+              });
+            }

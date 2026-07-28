@@ -123,7 +123,10 @@
   },
   "common": {
     "language": "Language",
-    "back": "Back"
+    "back": "Back",
+    "errorTitle": "Something went wrong",
+    "errorBody": "This page could not load. You can try again, or use the emergency contacts at the bottom of any page if you need help now.",
+    "retry": "Try again"
   },
   "privacy": {
     "delete": "Delete my MigraAid data",
