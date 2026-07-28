@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "tsx scripts/release/migrate.ts && next build",
+    "vercel-build": "tsx scripts/release/check-env.ts && tsx scripts/release/migrate.ts && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -25,6 +25,7 @@
     "eval": "tsx scripts/eval/run.ts",
     "eval:offline": "tsx scripts/eval/offline.ts",
     "icons": "tsx scripts/icons/generate.ts",
+    "check:env": "tsx scripts/release/check-env.ts",
     "privacy:cleanup": "tsx scripts/privacy/cleanup.ts"
   },
   "dependencies": {
