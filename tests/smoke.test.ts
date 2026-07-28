@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { EMBEDDING_DIMENSIONS } from "@/lib/embeddings";
-import { buildSystemPrompt, DISCLAIMER } from "@/lib/safety/prompt";
+import { buildSystemPrompt } from "@/lib/safety/prompt";
+import enMessages from "../messages/en.json";
 
 describe("foundation", () => {
   it("embedding dimensions match the pgvector column", () => {
@@ -15,6 +16,9 @@ describe("foundation", () => {
   });
 
   it("exposes a user-facing disclaimer", () => {
-    expect(DISCLAIMER.length).toBeGreaterThan(0);
+    // Asserts the catalog key that is actually rendered. This used to check a
+    // `DISCLAIMER` constant that no component consumed — two near-identical
+    // texts, only one of which a worker ever saw, free to drift apart.
+    expect(enMessages.home.disclaimer.length).toBeGreaterThan(0);
   });
 });

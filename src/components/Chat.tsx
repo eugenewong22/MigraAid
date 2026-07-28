@@ -531,7 +531,14 @@ export function Chat() {
                         <div className="flex flex-col gap-1 border-t border-warn-border pt-2.5">
                           <p className="text-[13.5px] leading-[1.5] text-muted">
                             {t("referralCodeLabel")}:{" "}
-                            <code className="select-all break-all font-mono font-[600] text-body-soft">
+                            <code
+                              lang="en"
+                              // Read character by character: an alphanumeric
+                              // code announced as a word cannot be written
+                              // down or read out over the phone.
+                              aria-label={m.referralCode.split("").join(" ")}
+                              className="select-all break-all font-mono font-[600] text-body-soft"
+                            >
                               {m.referralCode}
                             </code>
                           </p>
@@ -572,6 +579,8 @@ export function Chat() {
                               target="_blank"
                               rel="noreferrer"
                               aria-label={fullLabel}
+                              // The corpus is English; the page may not be.
+                              lang="en"
                               className="inline-flex min-h-11 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere] transition-colors hover:bg-sand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                             >
                               {shownLabel}
@@ -579,6 +588,7 @@ export function Chat() {
                           ) : (
                             <span
                               key={j}
+                              lang="en"
                               className="inline-flex min-h-11 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere]"
                             >
                               {shownLabel}
