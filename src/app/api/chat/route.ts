@@ -17,7 +17,10 @@ import {
 } from "@/lib/db/schema";
 import { randomUUID } from "node:crypto";
 import { and, eq, gt } from "drizzle-orm";
-import { detectHighStakesIssue } from "@/lib/safety/policy";
+import {
+  detectHighStakesIssue,
+  escalationSeverity,
+} from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
@@ -203,6 +206,11 @@ export async function POST(req: NextRequest) {
           detectHighStakesIssue(message) ?? detectHighStakesIssue(normalizedQuery);
         result.escalated = result.escalated || Boolean(deterministicIssue);
         result.issueType ??= deterministicIssue;
+        // `assisted` keeps the grounded answer and adds the referral; `danger`
+        // already replaced the answer before it got here.
+        result.severity ??= result.issueType && result.escalated
+          ? escalationSeverity(result.issueType)
+          : undefined;
         const referrals =
           result.escalated && result.issueType
             ? referralTargets(result.issueType)
@@ -371,6 +379,9 @@ export async function POST(req: NextRequest) {
             messageId: assistantMessageId ?? null,
             citations: result.citations,
             escalated: result.escalated,
+            // Lets the client frame a serious-but-answerable turn differently
+            // from a crisis one, rather than treating all escalation alike.
+            severity: result.severity ?? null,
             referrals,
             referralCode: referralCode ?? null,
             referralExpiresAt: referralExpiresAt ?? null,

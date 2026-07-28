@@ -19,6 +19,39 @@ export function detectHighStakesIssue(text: string): EscalationTrigger | undefin
   )?.[0];
 }
 
+
+/**
+ * How hard an escalation should bite.
+ *
+ * Escalation used to be one thing, and that one thing *deleted the answer*:
+ * any matched phrase replaced the model's prose with canned crisis text. The
+ * trigger categories cover most of what the corpus is about, so a false
+ * positive meant a worker asking about salary or dismissal got no information
+ * at all. That is why the phrase lists had to stay narrow, and why recall could
+ * never be tuned up.
+ *
+ * Splitting the consequence lets the matcher be generous:
+ *
+ *   danger    a worker may be unsafe right now. Suppress the answer, show the
+ *             reviewed crisis wording, lead with emergency contacts. Precision
+ *             matters here; the list stays tight.
+ *   assisted  serious, but the worker still benefits from knowing the rule.
+ *             Answer normally — grounded and cited as always — then attach the
+ *             warning and the referral. A false positive costs one extra
+ *             banner, not the whole answer.
+ */
+export type EscalationSeverity = "danger" | "assisted";
+
+/**
+ * Only immediate-harm categories suppress the answer. Passport confiscation,
+ * confinement and threats all live in `abuse_or_threats`.
+ */
+const DANGER_TRIGGERS: ReadonlySet<string> = new Set(["abuse_or_threats"]);
+
+export function escalationSeverity(trigger: string): EscalationSeverity {
+  return DANGER_TRIGGERS.has(trigger) ? "danger" : "assisted";
+}
+
 const INJECTION_PATTERNS = [
   /ignore (?:all |any |the )?(?:previous|prior|system|developer) instructions?/i,
   /disregard (?:all |any |the )?(?:previous|prior|system|developer) (?:instructions?|rules?)/i,

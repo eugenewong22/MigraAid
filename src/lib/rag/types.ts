@@ -40,6 +40,11 @@ export interface RagAnswer {
   escalated: boolean;
   /** Issue slug the model flagged when it escalated (drives referral routing). */
   issueType?: string;
+  /**
+   * How hard the escalation bites. `danger` replaces the answer with reviewed
+   * crisis wording; `assisted` keeps the grounded answer and adds a warning.
+   */
+  severity?: "danger" | "assisted";
   model: string;
   usage?: {
     inputTokens: number;

@@ -22,6 +22,7 @@ import { buildSystemPrompt } from "@/lib/safety/prompt";
 import {
   detectHighStakesIssue,
   detectPromptInjection,
+  escalationSeverity,
   hasCredibleGrounding,
 } from "@/lib/safety/policy";
 import type { AnswerOptions, Citation, RagAnswer, RetrievedChunk } from "./types";
@@ -85,13 +86,22 @@ function injectionRefusal(locale: string): RagAnswer {
   };
 }
 
-/** Safety decisions that must run before retrieval or any external model call. */
+/**
+ * Safety decisions that must run before retrieval or any external model call.
+ *
+ * Only `danger` short-circuits. An `assisted` issue — unpaid salary, injury,
+ * dismissal and the rest — lets the normal grounded answer proceed and is
+ * attached to it afterwards, because a worker in that situation is better off
+ * knowing the rule *and* who to call than being handed only a phone number.
+ */
 export function preflightSafetyAnswer(
   query: string,
   locale: string,
 ): RagAnswer | undefined {
   const highStakesIssue = detectHighStakesIssue(query);
-  if (highStakesIssue) return highStakesAnswer(locale, highStakesIssue);
+  if (highStakesIssue && escalationSeverity(highStakesIssue) === "danger") {
+    return highStakesAnswer(locale, highStakesIssue);
+  }
   if (detectPromptInjection(query)) return injectionRefusal(locale);
   return undefined;
 }
@@ -102,6 +112,7 @@ function highStakesAnswer(locale: string, issueType: string): RagAnswer {
     citations: [],
     escalated: true,
     issueType,
+    severity: "danger",
     model: "safety-policy",
   };
 }
@@ -130,22 +141,28 @@ export function enforceAnswerSafety(
   locale: string,
   sourceCount?: number,
 ): RagAnswer {
-  // A model may call the referral tool while also emitting prose. Tool use is
-  // not permission to bypass grounding: replace that prose with MigraAid's
-  // reviewed referral wording before it can be shown or persisted.
-  if (result.escalated && result.model !== "safety-policy") {
+  // A worker who may be in immediate danger gets the reviewed crisis wording,
+  // never model prose — tool use is not permission to bypass that.
+  const severity =
+    result.severity ??
+    (result.issueType && result.escalated
+      ? escalationSeverity(result.issueType)
+      : undefined);
+  if (severity === "danger" && result.model !== "safety-policy") {
     return {
       ...highStakesAnswer(locale, result.issueType ?? "out_of_scope"),
       model: result.model,
       usage: result.usage,
     };
   }
+  // Everything else must be grounded, including an `assisted` escalation. That
+  // is the point of the split: the answer survives, so it still has to earn its
+  // citations. Previously `escalated` skipped this gate entirely.
   if (
-    !result.escalated &&
-    (!result.text.trim() ||
-      result.citations.length === 0 ||
-      (sourceCount !== undefined &&
-        !hasValidCitationCoverage(result.text, sourceCount)))
+    !result.text.trim() ||
+    result.citations.length === 0 ||
+    (sourceCount !== undefined &&
+      !hasValidCitationCoverage(result.text, sourceCount))
   ) {
     return { ...ungroundedAnswer(locale), model: result.model, usage: result.usage };
   }

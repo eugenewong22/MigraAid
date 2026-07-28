@@ -127,14 +127,15 @@ describe("parseCompletion", () => {
     }
   });
 
-  it("escalates deterministically without calling the model", async () => {
+  it("suppresses the answer only for immediate danger", async () => {
     const result = await answer({
-      query: "My employer has not paid my unpaid salary",
+      query: "My boss threatened me and locked me in the dormitory",
       locale: "en",
       chunks,
     });
     expect(result.escalated).toBe(true);
-    expect(result.issueType).toBe("unpaid_salary");
+    expect(result.issueType).toBe("abuse_or_threats");
+    expect(result.severity).toBe("danger");
     expect(result.model).toBe("safety-policy");
   });
 
@@ -443,10 +444,23 @@ describe("parseCompletion", () => {
     expect(result.model).toBe("safety-policy");
   });
 
-  it("routes high-stakes issues before retrieval is required", () => {
-    const result = preflightSafetyAnswer("I was injured at work", "en");
-    expect(result?.issueType).toBe("workplace_injury");
+  it("short-circuits before retrieval when a worker may be in danger", () => {
+    const result = preflightSafetyAnswer("My employer took my passport", "en");
+    expect(result?.issueType).toBe("abuse_or_threats");
+    expect(result?.severity).toBe("danger");
     expect(result?.model).toBe("safety-policy");
+  });
+
+  it.each([
+    ["I was injured at work", "workplace_injury"],
+    ["My employer has not paid my unpaid salary", "unpaid_salary"],
+    ["My company dismissed me last week", "wrongful_dismissal"],
+  ])("lets a serious-but-not-dangerous question be answered: %s", (query) => {
+    // These used to be replaced wholesale by canned crisis text, which meant a
+    // worker asking about salary or dismissal — most of what the corpus covers
+    // — got no information at all. They now retrieve and answer normally; the
+    // referral is attached afterwards by the route.
+    expect(preflightSafetyAnswer(query, "en")).toBeUndefined();
   });
 });
 
