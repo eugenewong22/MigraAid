@@ -175,5 +175,10 @@
     "useBody": "Gunakan MigraAid untuk mengajukan pertanyaan yang sungguh-sungguh. Jangan mencoba membebani, merusak, atau memakainya mengirim konten yang melanggar hukum atau kasar. Tidak ada jaminan apa pun, dan layanan sesekali mungkin tidak tersedia.",
     "changesHeading": "Perubahan",
     "changesBody": "Ketentuan ini dapat berubah. Versi terkini selalu ada di halaman ini, dan riwayat lengkapnya publik di repositori sumber."
+  },
+  "safety": {
+    "ungrounded": "Saya tidak memiliki cukup informasi terverifikasi untuk menjawab dengan aman. Hubungi organisasi mitra; jika Anda dalam bahaya, gunakan halaman Kontak Darurat.",
+    "highStakes": "Hal ini dapat berdampak serius pada hak atau keselamatan Anda. Saya tidak boleh memberi nasihat untuk kasus khusus Anda. Hubungi salah satu organisasi bantuan di bawah secepatnya jika aman.",
+    "injection": "Saya hanya dapat membantu pertanyaan tentang hak dan layanan pekerja migran berdasarkan sumber terverifikasi. Tulis ulang pertanyaan tanpa instruksi untuk mengubah cara kerja MigraAid."
   }
 }

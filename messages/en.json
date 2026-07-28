@@ -175,5 +175,10 @@
     "useBody": "Please use MigraAid to ask genuine questions. Do not try to overload it, break it, or use it to send content that is unlawful or abusive. There is no warranty of any kind, and the service may be unavailable at times.",
     "changesHeading": "Changes",
     "changesBody": "These terms may change. The current version is always the one on this page, and the full history is public in the source repository."
+  },
+  "safety": {
+    "ungrounded": "I don't have enough verified source information to answer this safely. Please contact a partner organisation or use the Emergency Contacts page if you are in danger.",
+    "highStakes": "This may seriously affect your rights or safety. I should not advise you on your specific case. Please contact one of the support organisations below as soon as you safely can.",
+    "injection": "I can only help with questions about migrant-worker rights and services using verified sources. Please rephrase your question without instructions for changing how MigraAid works."
   }
 }

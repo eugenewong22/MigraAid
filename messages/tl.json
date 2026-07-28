@@ -175,5 +175,10 @@
     "useBody": "Gamitin ang MigraAid para sa totoong mga tanong. Huwag subukang i-overload, sirain, o gamitin para magpadala ng ilegal o mapang-abusong nilalaman. Walang anumang warranty, at maaaring hindi available ang serbisyo paminsan-minsan.",
     "changesHeading": "Mga pagbabago",
     "changesBody": "Maaaring magbago ang mga tuntuning ito. Ang kasalukuyang bersyon ay palaging nasa pahinang ito, at pampubliko ang buong kasaysayan sa source repository."
+  },
+  "safety": {
+    "ungrounded": "Wala akong sapat na beripikadong impormasyon para makasagot nang ligtas. Makipag-ugnayan sa isang partner na organisasyon; kung nasa panganib, gamitin ang Emergency Contacts.",
+    "highStakes": "Maaaring seryosong maapektuhan nito ang iyong mga karapatan o kaligtasan. Hindi ako dapat magpayo sa partikular mong kaso. Makipag-ugnayan agad sa isa sa mga organisasyong nasa ibaba kapag ligtas gawin ito.",
+    "injection": "Makakatulong lamang ako sa mga tanong tungkol sa karapatan at serbisyo para sa migranteng manggagawa gamit ang beripikadong sanggunian. Isulat muli ang tanong nang walang tagubilin na baguhin kung paano gumagana ang MigraAid."
   }
 }
