@@ -4,7 +4,7 @@ import {
   detectPromptInjection,
   hasCredibleGrounding,
 } from "@/lib/safety/policy";
-import { scrubPii } from "@/lib/safety/pii";
+import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
 import type { RetrievedChunk } from "@/lib/rag/types";
 
 describe("deterministic safety policy", () => {
@@ -113,5 +113,58 @@ describe("scrubPii", () => {
       "Basic salary $500 on 14/07/2026",
     );
     expect(scrubPii("১৪/০৭/২০২৬ তারিখে বেতন")).toBe("১৪/০৭/২০২৬ তারিখে বেতন");
+  });
+});
+
+describe("scrubIdentifiers", () => {
+  it("still removes every structured identifier scrubPii removes", () => {
+    expect(scrubIdentifiers("Write to me at worker@example.org")).not.toContain(
+      "worker@example.org",
+    );
+    expect(scrubIdentifiers("My FIN is G1234567X")).not.toContain("G1234567X");
+    expect(scrubIdentifiers("My passport is MD123456")).not.toContain("MD123456");
+    expect(scrubIdentifiers("Call +8801712345678")).not.toContain("+8801712345678");
+    expect(scrubIdentifiers("আমার নম্বর ০১৭১২৩৪৫৬৭৮")).not.toContain("০১৭১২৩৪৫৬৭৮");
+  });
+
+  it.each([
+    "What can my employer deduct from my salary?",
+    "Can my employer start a new salary deduction?",
+    "Can my employer transfer me to another company?",
+    "My employer did not pay me for 2 months",
+    "Can my company keep my passport?",
+    "My boss will not give me a rest day",
+  ])("leaves the question intact so it can be understood: %s", (question) => {
+    // These reach the embedder and the model. The greedy employer heuristic
+    // turns them into "What can [employer removed]?", which is unanswerable
+    // and unretrievable — the defect this split exists to fix.
+    expect(scrubIdentifiers(question)).toBe(question);
+  });
+
+  it("is what scrubPii builds on, so persistence is never weaker", () => {
+    const text = "Email a@b.co and my employer is ACME Pte Ltd";
+    const identifiers = scrubIdentifiers(text);
+    const full = scrubPii(text);
+
+    // Everything the identifier pass removes stays removed…
+    expect(identifiers).not.toContain("a@b.co");
+    expect(full).not.toContain("a@b.co");
+    // …and the heuristics remove strictly more.
+    expect(identifiers).toContain("ACME Pte Ltd");
+    expect(full).not.toContain("ACME Pte Ltd");
+  });
+});
+
+describe("scrubPii keeps its greedy heuristics for stored text", () => {
+  it("still redacts an employer name on the persistence path", () => {
+    expect(scrubPii("My employer is ACME Pte Ltd")).toContain("[employer removed]");
+  });
+
+  it("still redacts a personal name", () => {
+    expect(scrubPii("Please call Mr Tan Ah Kow")).toContain("[name removed]");
+  });
+
+  it("still redacts an address", () => {
+    expect(scrubPii("I stay at 512 Serangoon Road.")).toContain("[address removed]");
   });
 });

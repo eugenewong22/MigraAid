@@ -25,7 +25,7 @@ import {
   hasCredibleGrounding,
 } from "@/lib/safety/policy";
 import type { AnswerOptions, Citation, RagAnswer, RetrievedChunk } from "./types";
-import { scrubPii } from "@/lib/safety/pii";
+import { scrubIdentifiers } from "@/lib/safety/pii";
 import { isKnownIssueType, KNOWN_ISSUE_TYPES } from "@/lib/referral/route";
 import { normalizeQueryForRetrieval } from "./retrieve";
 
@@ -219,7 +219,7 @@ function buildMessages(opts: AnswerOptions): ChatCompletionMessageParam[] {
     { role: "system", content: systemPrompt(opts.locale, opts.chunks) },
     // Common contact and identity values are unnecessary for guidance and must
     // not be sent to the model even though local persistence is scrubbed too.
-    { role: "user", content: scrubPii(opts.query) },
+    { role: "user", content: scrubIdentifiers(opts.query) },
   ];
 }
 
@@ -394,7 +394,7 @@ export async function answer(opts: AnswerOptions): Promise<RagAnswer> {
   // high-stakes / injection phrasing the raw phrase lists miss is still caught.
   if (opts.locale !== "en") {
     const normalized = await normalizeQueryForRetrieval(
-      scrubPii(opts.query),
+      scrubIdentifiers(opts.query),
       opts.locale,
     );
     const secondary = preflightSafetyAnswer(normalized, opts.locale);

@@ -22,7 +22,7 @@ import { and, eq, gt } from "drizzle-orm";
 import { detectHighStakesIssue } from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
-import { scrubPii } from "@/lib/safety/pii";
+import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
 import { reportError } from "@/lib/observability/sentry";
 import {
   generateHandoffCode,
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
           // deterministic high-stakes / injection checks on English text — the
           // raw per-language phrase lists miss most non-English phrasings.
           normalizedQuery = await normalizeQueryForRetrieval(
-            scrubPii(message),
+            scrubIdentifiers(message),
             locale,
           );
           result = preflightSafetyAnswer(normalizedQuery, locale);
