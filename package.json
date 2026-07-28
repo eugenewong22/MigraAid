@@ -22,6 +22,7 @@
     "sources:check": "tsx scripts/sources/check.ts",
     "content:draft": "tsx scripts/content/draft.ts",
     "content:rollback": "tsx scripts/content/rollback.ts",
+    "content:restore": "tsx scripts/content/restore.ts",
     "eval": "tsx scripts/eval/run.ts",
     "eval:offline": "tsx scripts/eval/offline.ts",
     "icons": "tsx scripts/icons/generate.ts",

@@ -141,9 +141,32 @@ Note that `scripts/env.ts` loads `.env.local` with `override: true`, so a
 `DATABASE_URL` set on the command line **does not take effect**. Edit
 `.env.local`, or use the flag above knowingly.
 
+### Publishing the corpus
+
+```bash
+MIGRAAID_ALLOW_REMOTE_WRITE=1 pnpm ingest
+```
+
+Verify with `/api/health/ready?verbose=1`: `publishedItems` should be non-zero
+and `unindexedItems` zero.
+
+### Rolling back, and undoing that
+
 `pnpm content:rollback` archives every repository-managed item and deletes its
-vectors, returning the assistant to refusing every question — the safe state. It
-is reversible: edit a file and re-ingest.
+vectors, returning the assistant to refusing every question — the safe state.
+
+**A plain `pnpm ingest` does not undo it.** The ingester deliberately leaves
+archived items alone, because an editor who archived something in the CMS must
+not have it resurrected by the next deploy — and it cannot tell that apart from
+a rollback that archived everything. Run the inverse first:
+
+```bash
+MIGRAAID_ALLOW_REMOTE_WRITE=1 pnpm content:restore   # archived -> draft
+MIGRAAID_ALLOW_REMOTE_WRITE=1 pnpm ingest            # re-embed and publish
+```
+
+`content:restore` only touches items whose `source_key` is repository-managed,
+so anything archived by hand through the CMS stays archived.
 
 ## Routine
 
