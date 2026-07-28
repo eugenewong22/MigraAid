@@ -23,6 +23,7 @@ import {
 } from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
+import { retentionDays } from "@/lib/privacy/retention";
 import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
 import { guardGenerativeRoute } from "@/lib/ops/guard";
 import { acquireInflight, addSpend } from "@/lib/ops/gate";
@@ -466,8 +467,14 @@ export async function POST(req: NextRequest) {
     "cache-control": "no-store",
   };
   if (!existingSid) {
+    // The cookie lives exactly as long as the data it scopes. It was a year
+    // while conversations were deleted after thirty days, which left eleven
+    // months of identifier pointing at nothing — indefensible, and the fix is
+    // one expression. It costs a little unique-worker accuracy in the KPI; the
+    // privacy position is worth more.
+    const maxAge = retentionDays() * 24 * 60 * 60;
     headers["set-cookie"] =
-      `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=31536000`;
+      `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=${maxAge}`;
   }
   return new Response(stream, { headers });
 }

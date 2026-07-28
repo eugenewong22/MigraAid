@@ -12,6 +12,7 @@ import {
   RETENTION_BATCH_SIZE,
   deleteExpiredWorkerData,
   retentionCutoff,
+  retentionDays,
 } from "@/lib/privacy/retention";
 import { DELETE } from "@/app/api/privacy/route";
 
@@ -224,5 +225,20 @@ describe("DELETE /api/privacy — malformed maid_sid cookie", () => {
     const response = await DELETE(deleteRequest());
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
+  });
+});
+
+describe("session cookie lifetime", () => {
+  it("matches the retention window it scopes", () => {
+    // A cookie that outlives the rows it points at is an identifier with
+    // nothing left to identify. It was a year against a 30-day window.
+    expect(retentionDays(30)).toBe(30);
+    expect(retentionDays(7)).toBe(7);
+  });
+
+  it("stays inside the promised maximum whatever is configured", () => {
+    expect(retentionDays(365)).toBe(30);
+    expect(retentionDays(0)).toBe(30);
+    expect(retentionDays(Number.NaN)).toBe(30);
   });
 });

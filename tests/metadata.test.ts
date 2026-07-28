@@ -4,9 +4,9 @@ import sitemap from "@/app/sitemap";
 import robots from "@/app/robots";
 
 describe("sitemap", () => {
-  it("enumerates every locale x public route (8 x 4)", () => {
+  it("enumerates every locale x public route (8 x 6)", () => {
     const entries = sitemap();
-    expect(entries).toHaveLength(routing.locales.length * 4);
+    expect(entries).toHaveLength(routing.locales.length * 6);
   });
 
   it("never includes admin or api routes", () => {
@@ -45,5 +45,19 @@ describe("robots", () => {
       expect.arrayContaining(["/admin", "/*/admin", "/api"]),
     );
     expect(result.sitemap).toMatch(/\/sitemap\.xml$/);
+  });
+});
+
+describe("disclosure pages are discoverable", () => {
+  it("lists privacy and terms in the sitemap for every locale", () => {
+    const entries = sitemap();
+    for (const pathname of ["/privacy", "/terms"]) {
+      for (const locale of routing.locales) {
+        expect(
+          entries.some((e) => e.url.endsWith(`/${locale}${pathname}`)),
+          `${locale}${pathname}`,
+        ).toBe(true);
+      }
+    }
   });
 });

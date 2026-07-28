@@ -47,7 +47,7 @@
     "referralCodeLabel": "私人转介代码",
     "referralCodeHelp": "联系机构后，请向对方提供此私人转介代码。代码将于 {date} 到期。",
     "referralCodeHelpNoDate": "联系机构后，请向对方提供此私人转介代码。代码将在 30 天内到期。",
-    "privacy": "请勿填写姓名、身份证或护照号码、电话号码或电子邮箱。您的问题会发送给 AI 服务提供商。MigraAid 会尽可能在发送或存储前移除常见身份信息。",
+    "privacy": "请勿填写姓名、身份证或护照号码、电话号码或电邮。您的问题会发送至美国的 OpenAI，其可能为滥用监控保留最多 30 天。MigraAid 会先移除常见身份信息，并在 30 天后删除自身副本。",
     "errorRateLimited": "合同检查请求过多。请等待一分钟后重试。",
     "statusSearching": "正在搜索可靠资料…",
     "statusReading": "正在阅读资料…",
@@ -136,5 +136,44 @@
     "title": "找不到该页面",
     "body": "找不到该页面。它可能已被移动，或链接有误。",
     "home": "首页"
+  },
+  "footer": {
+    "label": "网站信息",
+    "independence": "MigraAid 是一个独立的非商业项目，与人力部（MOM）、TADM 或任何支援机构均无隶属关系。",
+    "nature": "本站依据公开资料提供一般信息，并非法律意见。答案可能有误或已过时。遇到严重问题，请联系紧急页面所列的机构。",
+    "privacy": "隐私",
+    "terms": "使用条款",
+    "emergency": "紧急联络",
+    "source": "源代码"
+  },
+  "privacyPage": {
+    "title": "隐私",
+    "intro": "MigraAid 不会询问您的身份。无需账户、姓名或电话号码。本页说明您输入的内容会如何被处理。",
+    "collectHeading": "收集哪些信息",
+    "collectBody": "您的问题与答案、一个匿名设备代码、您选择的语言，以及——仅在您勾选后——您拍摄的合同摘要。在存储前，MigraAid 会移除电子邮件、电话号码、NRIC/FIN 和护照号码等常见身份信息。",
+    "providerHeading": "还有谁能看到",
+    "providerBody": "为生成答案，您的问题会发送至位于美国的 OpenAI。OpenAI 可能为滥用监控保留最多 30 天后删除。MigraAid 会先移除常见身份信息，但仍请避免输入姓名、号码或地址。",
+    "retentionHeading": "保留多久",
+    "retentionBody": "MigraAid 每晚自动删除超过 {days} 天的对话和合同摘要。仅保留匿名的每日统计，且无法与您关联。",
+    "cookieHeading": "关于 Cookie",
+    "cookieBody": "一个 Cookie 保存随机代码，使本设备能够找到并删除自己的数据。其中不含您的任何信息，并在 {days} 天后过期——与其指向的数据一致。",
+    "rightsHeading": "删除您的数据",
+    "rightsBody": "您可随时用下方按钮删除本设备的全部数据，立即生效。请注意这是按设备进行的：清除浏览器或更换手机后，按钮将无法再找到那些对话，但它们仍会按计划自动删除。",
+    "contactHeading": "疑问",
+    "contactBody": "MigraAid 是独立项目，并非公司或政府服务。您可通过每页底部链接的源代码仓库提出疑问或反映问题。"
+  },
+  "termsPage": {
+    "title": "使用条款",
+    "intro": "MigraAid 免费使用。这些条款刻意保持简短。",
+    "notAdviceHeading": "这是信息，不是法律意见",
+    "notAdviceBody": "MigraAid 说明公开资料对您权利的表述。它不是律师，不了解您的具体情况，使用它不构成任何专业关系。若需针对个人情况的意见，请联系紧急页面上的机构。",
+    "accuracyHeading": "答案可能有误",
+    "accuracyBody": "每条答案均取自官方公开资料并标明所依据的来源，您可自行核对。即便如此，规则会变动，答案可能过时或有误。涉及工作、健康或居留权的决定，切勿仅依赖 MigraAid。",
+    "independenceHeading": "由谁运营",
+    "independenceBody": "MigraAid 是独立的非商业项目。尽管引用其公开指引，但与人力部、TADM 或任何支援机构均无隶属关系，未获其背书，也不代表其发言。",
+    "useHeading": "合理使用",
+    "useBody": "请用 MigraAid 提出真实问题。请勿试图使其过载、破坏它，或用它传送违法或辱骂性内容。本服务不提供任何形式的保证，且可能时有中断。",
+    "changesHeading": "条款变更",
+    "changesBody": "本条款可能变更。当前版本始终以本页为准，完整历史在源代码仓库中公开。"
   }
 }

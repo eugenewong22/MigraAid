@@ -24,15 +24,26 @@ export const RETENTION_BATCH_SIZE = 500;
  */
 export const MAX_BATCHES_PER_RUN = 40;
 
+/**
+ * The retention window actually in force, clamped to the promised maximum.
+ *
+ * Exported so the session cookie can be given the same lifetime as the data it
+ * scopes — a cookie that outlives the rows it points at is a tracking
+ * identifier with nothing left to identify.
+ */
+export function retentionDays(
+  days = Number(process.env.DATA_RETENTION_DAYS ?? DEFAULT_RETENTION_DAYS),
+): number {
+  return Number.isFinite(days) && days > 0
+    ? Math.max(1, Math.min(MAX_RETENTION_DAYS, Math.floor(days)))
+    : DEFAULT_RETENTION_DAYS;
+}
+
 export function retentionCutoff(
   now = new Date(),
   days = Number(process.env.DATA_RETENTION_DAYS ?? DEFAULT_RETENTION_DAYS),
 ): Date {
-  const safeDays =
-    Number.isFinite(days) && days > 0
-      ? Math.max(1, Math.min(MAX_RETENTION_DAYS, Math.floor(days)))
-      : DEFAULT_RETENTION_DAYS;
-  return new Date(now.getTime() - safeDays * 24 * 60 * 60 * 1000);
+  return new Date(now.getTime() - retentionDays(days) * 24 * 60 * 60 * 1000);
 }
 
 /** Runs one deleteBatch at a time until it drains or the run budget is spent. */
