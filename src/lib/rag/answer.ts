@@ -30,7 +30,9 @@ import { isKnownIssueType, KNOWN_ISSUE_TYPES } from "@/lib/referral/route";
 import { normalizeQueryForRetrieval } from "./retrieve";
 
 const MODEL = "gpt-5.6-terra";
-const MAX_TOKENS = 1024;
+/** Output ceiling per answer. Exported so the spend reservation can assume
+ * the worst case before the call is made. */
+export const MAX_TOKENS = 1024;
 // normalize (8s) + embed (12s) + answer (35s) = 55s, inside route maxDuration 60s.
 const MODEL_TIMEOUT_MS = 35_000;
 // The SDK `timeout` above only bounds time-to-first-byte; once tokens start

@@ -158,3 +158,18 @@ export function effectiveCeilingUsd(
 ): number {
   return flagOverrideUsd ?? envDefaultUsd ?? 0;
 }
+
+/**
+ * Rough prompt size for a reservation, from the retrieved sources.
+ *
+ * Four characters per token is the usual English approximation, and it need
+ * only be approximately right: the reservation is refunded against real usage
+ * a moment later, and an over-estimate is the safe direction.
+ */
+export function estimatePromptTokens(
+  chunks: ReadonlyArray<{ text: string }>,
+  systemPromptTokens = 600,
+): number {
+  const sourceChars = chunks.reduce((total, chunk) => total + chunk.text.length, 0);
+  return systemPromptTokens + Math.ceil(sourceChars / 4);
+}

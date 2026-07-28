@@ -8,12 +8,6 @@ import {
   isSupportedImageType,
 } from "@/lib/contract/analyze";
 import { hasExplicitStorageConsent } from "@/lib/contract/privacy";
-import {
-  rateLimit,
-  clientKey,
-  reportUntrustedClientKey,
-  UNTRUSTED_CLIENT_KEY,
-} from "@/lib/ratelimit";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import { contractReviews } from "@/lib/db/schema";
@@ -21,6 +15,7 @@ import { randomUUID } from "node:crypto";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { scrubPii } from "@/lib/safety/pii";
+import { guardGenerativeRoute } from "@/lib/ops/guard";
 import { reportError } from "@/lib/observability/sentry";
 import {
   readBoundedBytes,
@@ -54,36 +49,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Contracts are expensive (vision) — tighter limit than chat.
-  const clientIp = clientKey(req.headers);
-  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.contract");
-  const rl = await rateLimit(`contract:${clientIp}`, {
+  // Vision is the most expensive call in the product, so it gets a tighter
+  // quota and it is the first thing the budget ceiling switches off.
+  const guard = await guardGenerativeRoute(req, "api.contract", {
+    feature: "contract",
     limit: 5,
-    windowMs: 60_000,
   });
-  if (process.env.NODE_ENV === "production" && rl.source === "memory") {
-    await reportError(
-      new Error("Distributed rate limiter unavailable for contract analysis"),
-      "api.contract.ratelimit",
-    );
-    return Response.json(
-      { error: "Contract analysis is temporarily unavailable" },
-      { status: 503, headers: { "retry-after": "60" } },
-    );
-  }
-  if (!rl.ok) {
-    return Response.json(
-      { error: "Too many requests" },
-      {
-        status: 429,
-        headers: {
-          "retry-after": String(
-            Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000)),
-          ),
-        },
-      },
-    );
-  }
+  if (guard.response) return guard.response;
 
   const contentType = req.headers.get("content-type");
   if (!contentType?.toLowerCase().startsWith("multipart/form-data;")) {

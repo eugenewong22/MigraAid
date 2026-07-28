@@ -2,14 +2,12 @@ import type { NextRequest } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { retrieve, normalizeQueryForRetrieval } from "@/lib/rag/retrieve";
-import { preflightSafetyAnswer, streamAnswer } from "@/lib/rag/answer";
-import { referralTargets } from "@/lib/referral/route";
 import {
-  rateLimit,
-  clientKey,
-  reportUntrustedClientKey,
-  UNTRUSTED_CLIENT_KEY,
-} from "@/lib/ratelimit";
+  preflightSafetyAnswer,
+  streamAnswer,
+  MAX_TOKENS,
+} from "@/lib/rag/answer";
+import { referralTargets } from "@/lib/referral/route";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import {
@@ -23,6 +21,13 @@ import { detectHighStakesIssue } from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
 import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
+import { guardGenerativeRoute } from "@/lib/ops/guard";
+import { acquireInflight, addSpend } from "@/lib/ops/gate";
+import {
+  estimateCostMicros,
+  estimatePromptTokens,
+  reservationMicros,
+} from "@/lib/ops/budget";
 import { reportError } from "@/lib/observability/sentry";
 import {
   generateHandoffCode,
@@ -56,32 +61,14 @@ export async function POST(req: NextRequest) {
   if (!isSameOriginRequest(req)) {
     return new Response("Cross-origin requests are not allowed", { status: 403 });
   }
-  const clientIp = clientKey(req.headers);
-  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.chat");
-  const rl = await rateLimit(`chat:${clientIp}`, {
+  // One call decides everything: quota, feature flag, and today's spend. It
+  // also raises the alert when the app has degraded itself, so this route does
+  // not have to know what "degraded" means.
+  const guard = await guardGenerativeRoute(req, "api.chat", {
+    feature: "chat",
     limit: 20,
-    windowMs: 60_000,
   });
-  if (process.env.NODE_ENV === "production" && rl.source === "memory") {
-    // Fire-and-forget: the retrieve+generate pipeline below (or, on the 429
-    // path, nothing user-visible) gives Sentry's flush ample background time,
-    // and awaiting it would add ~1.5s of latency to every request during a
-    // Redis outage for a call whose result nothing here depends on.
-    void reportError(
-      new Error("Distributed rate limiter unavailable; using local chat quota"),
-      "api.chat.ratelimit",
-    );
-  }
-  if (!rl.ok) {
-    return new Response("Too many requests", {
-      status: 429,
-      headers: {
-        "retry-after": String(
-          Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000)),
-        ),
-      },
-    });
-  }
+  if (guard.response) return guard.response;
 
   let body: unknown;
   try {
@@ -171,18 +158,45 @@ export async function POST(req: NextRequest) {
             locale,
             normalizedQuery: locale === "en" ? undefined : normalizedQuery,
           });
-          const generated = streamAnswer({
-            query: message,
-            locale,
-            chunks,
-            signal: generationAbort.signal,
-          });
-          // Generation stays buffered until its citations/tool calls pass the
-          // safety gate. The browser receives one atomic terminal payload.
-          for await (const _delta of generated.textStream) {
-            // Draining completes the provider stream and resolves final().
+
+          // Claim a slot before spending anything. The cap bounds how many
+          // requests can be mid-flight and therefore unreconciled, which is
+          // what bounds how far past the daily ceiling spend can run.
+          const release = await acquireInflight();
+          if (!release) {
+            enqueue(write({ type: "error", reason: "busy" }));
+            return;
           }
-          result = await generated.final();
+
+          // Charge the worst case up front and refund the difference after.
+          // A lambda that dies mid-generation then leaves an over-count, which
+          // is the safe direction to be wrong in.
+          const reserved = reservationMicros({
+            inputTokens: estimatePromptTokens(chunks),
+            maxOutputTokens: MAX_TOKENS,
+          });
+          void addSpend(reserved);
+
+          try {
+            const generated = streamAnswer({
+              query: message,
+              locale,
+              chunks,
+              signal: generationAbort.signal,
+            });
+            // Generation stays buffered until its citations/tool calls pass the
+            // safety gate. The browser receives one atomic terminal payload.
+            for await (const _delta of generated.textStream) {
+              // Draining completes the provider stream and resolves final().
+            }
+            result = await generated.final();
+            const actual = result.usage
+              ? estimateCostMicros(result.usage)
+              : reserved;
+            void addSpend(actual - reserved);
+          } finally {
+            void release();
+          }
         }
         if (cancelled) return;
         const deterministicIssue =
