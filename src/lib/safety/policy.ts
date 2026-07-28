@@ -1,5 +1,6 @@
 import type { RetrievedChunk } from "@/lib/rag/types";
 import type { EscalationTrigger } from "./prompt";
+import { matchesRule, type MatchRule } from "./match";
 
 const HIGH_STAKES: Array<[EscalationTrigger, string[]]> = [
   ["unpaid_salary", ["unpaid salary", "salary not paid", "not been paid", "withheld my pay", "欠薪", "工资没发", "gaji belum dibayar", "hindi binayaran", "சம்பளம் கிடைக்கவில்லை", "বেতন দেয়নি", "ไม่จ่ายเงินเดือน", "လစာမပေး"]],
@@ -11,12 +12,102 @@ const HIGH_STAKES: Array<[EscalationTrigger, string[]]> = [
   ["immigration_status", ["immigration status", "work permit cancelled", "work permit expired", "overstay", "准证被取消", "izin kerja dibatalkan", "kinansela ang work permit", "வேலை அனுமதி ரத்து", "ওয়ার্ক পারমিট বাতিল", "ใบอนุญาตทำงานถูกยกเลิก", "အလုပ်ပါမစ်ပယ်ဖျက်"]],
 ];
 
-/** Deterministic backstop: high-stakes routing must not depend on a tool call. */
+/**
+ * Tolerant rules, layered on top of the literal phrase lists above.
+ *
+ * The lists stay as a floor — they encode phrasings in seven languages that
+ * would be laborious to re-derive — and these catch the variants they never
+ * could. `"work permit cancelled"` matched literally; `"work permit was
+ * cancelled"` did not, and no amount of list-tending fixes that class of miss.
+ *
+ * English carries most of the weight on purpose: `/api/chat` already
+ * translates every non-English question to English for retrieval and runs this
+ * detector on both, so a rule written once in English serves all eight locales.
+ */
+const TOLERANT: Array<[EscalationTrigger, MatchRule]> = [
+  ["unpaid_salary", {
+    sequences: [
+      { terms: ["salary", "not paid"] },
+      { terms: ["salary", "withhold"] },
+      { terms: ["pay", "months"], maxGap: 3 },
+    ],
+    coOccurrences: [{
+      subjects: ["salary", "wage", "pay", "工资", "gaji", "সম্পল", "বেতন", "சம்பளம்", "เงินเดือน", "လစာ"],
+      predicates: ["not", "never", "owe", "withhold", "late", "short", "refus", "没", "belum", "hindi", "ไม่", "မ"],
+    }],
+  }],
+  ["workplace_injury", {
+    sequences: [
+      { terms: ["injur", "work"] },
+      { terms: ["accident", "work"] },
+      { terms: ["hurt", "work"] },
+      { terms: ["fell", "site"] },
+    ],
+  }],
+  ["wrongful_dismissal", {
+    sequences: [
+      { terms: ["dismiss", "unfair"] },
+      { terms: ["fired"] },
+      { terms: ["sack"] },
+      { terms: ["terminat", "job"] },
+      { terms: ["lost", "job"] },
+    ],
+  }],
+  ["contract_dispute", {
+    sequences: [
+      { terms: ["contract", "sign"] },
+      { terms: ["contract", "chang"] },
+      { terms: ["contract", "different"] },
+    ],
+  }],
+  ["abuse_or_threats", {
+    sequences: [
+      { terms: ["threat"] },
+      { terms: ["passport", "keep"] },
+      { terms: ["passport", "take"] },
+      { terms: ["passport", "hold"] },
+      { terms: ["passport", "return"] },
+      { terms: ["lock"] },
+      { terms: ["beat"] },
+      { terms: ["hit", "me"] },
+      { terms: ["abus"] },
+      { terms: ["shout", "hit"] },
+    ],
+  }],
+  ["repatriation", {
+    sequences: [
+      { terms: ["send", "home"] },
+      { terms: ["send", "back"] },
+      { terms: ["deport"] },
+      { terms: ["ticket", "home"] },
+      { terms: ["forc", "leave"] },
+    ],
+  }],
+  ["immigration_status", {
+    sequences: [
+      { terms: ["work permit", "cancel"] },
+      { terms: ["work permit", "expir"] },
+      { terms: ["permit", "revok"] },
+      { terms: ["overstay"] },
+      { terms: ["ipa", "cancel"] },
+    ],
+  }],
+];
+
+/**
+ * Deterministic backstop: high-stakes routing must not depend on a tool call.
+ *
+ * Literal phrases first, because they are cheapest and cover the non-English
+ * lists; then the tolerant rules for everything a fixed list cannot anticipate.
+ */
 export function detectHighStakesIssue(text: string): EscalationTrigger | undefined {
   const normalized = text.toLowerCase();
-  return HIGH_STAKES.find(([, phrases]) =>
+  const literal = HIGH_STAKES.find(([, phrases]) =>
     phrases.some((phrase) => normalized.includes(phrase)),
   )?.[0];
+  if (literal) return literal;
+
+  return TOLERANT.find(([, rule]) => matchesRule(text, rule))?.[0];
 }
 
 

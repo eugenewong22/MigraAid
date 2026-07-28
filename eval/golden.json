@@ -667,12 +667,11 @@
     "tier": "smoke"
   },
   {
-    "id": "ref-passport-law",
+    "id": "esc-passport-law",
     "question": "Which section of the law says an employer cannot keep my passport?",
     "mustCite": false,
-    "shouldEscalate": false,
-    "expectRefusal": true,
-    "tier": "extended"
+    "shouldEscalate": true,
+    "tier": "smoke"
   },
   {
     "id": "ref-citizenship",
