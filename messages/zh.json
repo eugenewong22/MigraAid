@@ -20,7 +20,8 @@
     "primary": "主导航",
     "ask": "提问",
     "contract": "我的合同",
-    "emergency": "紧急"
+    "emergency": "紧急",
+    "skipToContent": "跳到主要内容"
   },
   "chat": {
     "title": "向 MigraAid 提问",

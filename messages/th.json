@@ -20,7 +20,8 @@
     "primary": "การนำทางหลัก",
     "ask": "ถาม",
     "contract": "สัญญาของฉัน",
-    "emergency": "ฉุกเฉิน"
+    "emergency": "ฉุกเฉิน",
+    "skipToContent": "ข้ามไปยังเนื้อหาหลัก"
   },
   "chat": {
     "title": "ถาม MigraAid",

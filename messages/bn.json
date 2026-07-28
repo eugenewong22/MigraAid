@@ -20,7 +20,8 @@
     "primary": "প্রধান নেভিগেশন",
     "ask": "জিজ্ঞাসা",
     "contract": "আমার চুক্তি",
-    "emergency": "জরুরি"
+    "emergency": "জরুরি",
+    "skipToContent": "মূল বিষয়বস্তুতে যান"
   },
   "chat": {
     "title": "MigraAid-কে জিজ্ঞাসা করুন",

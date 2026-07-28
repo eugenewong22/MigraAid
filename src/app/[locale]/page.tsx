@@ -30,11 +30,14 @@ export default async function Home({
   const t = await getTranslations("home");
 
   return (
-    <main className="flex-1">
-      {/* Programmatic page title; the visible headline is the tagline below. */}
-      <h1 className="sr-only">{t("title")}</h1>
-
+    <>
+      {/* Outside <main> so it is a real banner landmark — a <header> nested
+          inside <main> is not one, which left the app with no banner at all. */}
       <SiteHeader />
+
+      <main id="main" tabIndex={-1} className="flex-1">
+        {/* Programmatic page title; the visible headline is the tagline below. */}
+        <h1 className="sr-only">{t("title")}</h1>
 
       {/* Hero — cream with decorative sunrise circles behind the content. */}
       <section className="relative overflow-hidden px-5 py-8 md:px-12 md:pb-20 md:pt-[72px]">
@@ -136,5 +139,6 @@ export default async function Home({
         <DeleteMyData />
       </div>
     </main>
+    </>
   );
 }

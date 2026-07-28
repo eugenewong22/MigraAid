@@ -20,7 +20,8 @@
     "primary": "Navigasi utama",
     "ask": "Tanya",
     "contract": "Kontrak saya",
-    "emergency": "Darurat"
+    "emergency": "Darurat",
+    "skipToContent": "Lewati ke konten utama"
   },
   "chat": {
     "title": "Tanya MigraAid",

@@ -39,12 +39,14 @@ export default async function ContractPage({
   const th = await getTranslations("home");
 
   return (
-    <main className="flex min-h-full flex-1 flex-col">
+    <>
       <SiteHeader active="contract" mobileTitle={t("title")} />
+      <main id="main" tabIndex={-1} className="flex min-h-full flex-1 flex-col">
       <ContractUpload />
       <p className="px-5 pb-6 text-[13px] leading-[1.5] text-muted md:px-12">
         {th("disclaimer")}
       </p>
     </main>
+    </>
   );
 }

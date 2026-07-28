@@ -20,7 +20,8 @@
     "primary": "Pangunahing nabigasyon",
     "ask": "Magtanong",
     "contract": "Aking kontrata",
-    "emergency": "Emerhensiya"
+    "emergency": "Emerhensiya",
+    "skipToContent": "Laktawan papunta sa pangunahing nilalaman"
   },
   "chat": {
     "title": "Magtanong sa MigraAid",

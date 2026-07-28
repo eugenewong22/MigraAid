@@ -20,7 +20,8 @@
     "primary": "Primary navigation",
     "ask": "Ask",
     "contract": "My contract",
-    "emergency": "Emergency"
+    "emergency": "Emergency",
+    "skipToContent": "Skip to main content"
   },
   "chat": {
     "title": "Ask MigraAid",

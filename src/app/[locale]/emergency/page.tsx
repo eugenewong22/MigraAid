@@ -46,8 +46,9 @@ export default async function EmergencyPage({
   const ambulanceName = t("contacts.ambulanceFire.name");
 
   return (
-    <main className="flex min-h-full flex-1 flex-col">
+    <>
       <SiteHeader active="emergency" mobileTitle={t("title")} />
+      <main id="main" tabIndex={-1} className="flex min-h-full flex-1 flex-col">
       <h1 className="sr-only">{t("title")}</h1>
 
       {/* Call-first band — full-width emergency surface */}
@@ -140,5 +141,6 @@ export default async function EmergencyPage({
         {th("disclaimer")}
       </p>
     </main>
+    </>
   );
 }
