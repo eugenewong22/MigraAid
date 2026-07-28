@@ -1,0 +1,90 @@
+name: Retrieval
+
+# Retrieval accuracy on every change to the corpus or the RAG code.
+#
+# Embeddings only — no generation — so this is cheap enough to gate a pull
+# request, unlike the full eval in eval.yml which runs weekly and calls the
+# model for every question. Most corpus regressions are retrieval regressions:
+# an item reworded so it no longer matches the question it was written for, or a
+# new item that outranks the right one. Both are visible from embeddings alone.
+on:
+  pull_request:
+    paths:
+      - "content/**"
+      - "src/lib/rag/**"
+      - "src/lib/embeddings/**"
+      - "eval/golden.json"
+      - "scripts/eval/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: retrieval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: migraaid_retrieval
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      # Throwaway service-container credentials only. Provider keys are scoped
+      # to the steps that need them, so third-party actions never see them.
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/migraaid_retrieval
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          # The ingester attributes each item to the commit that last touched it.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Fail early if no embedding key is configured
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ] && [ -z "$VOYAGE_API_KEY" ]; then
+            echo "::error::Retrieval accuracy needs OPENAI_API_KEY (or VOYAGE_API_KEY)."
+            exit 1
+          fi
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm db:migrate
+
+      - name: Ingest the corpus
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+          EMBEDDING_PROVIDER: ${{ vars.EMBEDDING_PROVIDER || 'openai' }}
+          EMBEDDING_MODEL: ${{ vars.EMBEDDING_MODEL || 'text-embedding-3-small' }}
+        run: pnpm ingest
+
+      - name: Check retrieval accuracy
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+          EMBEDDING_PROVIDER: ${{ vars.EMBEDDING_PROVIDER || 'openai' }}
+          EMBEDDING_MODEL: ${{ vars.EMBEDDING_MODEL || 'text-embedding-3-small' }}
+        run: pnpm eval:offline

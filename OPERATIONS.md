@@ -118,9 +118,12 @@ Upstash, then `?verbose=1` for `gateSource`: `postgres` means the fallback tier
 is holding, `unavailable` means it is not.
 
 **Answers all say "not enough verified information".** The index is empty or in
-the wrong vector space. `?verbose=1` gives `publishedItems` and `unindexedItems`;
-if `unindexedItems > 0` the embedder configuration changed without a re-ingest.
-Run `pnpm ingest` (see the write guard note below).
+the wrong vector space — most likely `EMBEDDING_PROVIDER` or `EMBEDDING_MODEL`
+changed without a re-ingest, which makes the `embedding_generation` filter match
+nothing. Always ingest the new generation first, verify readiness, *then* flip
+the variable. `?verbose=1` gives `publishedItems` and `unindexedItems`; a
+non-zero `unindexedItems` is exactly this situation. Run `pnpm ingest` (see the
+write guard note below).
 
 **Deploy failed on the env check.** The message names each missing variable and
 why it matters. Set it in Vercel project settings, Production scope, redeploy.
@@ -148,5 +151,5 @@ is reversible: edit a file and re-ingest.
 |---|---|
 | Monthly | `pnpm sources:check` — a scheduled job runs this and opens an issue on drift |
 | Monthly | Re-verify the emergency numbers in `src/lib/referral/emergency.ts` against each organisation's own site |
-| Before a release | `pnpm eval` and `pnpm eval:offline` |
+| Before a release | `pnpm eval` and `pnpm eval:offline` (gates: recall@6 ≥ 98%, recall@1 ≥ 90%) |
 | Quarterly | Rotate `CRON_SECRET` and the Upstash token. `RATE_LIMIT_HASH_SALT` is separate on purpose — rotating it invalidates every rate-limit bucket and privacy tombstone at once, so rotate it alone and deliberately |

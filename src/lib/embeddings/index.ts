@@ -208,11 +208,45 @@ let cached: Embedder | undefined;
  * otherwise falls back to OpenAI, so a deployment with only an OpenAI key
  * still works with no other changes.
  */
+/**
+ * The configured embedder.
+ *
+ * Chosen explicitly, not by which API key happens to be populated. The old
+ * behaviour meant the vector space was an accident of environment: adding a
+ * Voyage key to a running deployment silently changed `embeddingGeneration`,
+ * which made the `embedding_generation` filter in retrieve.ts match nothing, so
+ * every answer became the ungrounded refusal until a full re-ingest. Nothing
+ * announced that, and readiness reported green.
+ *
+ * EMBEDDING_PROVIDER and EMBEDDING_MODEL are required in production
+ * (see src/env.ts) and surfaced by /api/health/ready, so changing vector space
+ * is a deliberate act with a visible before and after.
+ *
+ * The deployment order that avoids an outage is always:
+ *   1. ingest the new generation, 2. verify readiness, 3. flip the variable.
+ */
 export function getEmbedder(): Embedder {
-  if (!cached) {
+  if (cached) return cached;
+
+  const provider = process.env.EMBEDDING_PROVIDER;
+  const model = process.env.EMBEDDING_MODEL || undefined;
+
+  if (provider === "voyage") {
+    cached = createVoyageEmbedder({ model });
+  } else if (provider === "openai") {
+    cached = createOpenAIEmbedder({ model });
+  } else {
+    // Unset: keep the historical behaviour so local development and existing
+    // deployments keep working. Production cannot reach here — the env gate
+    // requires both variables.
     cached = process.env.VOYAGE_API_KEY
-      ? createVoyageEmbedder()
-      : createOpenAIEmbedder();
+      ? createVoyageEmbedder({ model })
+      : createOpenAIEmbedder({ model });
   }
   return cached;
+}
+
+/** Test seam, and used by scripts that change provider mid-process. */
+export function resetEmbedderForTesting(): void {
+  cached = undefined;
 }

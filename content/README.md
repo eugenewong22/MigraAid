@@ -129,7 +129,7 @@ for, and it is why a person still edits every item.
 | `pnpm sources:check` | Re-fetch and report sources that changed |
 | `pnpm content:draft [id]` | Draft items from a snapshot |
 | `pnpm ingest` | Chunk, embed and index published items |
-| `pnpm eval:offline` | Retrieval accuracy, no model calls |
+| `pnpm eval:offline` | Retrieval accuracy (recall@1/3/6, MRR), no model calls |
 | `pnpm eval` | Full retrieve→answer against `eval/golden.json` |
 | `pnpm test` | Corpus, fidelity and governance tests |
 
