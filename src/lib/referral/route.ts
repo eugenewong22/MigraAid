@@ -3,7 +3,6 @@
  * organisation. Static config for M4; in M5 the admin CMS lets partner NGOs
  * maintain the org list (and this reads from the `orgs` table).
  *
- * `referralTargets` is pure and unit-tested; `routeReferral` keeps the async
  * signature so a DB-backed implementation can drop in without changing callers.
  */
 import type { Domain } from "@/lib/rag/types";
@@ -92,8 +91,3 @@ export function referralTargets(issueType: string): ReferralTarget[] {
   });
 }
 
-export async function routeReferral(
-  req: ReferralRequest,
-): Promise<ReferralTarget[]> {
-  return referralTargets(req.issueType);
-}

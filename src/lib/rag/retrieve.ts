@@ -21,7 +21,7 @@ import { contentChunks, contentItems } from "@/lib/db/schema";
 import { getEmbedder } from "@/lib/embeddings";
 import type { RetrievedChunk, RetrieveOptions } from "./types";
 import { reportError } from "@/lib/observability/sentry";
-import { scrubPii } from "@/lib/safety/pii";
+import { scrubIdentifiers } from "@/lib/safety/pii";
 
 const NORMALIZE_MODEL = "gpt-5.6-terra";
 // Kept small so normalize + embed + answer fit inside the route maxDuration.
@@ -71,7 +71,7 @@ export async function retrieve(opts: RetrieveOptions): Promise<RetrievedChunk[]>
   const embedder = getEmbedder();
   const normalizedQuery =
     opts.normalizedQuery ??
-    (await normalizeQueryForRetrieval(scrubPii(opts.query), opts.locale));
+    (await normalizeQueryForRetrieval(scrubIdentifiers(opts.query), opts.locale));
   const [queryEmbedding] = await embedder.embed([normalizedQuery], {
     inputType: "query",
   });

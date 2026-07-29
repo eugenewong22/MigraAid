@@ -20,7 +20,8 @@
     "primary": "Navigasi utama",
     "ask": "Tanya",
     "contract": "Kontrak saya",
-    "emergency": "Darurat"
+    "emergency": "Darurat",
+    "skipToContent": "Lewati ke konten utama"
   },
   "chat": {
     "title": "Tanya MigraAid",
@@ -46,8 +47,14 @@
     "referralCodeLabel": "Kode rujukan pribadi",
     "referralCodeHelp": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa pada {date}.",
     "referralCodeHelpNoDate": "Berikan kode rujukan pribadi ini kepada organisasi setelah Anda menghubungi mereka. Kode ini kedaluwarsa dalam 30 hari.",
-    "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau alamat email. Pertanyaan Anda dikirim ke penyedia AI. Jika memungkinkan, MigraAid menghapus pengenal umum sebelum mengirim atau menyimpannya.",
-    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi."
+    "privacy": "Jangan sertakan nama, nomor identitas atau paspor, nomor telepon, atau email. Pertanyaan Anda dikirim ke OpenAI di Amerika Serikat, yang dapat menyimpannya hingga 30 hari untuk pemantauan penyalahgunaan. MigraAid menghapus pengenal umum lebih dulu dan menghapus salinannya setelah 30 hari.",
+    "errorRateLimited": "Terlalu banyak pemeriksaan kontrak diminta. Tunggu satu menit lalu coba lagi.",
+    "statusSearching": "Mencari sumber terverifikasi…",
+    "statusReading": "Membaca sumber…",
+    "statusWriting": "Menulis jawaban Anda…",
+    "statusChecking": "Memeriksa kecocokan sumber…",
+    "cancel": "Batal",
+    "errorBusy": "MigraAid sedang sangat sibuk. Coba lagi dalam satu menit."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -111,11 +118,15 @@
     "severity": "Tingkat",
     "severityInfo": "Informasi",
     "severityWarning": "Peringatan",
-    "severitySerious": "Serius"
+    "severitySerious": "Serius",
+    "errorUnavailable": "MigraAid tidak dapat memeriksa kontrak saat ini. Coba lagi nanti."
   },
   "common": {
     "language": "Bahasa",
-    "back": "Kembali"
+    "back": "Kembali",
+    "errorTitle": "Terjadi kesalahan",
+    "errorBody": "Halaman ini tidak dapat dimuat. Coba lagi, atau gunakan kontak darurat di bagian bawah halaman mana pun jika Anda butuh bantuan sekarang.",
+    "retry": "Coba lagi"
   },
   "privacy": {
     "delete": "Hapus data MigraAid saya",
@@ -128,5 +139,49 @@
     "title": "Halaman tidak ditemukan",
     "body": "Kami tidak dapat menemukan halaman ini. Halaman mungkin telah dipindahkan, atau tautannya salah.",
     "home": "Beranda"
+  },
+  "footer": {
+    "label": "Informasi situs",
+    "independence": "MigraAid adalah proyek independen dan nonkomersial. Tidak berafiliasi dengan MOM, TADM, atau organisasi bantuan mana pun.",
+    "nature": "Situs ini memberi informasi umum dari sumber publik, bukan nasihat hukum. Jawaban bisa salah atau tidak lagi berlaku. Untuk hal serius, hubungi organisasi yang tercantum di halaman Darurat.",
+    "privacy": "Privasi",
+    "terms": "Ketentuan penggunaan",
+    "emergency": "Kontak darurat",
+    "source": "Kode sumber"
+  },
+  "privacyPage": {
+    "title": "Privasi",
+    "intro": "MigraAid tidak menanyakan siapa Anda. Tidak ada akun, nama, atau nomor telepon. Halaman ini menjelaskan persis apa yang terjadi pada yang Anda ketik.",
+    "collectHeading": "Apa yang dikumpulkan",
+    "collectBody": "Pertanyaan dan jawaban Anda, kode perangkat anonim, bahasa pilihan Anda, dan — hanya jika Anda mencentang kotaknya — ringkasan kontrak yang Anda foto. Sebelum disimpan, MigraAid menghapus pengenal umum seperti email, nomor telepon, NRIC/FIN, dan nomor paspor.",
+    "providerHeading": "Siapa lagi yang melihatnya",
+    "providerBody": "Pertanyaan Anda dikirim ke OpenAI di Amerika Serikat untuk menghasilkan jawaban. OpenAI dapat menyimpannya hingga 30 hari untuk pemantauan penyalahgunaan sebelum menghapusnya. MigraAid menghapus pengenal umum lebih dulu, tetapi hindari mengetik nama, nomor, atau alamat.",
+    "retentionHeading": "Berapa lama disimpan",
+    "retentionBody": "MigraAid menghapus percakapan dan ringkasan kontrak setelah {days} hari, otomatis, setiap malam. Hanya hitungan harian anonim yang disimpan lebih lama, dan itu tidak dapat dikaitkan dengan Anda.",
+    "cookieHeading": "Tentang cookie",
+    "cookieBody": "Satu cookie menyimpan kode acak agar perangkat ini dapat menemukan dan menghapus datanya sendiri. Tidak berisi apa pun tentang Anda, dan kedaluwarsa setelah {days} hari — sama dengan data yang ditunjuknya.",
+    "rightsHeading": "Menghapus data Anda",
+    "rightsBody": "Anda dapat menghapus semuanya dari perangkat ini kapan saja dengan tombol di bawah. Berlaku seketika. Perhatikan bahwa ini per perangkat: membersihkan peramban atau berganti ponsel membuat tombol tidak lagi menemukan percakapan itu, meski tetap terhapus otomatis sesuai jadwal.",
+    "contactHeading": "Pertanyaan",
+    "contactBody": "MigraAid adalah proyek independen, bukan perusahaan atau layanan pemerintah. Anda dapat mengajukan pertanyaan atau keluhan melalui repositori sumber yang ditautkan di bagian bawah setiap halaman."
+  },
+  "termsPage": {
+    "title": "Ketentuan penggunaan",
+    "intro": "MigraAid gratis digunakan. Ketentuan ini sengaja dibuat singkat.",
+    "notAdviceHeading": "Ini informasi, bukan nasihat hukum",
+    "notAdviceBody": "MigraAid menjelaskan apa kata sumber publik tentang hak Anda. Ini bukan pengacara, tidak mengetahui situasi Anda, dan penggunaannya tidak menciptakan hubungan profesional. Untuk nasihat atas kasus Anda sendiri, hubungi organisasi di halaman Darurat.",
+    "accuracyHeading": "Jawaban bisa saja salah",
+    "accuracyBody": "Setiap jawaban diambil dari sumber resmi yang diterbitkan dan menunjukkan sumber yang dipakai, sehingga Anda bisa memeriksanya sendiri. Meski begitu, aturan berubah dan jawaban bisa usang atau keliru. Jangan hanya mengandalkan MigraAid untuk keputusan yang memengaruhi pekerjaan, kesehatan, atau hak tinggal Anda.",
+    "independenceHeading": "Siapa yang menjalankannya",
+    "independenceBody": "MigraAid adalah proyek independen dan nonkomersial. Tidak berafiliasi, tidak didukung, dan tidak berbicara mewakili Kementerian Tenaga Kerja, TADM, atau organisasi bantuan mana pun, meskipun mengutip panduan resmi mereka.",
+    "useHeading": "Menggunakan layanan secara wajar",
+    "useBody": "Gunakan MigraAid untuk mengajukan pertanyaan yang sungguh-sungguh. Jangan mencoba membebani, merusak, atau memakainya mengirim konten yang melanggar hukum atau kasar. Tidak ada jaminan apa pun, dan layanan sesekali mungkin tidak tersedia.",
+    "changesHeading": "Perubahan",
+    "changesBody": "Ketentuan ini dapat berubah. Versi terkini selalu ada di halaman ini, dan riwayat lengkapnya publik di repositori sumber."
+  },
+  "safety": {
+    "ungrounded": "Saya tidak memiliki cukup informasi terverifikasi untuk menjawab dengan aman. Hubungi organisasi mitra; jika Anda dalam bahaya, gunakan halaman Kontak Darurat.",
+    "highStakes": "Hal ini dapat berdampak serius pada hak atau keselamatan Anda. Saya tidak boleh memberi nasihat untuk kasus khusus Anda. Hubungi salah satu organisasi bantuan di bawah secepatnya jika aman.",
+    "injection": "Saya hanya dapat membantu pertanyaan tentang hak dan layanan pekerja migran berdasarkan sumber terverifikasi. Tulis ulang pertanyaan tanpa instruksi untuk mengubah cara kerja MigraAid."
   }
 }

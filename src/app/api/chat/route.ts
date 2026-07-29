@@ -2,14 +2,12 @@ import type { NextRequest } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { retrieve, normalizeQueryForRetrieval } from "@/lib/rag/retrieve";
-import { preflightSafetyAnswer, streamAnswer } from "@/lib/rag/answer";
-import { referralTargets } from "@/lib/referral/route";
 import {
-  rateLimit,
-  clientKey,
-  reportUntrustedClientKey,
-  UNTRUSTED_CLIENT_KEY,
-} from "@/lib/ratelimit";
+  preflightSafetyAnswer,
+  streamAnswer,
+  MAX_TOKENS,
+} from "@/lib/rag/answer";
+import { referralTargets } from "@/lib/referral/route";
 import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import {
@@ -19,10 +17,21 @@ import {
 } from "@/lib/db/schema";
 import { randomUUID } from "node:crypto";
 import { and, eq, gt } from "drizzle-orm";
-import { detectHighStakesIssue } from "@/lib/safety/policy";
+import {
+  detectHighStakesIssue,
+  escalationSeverity,
+} from "@/lib/safety/policy";
 import { isSessionTombstoned } from "@/lib/privacy/tombstone";
 import { deleteWorkerSessionData } from "@/lib/privacy/delete";
-import { scrubPii } from "@/lib/safety/pii";
+import { retentionDays } from "@/lib/privacy/retention";
+import { scrubIdentifiers, scrubPii } from "@/lib/safety/pii";
+import { guardGenerativeRoute } from "@/lib/ops/guard";
+import { acquireInflight, addSpend } from "@/lib/ops/gate";
+import {
+  estimateCostMicros,
+  estimatePromptTokens,
+  reservationMicros,
+} from "@/lib/ops/budget";
 import { reportError } from "@/lib/observability/sentry";
 import {
   generateHandoffCode,
@@ -56,32 +65,14 @@ export async function POST(req: NextRequest) {
   if (!isSameOriginRequest(req)) {
     return new Response("Cross-origin requests are not allowed", { status: 403 });
   }
-  const clientIp = clientKey(req.headers);
-  if (clientIp === UNTRUSTED_CLIENT_KEY) reportUntrustedClientKey("api.chat");
-  const rl = await rateLimit(`chat:${clientIp}`, {
+  // One call decides everything: quota, feature flag, and today's spend. It
+  // also raises the alert when the app has degraded itself, so this route does
+  // not have to know what "degraded" means.
+  const guard = await guardGenerativeRoute(req, "api.chat", {
+    feature: "chat",
     limit: 20,
-    windowMs: 60_000,
   });
-  if (process.env.NODE_ENV === "production" && rl.source === "memory") {
-    // Fire-and-forget: the retrieve+generate pipeline below (or, on the 429
-    // path, nothing user-visible) gives Sentry's flush ample background time,
-    // and awaiting it would add ~1.5s of latency to every request during a
-    // Redis outage for a call whose result nothing here depends on.
-    void reportError(
-      new Error("Distributed rate limiter unavailable; using local chat quota"),
-      "api.chat.ratelimit",
-    );
-  }
-  if (!rl.ok) {
-    return new Response("Too many requests", {
-      status: 429,
-      headers: {
-        "retry-after": String(
-          Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000)),
-        ),
-      },
-    });
-  }
+  if (guard.response) return guard.response;
 
   let body: unknown;
   try {
@@ -152,15 +143,20 @@ export async function POST(req: NextRequest) {
       const heartbeat = setInterval(() => {
         enqueue(write({ type: "ping" }));
       }, 10_000);
+      // The answer is buffered until it clears the citation gate, so the only
+      // honest thing to show meanwhile is *where we are*, not what was written.
+      const status = (stage: string, extra: Record<string, unknown> = {}) =>
+        enqueue(write({ type: "status", stage, ...extra }));
       try {
         let result = preflightSafetyAnswer(message, locale);
         let normalizedQuery = message;
+        status("searching");
         if (!result && locale !== "en") {
           // Reuse the English translation retrieval needs anyway to run the
           // deterministic high-stakes / injection checks on English text — the
           // raw per-language phrase lists miss most non-English phrasings.
           normalizedQuery = await normalizeQueryForRetrieval(
-            scrubPii(message),
+            scrubIdentifiers(message),
             locale,
           );
           result = preflightSafetyAnswer(normalizedQuery, locale);
@@ -171,24 +167,73 @@ export async function POST(req: NextRequest) {
             locale,
             normalizedQuery: locale === "en" ? undefined : normalizedQuery,
           });
-          const generated = streamAnswer({
-            query: message,
-            locale,
-            chunks,
-            signal: generationAbort.signal,
-          });
-          // Generation stays buffered until its citations/tool calls pass the
-          // safety gate. The browser receives one atomic terminal payload.
-          for await (const _delta of generated.textStream) {
-            // Draining completes the provider stream and resolves final().
+          status("reading", { sourceCount: chunks.length });
+
+          // Claim a slot before spending anything. The cap bounds how many
+          // requests can be mid-flight and therefore unreconciled, which is
+          // what bounds how far past the daily ceiling spend can run.
+          const release = await acquireInflight();
+          if (!release) {
+            enqueue(write({ type: "error", reason: "busy" }));
+            return;
           }
-          result = await generated.final();
+
+          // Charge the worst case up front and refund the difference after.
+          // A lambda that dies mid-generation then leaves an over-count, which
+          // is the safe direction to be wrong in.
+          const reserved = reservationMicros({
+            inputTokens: estimatePromptTokens(chunks),
+            maxOutputTokens: MAX_TOKENS,
+          });
+          void addSpend(reserved);
+
+          try {
+            const generated = streamAnswer({
+              query: message,
+              locale,
+              chunks,
+              signal: generationAbort.signal,
+            });
+            // Generation stays buffered until its citations/tool calls pass the
+            // safety gate. The browser receives one atomic terminal payload —
+            // but it can honestly be told *how much* has been written without
+            // being shown *what*, which is a real progress signal at no cost to
+            // the gate.
+            let written = 0;
+            let lastReport = 0;
+            let announcedWriting = false;
+            for await (const delta of generated.textStream) {
+              written += delta.length;
+              if (!announcedWriting) {
+                announcedWriting = true;
+                status("writing");
+              }
+              const now = Date.now();
+              if (now - lastReport >= 500) {
+                lastReport = now;
+                enqueue(write({ type: "progress", chars: written }));
+              }
+            }
+            result = await generated.final();
+            status("checking");
+            const actual = result.usage
+              ? estimateCostMicros(result.usage)
+              : reserved;
+            void addSpend(actual - reserved);
+          } finally {
+            void release();
+          }
         }
         if (cancelled) return;
         const deterministicIssue =
           detectHighStakesIssue(message) ?? detectHighStakesIssue(normalizedQuery);
         result.escalated = result.escalated || Boolean(deterministicIssue);
         result.issueType ??= deterministicIssue;
+        // `assisted` keeps the grounded answer and adds the referral; `danger`
+        // already replaced the answer before it got here.
+        result.severity ??= result.issueType && result.escalated
+          ? escalationSeverity(result.issueType)
+          : undefined;
         const referrals =
           result.escalated && result.issueType
             ? referralTargets(result.issueType)
@@ -357,6 +402,9 @@ export async function POST(req: NextRequest) {
             messageId: assistantMessageId ?? null,
             citations: result.citations,
             escalated: result.escalated,
+            // Lets the client frame a serious-but-answerable turn differently
+            // from a crisis one, rather than treating all escalation alike.
+            severity: result.severity ?? null,
             referrals,
             referralCode: referralCode ?? null,
             referralExpiresAt: referralExpiresAt ?? null,
@@ -419,8 +467,14 @@ export async function POST(req: NextRequest) {
     "cache-control": "no-store",
   };
   if (!existingSid) {
+    // The cookie lives exactly as long as the data it scopes. It was a year
+    // while conversations were deleted after thirty days, which left eleven
+    // months of identifier pointing at nothing — indefensible, and the fix is
+    // one expression. It costs a little unique-worker accuracy in the KPI; the
+    // privacy position is worth more.
+    const maxAge = retentionDays() * 24 * 60 * 60;
     headers["set-cookie"] =
-      `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=31536000`;
+      `maid_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=${maxAge}`;
   }
   return new Response(stream, { headers });
 }

@@ -62,6 +62,24 @@ class RateLimitedError extends Error {
   }
 }
 
+/**
+ * How far along the bar should sit.
+ *
+ * Capped at 90% while writing so it never claims to be done, and given floors
+ * per stage so it always moves forward. `chars` is the honest signal: it says
+ * how much has been written without revealing any of it, which leaves the
+ * citation gate — the reason for buffering at all — completely intact.
+ */
+export function progressPercent(stage: string | null, chars: number): number {
+  if (stage === "checking") return 95;
+  if (stage === "writing") {
+    // ~900 characters is a typical full answer.
+    return Math.min(90, 35 + Math.round((chars / 900) * 55));
+  }
+  if (stage === "reading") return 25;
+  return 10;
+}
+
 export function Chat() {
   const t = useTranslations("chat");
   // Referral org names/notes reuse the professionally-translated emergency
@@ -72,6 +90,35 @@ export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  /** Where the server says it is, so the wait is legible rather than blank. */
+  const [stage, setStage] = useState<string | null>(null);
+  const [writtenChars, setWrittenChars] = useState(0);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const abortRef = useRef<AbortController | null>(null);
+
+  /** Localized label for a server stage. Unknown stages fall back to the
+   *  generic loading copy rather than rendering nothing. */
+  const stageLabel = (value: string | null): string => {
+    switch (value) {
+      case "searching":
+        return t("statusSearching");
+      case "reading":
+        return t("statusReading");
+      case "writing":
+        return t("statusWriting");
+      case "checking":
+        return t("statusChecking");
+      default:
+        return t("loading");
+    }
+  };
+
+  /** Stop the turn. The server aborts generation on the request signal, so
+   *  this genuinely halts the spend rather than just hiding the result. */
+  const cancel = () => {
+    abortRef.current?.abort();
+  };
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [liveMessage, setLiveMessage] = useState("");
   const logRef = useRef<HTMLDivElement>(null);
@@ -172,6 +219,17 @@ export function Chat() {
     setInput((current) => (current.trim() ? current : question));
   }
 
+  // Elapsed seconds, for the visible counter only. A wait of 30-55s with no
+  // moving indicator is indistinguishable from a hang.
+  useEffect(() => {
+    if (startedAt === null) return;
+    const id = setInterval(
+      () => setElapsed(Math.floor((Date.now() - startedAt) / 1000)),
+      1_000,
+    );
+    return () => clearInterval(id);
+  }, [startedAt]);
+
   async function send(e: React.FormEvent) {
     e.preventDefault();
     const question = input.trim();
@@ -187,6 +245,10 @@ export function Chat() {
       { role: "assistant", text: "" },
     ]);
     setBusy(true);
+    setStage("searching");
+    setWrittenChars(0);
+    setStartedAt(Date.now());
+    setElapsed(0);
     // Keep focus in the composer: the Send button is about to disable, and a
     // disabled element silently drops keyboard/screen-reader focus to the page.
     inputRef.current?.focus();
@@ -199,6 +261,7 @@ export function Chat() {
     // server emits heartbeat frames during generation so a healthy slow answer
     // keeps the inactivity timer alive while a dead connection trips it.
     const controller = new AbortController();
+    abortRef.current = controller;
     const OVERALL_TIMEOUT_MS = 75_000;
     const INACTIVITY_TIMEOUT_MS = 25_000;
     const overallTimer = setTimeout(() => controller.abort(), OVERALL_TIMEOUT_MS);
@@ -243,8 +306,14 @@ export function Chat() {
             // One malformed frame must not abort the rest of the stream.
             continue;
           }
-          if (evt.type === "text") {
-            updateLast((m) => ({ ...m, text: m.text + evt.text }));
+          if (evt.type === "status") {
+            // Announce each stage once. The elapsed counter below is visual
+            // only — reading seconds aloud to a screen-reader user is torture.
+            setStage(evt.stage);
+            const label = stageLabel(evt.stage);
+            if (label) announce(label);
+          } else if (evt.type === "progress") {
+            setWrittenChars(typeof evt.chars === "number" ? evt.chars : 0);
           } else if (evt.type === "done") {
             completed = true;
             if (evt.conversationId) setConversationId(evt.conversationId);
@@ -261,6 +330,12 @@ export function Chat() {
             announce(evt.text, announceHoldMs(evt.text));
           } else if (evt.type === "error") {
             completed = true;
+            if (evt.reason === "busy") {
+              updateLast((m) => ({ ...m, failed: true, failedMessage: t("errorBusy") }));
+              restoreQuestion(question);
+              announce(t("errorBusy"));
+              continue;
+            }
             // Keep any partial answer already shown — replacing it with the
             // error wording deletes half-useful text on a flaky connection.
             updateLast((m) => ({ ...m, failed: true }));
@@ -279,6 +354,8 @@ export function Chat() {
       clearTimeout(overallTimer);
       clearTimeout(inactivityTimer);
       setBusy(false);
+      setStage(null);
+      setStartedAt(null);
     }
   }
 
@@ -355,6 +432,42 @@ export function Chat() {
                       ))}
                   </p>
 
+                  {busy && !m.text && i === messages.length - 1 && (
+                    <div className="flex flex-col gap-2">
+                      {/* Stage in a polite region, announced once per change.
+                          The counter is aria-hidden: reading seconds aloud to a
+                          screen-reader user would be relentless. */}
+                      <div className="flex items-center justify-between gap-3">
+                        <span role="status" className="text-[14px] text-muted">
+                          {stageLabel(stage)}
+                        </span>
+                        <span aria-hidden="true" className="text-[13px] tabular-nums text-muted">
+                          {elapsed}s
+                        </span>
+                      </div>
+                      {/* Capped below full so it never claims to be finished.
+                          The width is driven by characters actually written —
+                          honest about how much, silent about what. */}
+                      <div
+                        className="h-1.5 overflow-hidden rounded-full bg-sand"
+                        role="progressbar"
+                        aria-hidden="true"
+                      >
+                        <div
+                          className="h-full rounded-full bg-terracotta transition-[width] duration-500"
+                          style={{ width: `${progressPercent(stage, writtenChars)}%` }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={cancel}
+                        className="self-start min-h-11 rounded-lg px-3 text-[14px] font-semibold text-muted underline underline-offset-4"
+                      >
+                        {t("cancel")}
+                      </button>
+                    </div>
+                  )}
+
                   {m.failed && (
                     <p
                       role="alert"
@@ -418,7 +531,14 @@ export function Chat() {
                         <div className="flex flex-col gap-1 border-t border-warn-border pt-2.5">
                           <p className="text-[13.5px] leading-[1.5] text-muted">
                             {t("referralCodeLabel")}:{" "}
-                            <code className="select-all break-all font-mono font-[600] text-body-soft">
+                            <code
+                              lang="en"
+                              // Read character by character: an alphanumeric
+                              // code announced as a word cannot be written
+                              // down or read out over the phone.
+                              aria-label={m.referralCode.split("").join(" ")}
+                              className="select-all break-all font-mono font-[600] text-body-soft"
+                            >
                               {m.referralCode}
                             </code>
                           </p>
@@ -459,14 +579,17 @@ export function Chat() {
                               target="_blank"
                               rel="noreferrer"
                               aria-label={fullLabel}
-                              className="inline-flex min-h-9 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere] transition-colors hover:bg-sand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                              // The corpus is English; the page may not be.
+                              lang="en"
+                              className="inline-flex min-h-11 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere] transition-colors hover:bg-sand-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                             >
                               {shownLabel}
                             </a>
                           ) : (
                             <span
                               key={j}
-                              className="inline-flex min-h-9 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere]"
+                              lang="en"
+                              className="inline-flex min-h-11 max-w-full items-center rounded-full bg-sand px-3.5 text-[13.5px] font-[600] text-chip-text [overflow-wrap:anywhere]"
                             >
                               {shownLabel}
                             </span>
@@ -479,7 +602,7 @@ export function Chat() {
                             c.quote ? (
                               <li key={j}>
                                 <details>
-                                  <summary className="cursor-pointer text-[13.5px] text-muted">
+                                  <summary className="inline-flex min-h-11 cursor-pointer items-center text-[13.5px] text-muted">
                                     {typeof c.sourceNumber === "number"
                                       ? `[${c.sourceNumber}] `
                                       : ""}

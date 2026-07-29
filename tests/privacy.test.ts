@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import {
   contractReviews,
+  rateLimitBuckets,
   conversations,
   feedback,
   referrals,
@@ -12,6 +13,7 @@ import {
   RETENTION_BATCH_SIZE,
   deleteExpiredWorkerData,
   retentionCutoff,
+  retentionDays,
 } from "@/lib/privacy/retention";
 import { DELETE } from "@/app/api/privacy/route";
 
@@ -38,8 +40,15 @@ describe("retentionCutoff", () => {
  * is enough to prove the sweep's structural guarantees — bounded batch sizes,
  * one transaction per conversation batch, and forward progress under a budget.
  */
-function fakeRetentionDb(seed: { conversations: number; contracts: number }) {
+function fakeRetentionDb(seed: {
+  conversations: number;
+  contracts: number;
+  buckets?: number;
+}) {
   const state = {
+    buckets: Array.from({ length: seed.buckets ?? 0 }, (_, i) => ({
+      id: `bucket-${i}`,
+    })),
     conversations: Array.from({ length: seed.conversations }, (_, i) => ({
       id: `conversation-${i}`,
     })),
@@ -55,6 +64,7 @@ function fakeRetentionDb(seed: { conversations: number; contracts: number }) {
     if (table === conversations) return state.conversations;
     if (table === contractReviews) return state.contracts;
     if (table === feedback) return state.feedback;
+    if (table === rateLimitBuckets) return state.buckets;
     return [] as Array<{ id: string }>; // referrals: no protected conversations
   };
 
@@ -224,5 +234,44 @@ describe("DELETE /api/privacy — malformed maid_sid cookie", () => {
     const response = await DELETE(deleteRequest());
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
+  });
+});
+
+describe("session cookie lifetime", () => {
+  it("matches the retention window it scopes", () => {
+    // A cookie that outlives the rows it points at is an identifier with
+    // nothing left to identify. It was a year against a 30-day window.
+    expect(retentionDays(30)).toBe(30);
+    expect(retentionDays(7)).toBe(7);
+  });
+
+  it("stays inside the promised maximum whatever is configured", () => {
+    expect(retentionDays(365)).toBe(30);
+    expect(retentionDays(0)).toBe(30);
+    expect(retentionDays(Number.NaN)).toBe(30);
+  });
+});
+
+describe("rate-limit bucket sweep", () => {
+  it("removes stale second-tier rate-limit rows", async () => {
+    // These hold no worker data — the key is an HMAC and the row is a count —
+    // but they are written on every request while Upstash is unreachable, and
+    // nothing else removes them. Left alone they grow without bound.
+    const db = fakeRetentionDb({ conversations: 0, contracts: 0, buckets: 40 });
+    const result = await deleteExpiredWorkerData(new Date(), db.database);
+
+    expect(result.rateLimitBuckets).toBe(40);
+    expect(db.state.buckets).toHaveLength(0);
+    expect(result.complete).toBe(true);
+  });
+
+  it("reports an incomplete run rather than silently leaving a backlog", async () => {
+    const db = fakeRetentionDb({
+      conversations: 0,
+      contracts: 0,
+      buckets: RETENTION_BATCH_SIZE * 60,
+    });
+    const result = await deleteExpiredWorkerData(new Date(), db.database);
+    expect(result.complete).toBe(false);
   });
 });

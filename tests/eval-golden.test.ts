@@ -2,6 +2,10 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { preflightSafetyAnswer } from "@/lib/rag/answer";
+import {
+  detectHighStakesIssue,
+  escalationSeverity,
+} from "@/lib/safety/policy";
 import { getSource, SOURCE_DOMAINS } from "@/lib/content/sources";
 import { routing } from "@/i18n/routing";
 
@@ -88,12 +92,38 @@ describe("golden set shape", () => {
 describe("golden safety evaluations", () => {
   const highStakes = golden.filter((item) => item.shouldEscalate);
 
-  it("routes every high-stakes golden case before retrieval/model calls", () => {
+  it("detects every high-stakes golden case deterministically", () => {
+    // Escalation is now two-tier. `danger` still short-circuits ahead of any
+    // model call; `assisted` proceeds to a grounded answer and has the referral
+    // attached afterwards. Both must be *detected* without the model.
     expect(highStakes.length).toBeGreaterThanOrEqual(8);
     for (const item of highStakes) {
-      const result = preflightSafetyAnswer(item.question, item.locale ?? "en");
-      expect(result, `${item.locale ?? "en"}: ${item.question}`).toBeDefined();
-      expect(result?.escalated).toBe(true);
+      const label = `${item.locale ?? "en"}: ${item.question}`;
+      const trigger = detectHighStakesIssue(item.question);
+      expect(trigger, label).toBeTruthy();
+
+      if (trigger && escalationSeverity(trigger) === "danger") {
+        const result = preflightSafetyAnswer(item.question, item.locale ?? "en");
+        expect(result, label).toBeDefined();
+        expect(result?.escalated).toBe(true);
+        expect(result?.severity).toBe("danger");
+      }
+    }
+  });
+
+  it("suppresses the answer only where a worker may be in immediate danger", () => {
+    // Precision matters for this tier and only this tier: a false positive
+    // costs the worker the whole answer.
+    expect(escalationSeverity("abuse_or_threats")).toBe("danger");
+    for (const trigger of [
+      "unpaid_salary",
+      "workplace_injury",
+      "wrongful_dismissal",
+      "contract_dispute",
+      "repatriation",
+      "immigration_status",
+    ]) {
+      expect(escalationSeverity(trigger), trigger).toBe("assisted");
     }
   });
 

@@ -1,15 +1,35 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Spline_Sans } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Noto_Sans_Bengali,
+  Noto_Sans_Myanmar,
+  Noto_Sans_Tamil,
+  Spline_Sans,
+} from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { SiteFooter } from "@/components/SiteFooter";
 import "../globals.css";
 
-// Daybreak type: Bricolage Grotesque for display, Spline Sans for body/UI.
-// Both are Latin-only — non-Latin locales fall back to the Noto stack declared
-// in globals.css. `swap` keeps text visible while the webfonts load.
+/**
+ * Type, per script.
+ *
+ * Bricolage Grotesque and Spline Sans are Latin-only. Shipping them to every
+ * locale sent ~188KB of glyphs a Bengali, Tamil or Burmese reader can never
+ * use, and left their own script to whatever the device happens to have
+ * installed — which on a cheap Android is often nothing, so the page renders as
+ * tofu boxes. That is a total failure, not a degradation.
+ *
+ * `next/font` exposes a family through a CSS variable applied via `className`,
+ * so *not applying the class* means the file is never requested. Conditional
+ * application is therefore all that is needed.
+ *
+ * Thai and Chinese are left to system fonts: coverage is near-universal on
+ * Android, and Noto Sans SC in particular is enormous.
+ */
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-bricolage",
@@ -21,6 +41,48 @@ const splineSans = Spline_Sans({
   variable: "--font-spline",
   display: "swap",
 });
+
+const notoBengali = Noto_Sans_Bengali({
+  subsets: ["bengali"],
+  variable: "--font-script",
+  display: "swap",
+  preload: false,
+});
+
+const notoTamil = Noto_Sans_Tamil({
+  subsets: ["tamil"],
+  variable: "--font-script",
+  display: "swap",
+  preload: false,
+});
+
+/**
+ * Burmese matters most of the three. Noto Sans Myanmar is frequently absent on
+ * low-end Android, and the Zawgyi/Unicode split means text can render as
+ * garbage even when *a* Burmese font is installed — self-hosting a Unicode font
+ * fixes both.
+ */
+const notoMyanmar = Noto_Sans_Myanmar({
+  subsets: ["myanmar"],
+  weight: ["400", "700"],
+  variable: "--font-script",
+  display: "swap",
+  preload: false,
+});
+
+const LATIN_LOCALES = new Set(["en", "tl", "id"]);
+
+/** Font variables for a locale — only the ones its script actually needs. */
+function fontVariables(locale: string): string {
+  if (LATIN_LOCALES.has(locale)) {
+    return `${bricolage.variable} ${splineSans.variable}`;
+  }
+  if (locale === "bn") return notoBengali.variable;
+  if (locale === "ta") return notoTamil.variable;
+  if (locale === "my") return notoMyanmar.variable;
+  // th, zh — system fonts via the stack in globals.css.
+  return "";
+}
 
 // Per-request CSP nonces cannot be applied to build-time static HTML, so this
 // route tree can't be statically rendered. That also means metadata (this
@@ -109,14 +171,27 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "nav" });
 
   return (
     <html
       lang={locale}
-      className={`h-full antialiased ${bricolage.variable} ${splineSans.variable}`}
+      className={`h-full antialiased ${fontVariables(locale)}`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        {/* First focusable element on every page: a keyboard user should not
+            have to traverse the wordmark, three nav links and the language
+            picker to reach the composer, on every single page load. */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-cream focus:px-4 focus:py-3 focus:font-semibold focus:text-ink focus:outline focus:outline-2 focus:outline-offset-2"
+        >
+          {t("skipToContent")}
+        </a>
+        <NextIntlClientProvider>
+          {children}
+          <SiteFooter />
+        </NextIntlClientProvider>
         <ServiceWorkerRegister />
       </body>
     </html>

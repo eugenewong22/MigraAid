@@ -49,7 +49,7 @@ describe("database security migration", () => {
       path.join(process.cwd(), "src", "lib", "db", "schema.ts"),
       "utf8",
     );
-    expect(schema.match(/\.enableRLS\(\)/g)).toHaveLength(11);
+    expect(schema.match(/\.enableRLS\(\)/g)).toHaveLength(12);
   });
 
   it("cleans legacy nullable rows before applying new not-null constraints", async () => {
@@ -89,6 +89,19 @@ describe("database security migration", () => {
       "utf8",
     );
     expect(sql).toContain('ALTER TABLE "feedback" DROP COLUMN "comment"');
+  });
+
+  it("keeps the second-tier rate limiter behind default-deny RLS too", async () => {
+    const sql = await readFile(
+      path.join(process.cwd(), "drizzle", "0012_familiar_slipstream.sql"),
+      "utf8",
+    );
+    expect(sql).toContain('CREATE TABLE "rate_limit_buckets"');
+    expect(sql).toContain(
+      'ALTER TABLE "rate_limit_buckets" ENABLE ROW LEVEL SECURITY',
+    );
+    // Composite key is what makes the fixed-window upsert atomic.
+    expect(sql).toContain('PRIMARY KEY("key","window_start")');
   });
 
   it("cannot store a verbatim excerpt without the source it came from", async () => {

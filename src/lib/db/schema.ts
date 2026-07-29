@@ -301,6 +301,29 @@ export const auditLog = pgTable("audit_log", {
   at: timestamp("at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [index("audit_log_at_idx").on(table.at)]).enableRLS();
 
+// ── Operations ─────────────────────────────────────────────────────────────────
+
+/**
+ * Second-tier rate-limit counters, used only when Upstash is unreachable.
+ *
+ * Slower than Redis and not the normal path, but Postgres is already required
+ * and already on every request, so this means an Upstash outage degrades the
+ * limiter rather than taking the whole product down. Keys are HMACs — no raw IP
+ * or session id is stored. Rows are swept by the nightly retention cron.
+ */
+export const rateLimitBuckets = pgTable(
+  "rate_limit_buckets",
+  {
+    key: text("key").notNull(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (table) => [
+    primaryKey({ columns: [table.key, table.windowStart] }),
+    index("rate_limit_buckets_window_idx").on(table.windowStart),
+  ],
+).enableRLS();
+
 export type ContentItem = typeof contentItems.$inferSelect;
 export type ContentChunk = typeof contentChunks.$inferSelect;
 export type Conversation = typeof conversations.$inferSelect;

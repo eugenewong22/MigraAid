@@ -42,6 +42,14 @@ jobs:
       - name: Lint
         run: pnpm lint --max-warnings 0
 
+      # Gated at critical only. The high-severity advisories outstanding today
+      # are all in build-time transitives (postcss and brace-expansion via the
+      # bundler, sharp via the icons script) and are not reachable by a request
+      # to the deployed app. A gate that is red on day one gets disabled, so
+      # those are surfaced weekly as an issue instead (see security-audit.yml).
+      - name: Audit dependencies
+        run: pnpm audit --audit-level critical --prod
+
       - name: Verify checked-in migrations match the schema
         run: |
           pnpm db:generate

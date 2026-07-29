@@ -20,7 +20,8 @@
     "primary": "Pangunahing nabigasyon",
     "ask": "Magtanong",
     "contract": "Aking kontrata",
-    "emergency": "Emerhensiya"
+    "emergency": "Emerhensiya",
+    "skipToContent": "Laktawan papunta sa pangunahing nilalaman"
   },
   "chat": {
     "title": "Magtanong sa MigraAid",
@@ -46,8 +47,14 @@
     "referralCodeLabel": "Pribadong handoff code",
     "referralCodeHelp": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa {date}.",
     "referralCodeHelpNoDate": "Ibigay ang pribadong handoff code na ito sa organisasyon pagkatapos mo silang kontakin. Mag-e-expire ito sa loob ng 30 araw.",
-    "privacy": "Huwag magsama ng mga pangalan, numero ng ID o pasaporte, numero ng telepono, o email address. Ipinapadala ang iyong tanong sa isang AI provider. Hangga't maaari, inaalis ng MigraAid ang mga karaniwang pagkakakilanlan bago ipadala o i-save ito.",
-    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli."
+    "privacy": "Huwag isama ang pangalan, ID o numero ng pasaporte, numero ng telepono, o email. Ipinapadala ang tanong mo sa OpenAI sa Estados Unidos, na maaaring magtago nito hanggang 30 araw para sa pagsubaybay sa pang-aabuso. Inaalis muna ng MigraAid ang karaniwang pagkakakilanlan at binubura ang sariling kopya pagkatapos ng 30 araw.",
+    "errorRateLimited": "Napakaraming pagsusuri ng kontrata ang hiniling. Maghintay ng isang minuto at subukang muli.",
+    "statusSearching": "Naghahanap ng beripikadong sanggunian…",
+    "statusReading": "Binabasa ang mga sanggunian…",
+    "statusWriting": "Isinusulat ang sagot mo…",
+    "statusChecking": "Sinusuri kung tugma ang mga sanggunian…",
+    "cancel": "Kanselahin",
+    "errorBusy": "Napakaabala ng MigraAid ngayon. Subukan ulit pagkatapos ng isang minuto."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -111,11 +118,15 @@
     "severity": "Antas ng panganib",
     "severityInfo": "Impormasyon",
     "severityWarning": "Babala",
-    "severitySerious": "Seryoso"
+    "severitySerious": "Seryoso",
+    "errorUnavailable": "Hindi masuri ng MigraAid ang mga kontrata ngayon. Subukan ulit mamaya."
   },
   "common": {
     "language": "Wika",
-    "back": "Bumalik"
+    "back": "Bumalik",
+    "errorTitle": "May naging problema",
+    "errorBody": "Hindi ma-load ang pahinang ito. Subukan ulit, o gamitin ang emergency contacts sa ibaba ng alinmang pahina kung kailangan mo ng tulong ngayon.",
+    "retry": "Subukan ulit"
   },
   "privacy": {
     "delete": "Burahin ang aking MigraAid data",
@@ -128,5 +139,49 @@
     "title": "Hindi nahanap ang pahina",
     "body": "Hindi namin mahanap ang pahinang ito. Maaaring nailipat na ito, o mali ang link.",
     "home": "Home"
+  },
+  "footer": {
+    "label": "Impormasyon ng site",
+    "independence": "Ang MigraAid ay isang independyente at hindi komersyal na proyekto. Hindi ito kaugnay ng MOM, TADM, o anumang organisasyong tumutulong.",
+    "nature": "Nagbibigay ito ng pangkalahatang impormasyon mula sa pampublikong sanggunian, hindi legal na payo. Maaaring mali o luma na ang mga sagot. Para sa seryosong bagay, makipag-ugnayan sa mga organisasyon sa pahinang Emergency.",
+    "privacy": "Privacy",
+    "terms": "Mga tuntunin",
+    "emergency": "Emergency contacts",
+    "source": "Source code"
+  },
+  "privacyPage": {
+    "title": "Privacy",
+    "intro": "Hindi tinatanong ng MigraAid kung sino ka. Walang account, walang pangalan, at walang numero ng telepono. Ipinapaliwanag ng pahinang ito ang eksaktong nangyayari sa isinusulat mo.",
+    "collectHeading": "Ano ang kinokolekta",
+    "collectBody": "Ang tanong at sagot mo, isang anonymous na device code, ang wikang pinili mo, at — kung tinikan mo lang ang kahon — ang buod ng kontratang kinunan mo. Bago mag-imbak, inaalis ng MigraAid ang karaniwang pagkakakilanlan tulad ng email, numero ng telepono, NRIC/FIN at numero ng pasaporte.",
+    "providerHeading": "Sino pa ang nakakakita",
+    "providerBody": "Ipinapadala ang tanong mo sa OpenAI sa Estados Unidos para makabuo ng sagot. Maaari itong itago ng OpenAI hanggang 30 araw para sa pagsubaybay sa pang-aabuso bago burahin. Inaalis muna ng MigraAid ang karaniwang pagkakakilanlan, pero iwasan pa ring magsulat ng pangalan, numero o address.",
+    "retentionHeading": "Gaano katagal itinatago",
+    "retentionBody": "Awtomatikong binubura ng MigraAid ang mga usapan at buod ng kontrata pagkatapos ng {days} araw, gabi-gabi. Ang anonymous na pang-araw-araw na bilang lang ang mas matagal na itinatago, at hindi iyon maiuugnay sa iyo.",
+    "cookieHeading": "Ang cookie",
+    "cookieBody": "May isang cookie na naglalaman ng random na code para mahanap at mabura ng device na ito ang sarili nitong data. Walang laman itong tungkol sa iyo, at nag-e-expire pagkatapos ng {days} araw — kapareho ng data na tinuturo nito.",
+    "rightsHeading": "Pagbura ng iyong data",
+    "rightsBody": "Puwede mong burahin ang lahat mula sa device na ito anumang oras gamit ang button sa ibaba. Agad itong epektibo. Tandaan: bawat device ito. Kapag nilinis mo ang browser o nagpalit ng telepono, hindi na mahahanap ng button ang mga usapang iyon, pero awtomatiko pa ring mabubura ang mga ito sa takdang panahon.",
+    "contactHeading": "Mga tanong",
+    "contactBody": "Ang MigraAid ay independyenteng proyekto, hindi kompanya o serbisyo ng gobyerno. Maaari kang magtanong o magsabi ng alalahanin sa source repository na naka-link sa ibaba ng bawat pahina."
+  },
+  "termsPage": {
+    "title": "Mga tuntunin ng paggamit",
+    "intro": "Libre ang MigraAid. Sadyang maikli ang mga tuntuning ito.",
+    "notAdviceHeading": "Impormasyon ito, hindi legal na payo",
+    "notAdviceBody": "Ipinapaliwanag ng MigraAid ang sinasabi ng pampublikong sanggunian tungkol sa karapatan mo. Hindi ito abogado, hindi nito alam ang sitwasyon mo, at hindi nagbubunga ng propesyonal na relasyon ang paggamit nito. Para sa payo sa sarili mong kaso, makipag-ugnayan sa mga organisasyon sa pahinang Emergency.",
+    "accuracyHeading": "Maaaring mali ang mga sagot",
+    "accuracyBody": "Ang bawat sagot ay mula sa opisyal na inilathalang sanggunian at ipinapakita kung alin ang ginamit, para ma-check mo mismo. Gayunpaman, nagbabago ang mga panuntunan at maaaring luma na o mali ang sagot. Huwag umasa sa MigraAid lang para sa desisyong may epekto sa trabaho, kalusugan, o karapatan mong manatili.",
+    "independenceHeading": "Sino ang nagpapatakbo nito",
+    "independenceBody": "Ang MigraAid ay independyente at hindi komersyal na proyekto. Hindi ito kaugnay, hindi inendorso, at hindi nagsasalita para sa Ministry of Manpower, TADM, o anumang organisasyong tumutulong, kahit sinisipi nito ang kanilang inilathalang gabay.",
+    "useHeading": "Patas na paggamit ng serbisyo",
+    "useBody": "Gamitin ang MigraAid para sa totoong mga tanong. Huwag subukang i-overload, sirain, o gamitin para magpadala ng ilegal o mapang-abusong nilalaman. Walang anumang warranty, at maaaring hindi available ang serbisyo paminsan-minsan.",
+    "changesHeading": "Mga pagbabago",
+    "changesBody": "Maaaring magbago ang mga tuntuning ito. Ang kasalukuyang bersyon ay palaging nasa pahinang ito, at pampubliko ang buong kasaysayan sa source repository."
+  },
+  "safety": {
+    "ungrounded": "Wala akong sapat na beripikadong impormasyon para makasagot nang ligtas. Makipag-ugnayan sa isang partner na organisasyon; kung nasa panganib, gamitin ang Emergency Contacts.",
+    "highStakes": "Maaaring seryosong maapektuhan nito ang iyong mga karapatan o kaligtasan. Hindi ako dapat magpayo sa partikular mong kaso. Makipag-ugnayan agad sa isa sa mga organisasyong nasa ibaba kapag ligtas gawin ito.",
+    "injection": "Makakatulong lamang ako sa mga tanong tungkol sa karapatan at serbisyo para sa migranteng manggagawa gamit ang beripikadong sanggunian. Isulat muli ang tanong nang walang tagubilin na baguhin kung paano gumagana ang MigraAid."
   }
 }

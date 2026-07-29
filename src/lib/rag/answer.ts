@@ -19,18 +19,22 @@ import type {
   ChatCompletionTool,
 } from "openai/resources/chat/completions";
 import { buildSystemPrompt } from "@/lib/safety/prompt";
+import { safetyResponse } from "@/lib/safety/responses";
 import {
   detectHighStakesIssue,
   detectPromptInjection,
+  escalationSeverity,
   hasCredibleGrounding,
 } from "@/lib/safety/policy";
 import type { AnswerOptions, Citation, RagAnswer, RetrievedChunk } from "./types";
-import { scrubPii } from "@/lib/safety/pii";
+import { scrubIdentifiers } from "@/lib/safety/pii";
 import { isKnownIssueType, KNOWN_ISSUE_TYPES } from "@/lib/referral/route";
 import { normalizeQueryForRetrieval } from "./retrieve";
 
 const MODEL = "gpt-5.6-terra";
-const MAX_TOKENS = 1024;
+/** Output ceiling per answer. Exported so the spend reservation can assume
+ * the worst case before the call is made. */
+export const MAX_TOKENS = 1024;
 // normalize (8s) + embed (12s) + answer (35s) = 55s, inside route maxDuration 60s.
 const MODEL_TIMEOUT_MS = 35_000;
 // The SDK `timeout` above only bounds time-to-first-byte; once tokens start
@@ -39,42 +43,9 @@ const MODEL_TIMEOUT_MS = 35_000;
 // above the route's 10s heartbeat interval and under its 60s maxDuration.
 const STREAM_INACTIVITY_TIMEOUT_MS = 20_000;
 
-const UNGROUNDED_RESPONSES: Record<string, string> = {
-  en: "I don't have enough verified source information to answer this safely. Please contact a partner organisation or use the Emergency Contacts page if you are in danger.",
-  bn: "নিরাপদে উত্তর দেওয়ার মতো যথেষ্ট যাচাই করা তথ্য আমার কাছে নেই। অনুগ্রহ করে কোনো সহযোগী সংস্থার সঙ্গে যোগাযোগ করুন; বিপদে থাকলে জরুরি যোগাযোগ পাতা ব্যবহার করুন।",
-  ta: "பாதுகாப்பாகப் பதிலளிக்கப் போதுமான சரிபார்க்கப்பட்ட தகவல் என்னிடம் இல்லை. ஒரு கூட்டாளர் அமைப்பைத் தொடர்புகொள்ளுங்கள்; ஆபத்தில் இருந்தால் அவசரத் தொடர்புகள் பக்கத்தைப் பயன்படுத்துங்கள்.",
-  tl: "Wala akong sapat na beripikadong impormasyon para makasagot nang ligtas. Makipag-ugnayan sa isang partner na organisasyon; kung nasa panganib, gamitin ang Emergency Contacts.",
-  zh: "我没有足够的可靠资料来安全回答。请联系合作机构；如有危险，请使用紧急联络页面。",
-  id: "Saya tidak memiliki cukup informasi terverifikasi untuk menjawab dengan aman. Hubungi organisasi mitra; jika Anda dalam bahaya, gunakan halaman Kontak Darurat.",
-  th: "ฉันไม่มีข้อมูลที่ตรวจสอบแล้วเพียงพอที่จะตอบอย่างปลอดภัย โปรดติดต่อองค์กรพันธมิตร หากอยู่ในอันตรายให้ใช้หน้ารายชื่อติดต่อฉุกเฉิน",
-  my: "ဘေးကင်းစွာဖြေဆိုရန် အတည်ပြုထားသော အချက်အလက် မလုံလောက်ပါ။ မိတ်ဖက်အဖွဲ့ကို ဆက်သွယ်ပါ။ အန္တရာယ်ရှိလျှင် အရေးပေါ်ဆက်သွယ်ရန် စာမျက်နှာကို အသုံးပြုပါ။",
-};
-
-const HIGH_STAKES_RESPONSES: Record<string, string> = {
-  en: "This may seriously affect your rights or safety. I should not advise you on your specific case. Please contact one of the support organisations below as soon as you safely can.",
-  bn: "এটি আপনার অধিকার বা নিরাপত্তাকে গুরুতরভাবে প্রভাবিত করতে পারে। আপনার নির্দিষ্ট বিষয়ে আমার পরামর্শ দেওয়া উচিত নয়। নিরাপদে সম্ভব হলে নিচের সহায়তা সংস্থাগুলোর একটির সঙ্গে দ্রুত যোগাযোগ করুন।",
-  ta: "இது உங்கள் உரிமைகள் அல்லது பாதுகாப்பை கடுமையாகப் பாதிக்கலாம். உங்கள் குறிப்பிட்ட வழக்கில் நான் ஆலோசனை வழங்கக் கூடாது. பாதுகாப்பாக முடிந்தவுடன் கீழுள்ள ஆதரவு அமைப்புகளில் ஒன்றைத் தொடர்புகொள்ளுங்கள்.",
-  tl: "Maaaring seryosong maapektuhan nito ang iyong mga karapatan o kaligtasan. Hindi ako dapat magpayo sa partikular mong kaso. Makipag-ugnayan agad sa isa sa mga organisasyong nasa ibaba kapag ligtas gawin ito.",
-  zh: "这可能严重影响您的权利或安全。我不应针对您的具体情况提供意见。请在确保安全的情况下尽快联系下方的支援机构。",
-  id: "Hal ini dapat berdampak serius pada hak atau keselamatan Anda. Saya tidak boleh memberi nasihat untuk kasus khusus Anda. Hubungi salah satu organisasi bantuan di bawah secepatnya jika aman.",
-  th: "เรื่องนี้อาจส่งผลร้ายแรงต่อสิทธิหรือความปลอดภัยของคุณ ฉันไม่ควรให้คำแนะนำเฉพาะกรณี โปรดติดต่อองค์กรช่วยเหลือด้านล่างโดยเร็วเมื่อทำได้อย่างปลอดภัย",
-  my: "ဤကိစ္စသည် သင့်အခွင့်အရေး သို့မဟုတ် ဘေးကင်းရေးကို ပြင်းထန်စွာ ထိခိုက်နိုင်ပါသည်။ သင့်အမှုအတွက် သီးခြားအကြံမပေးသင့်ပါ။ ဘေးကင်းစွာ လုပ်နိုင်သည့်အခါ အောက်ပါကူညီရေးအဖွဲ့တစ်ခုကို အမြန်ဆက်သွယ်ပါ။",
-};
-
-const INJECTION_RESPONSES: Record<string, string> = {
-  en: "I can only help with questions about migrant-worker rights and services using verified sources. Please rephrase your question without instructions for changing how MigraAid works.",
-  bn: "আমি শুধু যাচাই করা উৎস ব্যবহার করে অভিবাসী কর্মীদের অধিকার ও সেবা সম্পর্কে প্রশ্নে সাহায্য করতে পারি। MigraAid কীভাবে কাজ করে তা বদলানোর নির্দেশনা ছাড়া প্রশ্নটি আবার লিখুন।",
-  ta: "சரிபார்க்கப்பட்ட ஆதாரங்களைப் பயன்படுத்தி புலம்பெயர் தொழிலாளர் உரிமைகள் மற்றும் சேவைகள் பற்றிய கேள்விகளுக்கு மட்டுமே உதவ முடியும். MigraAid எவ்வாறு செயல்பட வேண்டும் என்ற வழிமுறைகள் இல்லாமல் கேள்வியை மீண்டும் எழுதுங்கள்.",
-  tl: "Makakatulong lamang ako sa mga tanong tungkol sa karapatan at serbisyo para sa migranteng manggagawa gamit ang beripikadong sanggunian. Isulat muli ang tanong nang walang tagubilin na baguhin kung paano gumagana ang MigraAid.",
-  zh: "我只能依据可靠资料回答有关外籍劳工权利和服务的问题。请重新提问，不要加入改变 MigraAid 运作方式的指令。",
-  id: "Saya hanya dapat membantu pertanyaan tentang hak dan layanan pekerja migran berdasarkan sumber terverifikasi. Tulis ulang pertanyaan tanpa instruksi untuk mengubah cara kerja MigraAid.",
-  th: "ฉันช่วยได้เฉพาะคำถามเกี่ยวกับสิทธิและบริการของแรงงานข้ามชาติโดยใช้แหล่งข้อมูลที่ตรวจสอบแล้ว โปรดถามใหม่โดยไม่ใส่คำสั่งให้เปลี่ยนวิธีทำงานของ MigraAid",
-  my: "အတည်ပြုထားသော ရင်းမြစ်များကို သုံး၍ ရွှေ့ပြောင်းအလုပ်သမား အခွင့်အရေးနှင့် ဝန်ဆောင်မှု မေးခွန်းများကိုသာ ကူညီနိုင်ပါသည်။ MigraAid အလုပ်လုပ်ပုံကို ပြောင်းရန် ညွှန်ကြားချက်မပါဘဲ ပြန်မေးပါ။",
-};
-
 function injectionRefusal(locale: string): RagAnswer {
   return {
-    text: INJECTION_RESPONSES[locale] ?? INJECTION_RESPONSES.en,
+    text: safetyResponse(locale, "injection"),
     citations: [],
     // This is a policy refusal, not a worker crisis. Marking it escalated would
     // show emergency framing and create a bogus NGO referral record.
@@ -83,30 +54,40 @@ function injectionRefusal(locale: string): RagAnswer {
   };
 }
 
-/** Safety decisions that must run before retrieval or any external model call. */
+/**
+ * Safety decisions that must run before retrieval or any external model call.
+ *
+ * Only `danger` short-circuits. An `assisted` issue — unpaid salary, injury,
+ * dismissal and the rest — lets the normal grounded answer proceed and is
+ * attached to it afterwards, because a worker in that situation is better off
+ * knowing the rule *and* who to call than being handed only a phone number.
+ */
 export function preflightSafetyAnswer(
   query: string,
   locale: string,
 ): RagAnswer | undefined {
   const highStakesIssue = detectHighStakesIssue(query);
-  if (highStakesIssue) return highStakesAnswer(locale, highStakesIssue);
+  if (highStakesIssue && escalationSeverity(highStakesIssue) === "danger") {
+    return highStakesAnswer(locale, highStakesIssue);
+  }
   if (detectPromptInjection(query)) return injectionRefusal(locale);
   return undefined;
 }
 
 function highStakesAnswer(locale: string, issueType: string): RagAnswer {
   return {
-    text: HIGH_STAKES_RESPONSES[locale] ?? HIGH_STAKES_RESPONSES.en,
+    text: safetyResponse(locale, "highStakes"),
     citations: [],
     escalated: true,
     issueType,
+    severity: "danger",
     model: "safety-policy",
   };
 }
 
 function ungroundedAnswer(locale: string): RagAnswer {
   return {
-    text: UNGROUNDED_RESPONSES[locale] ?? UNGROUNDED_RESPONSES.en,
+    text: safetyResponse(locale, "ungrounded"),
     citations: [],
     // Like the injection refusal, this is a scope refusal, not a worker crisis:
     // marking it escalated minted a real NGO referral row + handoff code for
@@ -128,22 +109,28 @@ export function enforceAnswerSafety(
   locale: string,
   sourceCount?: number,
 ): RagAnswer {
-  // A model may call the referral tool while also emitting prose. Tool use is
-  // not permission to bypass grounding: replace that prose with MigraAid's
-  // reviewed referral wording before it can be shown or persisted.
-  if (result.escalated && result.model !== "safety-policy") {
+  // A worker who may be in immediate danger gets the reviewed crisis wording,
+  // never model prose — tool use is not permission to bypass that.
+  const severity =
+    result.severity ??
+    (result.issueType && result.escalated
+      ? escalationSeverity(result.issueType)
+      : undefined);
+  if (severity === "danger" && result.model !== "safety-policy") {
     return {
       ...highStakesAnswer(locale, result.issueType ?? "out_of_scope"),
       model: result.model,
       usage: result.usage,
     };
   }
+  // Everything else must be grounded, including an `assisted` escalation. That
+  // is the point of the split: the answer survives, so it still has to earn its
+  // citations. Previously `escalated` skipped this gate entirely.
   if (
-    !result.escalated &&
-    (!result.text.trim() ||
-      result.citations.length === 0 ||
-      (sourceCount !== undefined &&
-        !hasValidCitationCoverage(result.text, sourceCount)))
+    !result.text.trim() ||
+    result.citations.length === 0 ||
+    (sourceCount !== undefined &&
+      !hasValidCitationCoverage(result.text, sourceCount))
   ) {
     return { ...ungroundedAnswer(locale), model: result.model, usage: result.usage };
   }
@@ -219,7 +206,7 @@ function buildMessages(opts: AnswerOptions): ChatCompletionMessageParam[] {
     { role: "system", content: systemPrompt(opts.locale, opts.chunks) },
     // Common contact and identity values are unnecessary for guidance and must
     // not be sent to the model even though local persistence is scrubbed too.
-    { role: "user", content: scrubPii(opts.query) },
+    { role: "user", content: scrubIdentifiers(opts.query) },
   ];
 }
 
@@ -394,7 +381,7 @@ export async function answer(opts: AnswerOptions): Promise<RagAnswer> {
   // high-stakes / injection phrasing the raw phrase lists miss is still caught.
   if (opts.locale !== "en") {
     const normalized = await normalizeQueryForRetrieval(
-      scrubPii(opts.query),
+      scrubIdentifiers(opts.query),
       opts.locale,
     );
     const secondary = preflightSafetyAnswer(normalized, opts.locale);

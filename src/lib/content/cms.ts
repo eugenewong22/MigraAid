@@ -70,18 +70,6 @@ export function isIndependentReviewer(
   );
 }
 
-export async function writeAudit(
-  actor: string,
-  action: string,
-  entity: string,
-  entityId: string,
-  metadata?: Record<string, unknown>,
-): Promise<void> {
-  await getDb()
-    .insert(auditLog)
-    .values({ actor, action, entity, entityId, metadata });
-}
-
 export async function listContent() {
   return getDb().select().from(contentItems).orderBy(desc(contentItems.updatedAt));
 }

@@ -1,0 +1,30 @@
+version: 2
+
+# Weekly rather than daily: this is a solo-maintained project, and a pull
+# request nobody has time to read is noise that trains you to ignore the ones
+# that matter. Security updates arrive out of band regardless of the schedule.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for the routine churn, so the individually interesting ones
+      # (Next, React, the OpenAI SDK, Drizzle) stand out on their own.
+      dev-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
+      production-patches:
+        dependency-type: production
+        update-types: [patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # Actions are pinned to commit SHAs here, so this is the only way a pinned
+    # action ever gets updated — without it they silently rot.
+    open-pull-requests-limit: 3

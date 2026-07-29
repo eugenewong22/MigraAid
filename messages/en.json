@@ -20,7 +20,8 @@
     "primary": "Primary navigation",
     "ask": "Ask",
     "contract": "My contract",
-    "emergency": "Emergency"
+    "emergency": "Emergency",
+    "skipToContent": "Skip to main content"
   },
   "chat": {
     "title": "Ask MigraAid",
@@ -46,8 +47,14 @@
     "referralCodeLabel": "Private handoff code",
     "referralCodeHelp": "Give this private handoff code to the organisation after you contact them. It expires on {date}.",
     "referralCodeHelpNoDate": "Give this private handoff code to the organisation after you contact them. It expires in 30 days.",
-    "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to an AI provider. Where possible, MigraAid removes common identifiers before sending or storing it.",
-    "errorRateLimited": "Too many messages were sent. Please wait a minute and try again."
+    "privacy": "Do not include names, ID or passport numbers, phone numbers, or email addresses. Your question is sent to OpenAI in the United States, which may keep it up to 30 days for abuse monitoring. MigraAid removes common identifiers first and deletes its own copy after 30 days.",
+    "errorRateLimited": "Too many messages were sent. Please wait a minute and try again.",
+    "statusSearching": "Searching verified sources…",
+    "statusReading": "Reading the sources…",
+    "statusWriting": "Writing your answer…",
+    "statusChecking": "Checking the sources match…",
+    "cancel": "Cancel",
+    "errorBusy": "MigraAid is very busy right now. Please try again in a minute."
   },
   "emergency": {
     "sms": "SMS {number}",
@@ -111,11 +118,15 @@
     "severity": "Severity",
     "severityInfo": "Information",
     "severityWarning": "Warning",
-    "severitySerious": "Serious"
+    "severitySerious": "Serious",
+    "errorUnavailable": "MigraAid can't check contracts right now. Please try again later."
   },
   "common": {
     "language": "Language",
-    "back": "Back"
+    "back": "Back",
+    "errorTitle": "Something went wrong",
+    "errorBody": "This page could not load. You can try again, or use the emergency contacts at the bottom of any page if you need help now.",
+    "retry": "Try again"
   },
   "privacy": {
     "delete": "Delete my MigraAid data",
@@ -128,5 +139,49 @@
     "title": "Page not found",
     "body": "We can't find that page. It may have been moved, or the link may be incorrect.",
     "home": "Home"
+  },
+  "footer": {
+    "label": "Site information",
+    "independence": "MigraAid is an independent, non-commercial project. It is not affiliated with MOM, TADM, or any support organisation.",
+    "nature": "It gives general information from public sources, not legal advice. Answers can be wrong or out of date. For anything serious, contact one of the organisations listed on the Emergency page.",
+    "privacy": "Privacy",
+    "terms": "Terms of use",
+    "emergency": "Emergency contacts",
+    "source": "Source code"
+  },
+  "privacyPage": {
+    "title": "Privacy",
+    "intro": "MigraAid does not ask who you are. There is no account, no name, and no phone number. This page explains exactly what happens to what you type.",
+    "collectHeading": "What is collected",
+    "collectBody": "Your question and the answer, an anonymous device code, your chosen language, and — only if you tick the box — the summary of a contract you photographed. Before anything is stored, MigraAid removes common identifiers such as email addresses, phone numbers, NRIC/FIN and passport numbers.",
+    "providerHeading": "Who else sees it",
+    "providerBody": "Your question is sent to OpenAI in the United States to produce the answer. OpenAI may keep it for up to 30 days for abuse monitoring before deleting it. MigraAid removes common identifiers first, but you should still avoid typing names, numbers or addresses.",
+    "retentionHeading": "How long it is kept",
+    "retentionBody": "MigraAid deletes conversations and contract summaries after {days} days, automatically, every night. Only anonymous daily counts are kept longer, and those cannot be linked back to you.",
+    "cookieHeading": "The cookie",
+    "cookieBody": "One cookie holds a random code so this device can find and delete its own data. It contains nothing about you, and it expires after {days} days — the same as the data it points to.",
+    "rightsHeading": "Deleting your data",
+    "rightsBody": "You can delete everything from this device at any time using the button below. It takes effect immediately. Note that this works per device: clearing your browser or switching phones means the button can no longer find those conversations, though they are still deleted automatically on schedule.",
+    "contactHeading": "Questions",
+    "contactBody": "MigraAid is an independent project, not a company or a government service. You can raise a question or a concern through the source repository linked at the bottom of every page."
+  },
+  "termsPage": {
+    "title": "Terms of use",
+    "intro": "MigraAid is free to use. These terms are short on purpose.",
+    "notAdviceHeading": "This is information, not legal advice",
+    "notAdviceBody": "MigraAid explains what public sources say about your rights. It is not a lawyer, it does not know your situation, and using it does not create any professional relationship. For advice about your own case, contact one of the organisations on the Emergency page.",
+    "accuracyHeading": "Answers can be wrong",
+    "accuracyBody": "Every answer is drawn from official published sources and shows which one it used, so you can check it yourself. Even so, rules change and answers can be out of date or mistaken. Never rely on MigraAid alone for a decision that affects your job, your health, or your right to stay.",
+    "independenceHeading": "Who runs this",
+    "independenceBody": "MigraAid is an independent, non-commercial project. It is not affiliated with, endorsed by, or speaking for the Ministry of Manpower, TADM, or any support organisation, even though it cites their published guidance.",
+    "useHeading": "Using the service fairly",
+    "useBody": "Please use MigraAid to ask genuine questions. Do not try to overload it, break it, or use it to send content that is unlawful or abusive. There is no warranty of any kind, and the service may be unavailable at times.",
+    "changesHeading": "Changes",
+    "changesBody": "These terms may change. The current version is always the one on this page, and the full history is public in the source repository."
+  },
+  "safety": {
+    "ungrounded": "I don't have enough verified source information to answer this safely. Please contact a partner organisation or use the Emergency Contacts page if you are in danger.",
+    "highStakes": "This may seriously affect your rights or safety. I should not advise you on your specific case. Please contact one of the support organisations below as soon as you safely can.",
+    "injection": "I can only help with questions about migrant-worker rights and services using verified sources. Please rephrase your question without instructions for changing how MigraAid works."
   }
 }

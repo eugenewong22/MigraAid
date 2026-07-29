@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { progressPercent } from "@/components/Chat";
 import {
   CONTRACT_UPLOAD_MAX_BYTES,
   contractUploadErrorForStatus,
@@ -45,5 +46,46 @@ describe("contract upload preflight", () => {
     expect(contractUploadErrorForStatus(413)).toBe("errorTooLarge");
     expect(contractUploadErrorForStatus(429)).toBe("errorRateLimited");
     expect(contractUploadErrorForStatus(500)).toBe("error");
+  });
+});
+
+describe("contractUploadErrorForStatus — service unavailable", () => {
+  it("does not tell a worker to retake the photo when the service stopped itself", () => {
+    // 503 is a degraded limiter, a spend ceiling or a flag. The generic copy
+    // says "please try a clearer photo", which is wrong and expensive: each
+    // retry burns another of their five per minute for a problem no photo
+    // can fix.
+    expect(contractUploadErrorForStatus(503)).toBe("errorUnavailable");
+  });
+
+  it("still maps the statuses a photo can actually fix", () => {
+    expect(contractUploadErrorForStatus(413)).toBe("errorTooLarge");
+    expect(contractUploadErrorForStatus(415)).toBe("errorInvalidFile");
+    expect(contractUploadErrorForStatus(429)).toBe("errorRateLimited");
+    expect(contractUploadErrorForStatus(500)).toBe("error");
+  });
+});
+
+describe("progressPercent", () => {
+  it("moves forward through the stages", () => {
+    expect(progressPercent("searching", 0)).toBeLessThan(progressPercent("reading", 0));
+    expect(progressPercent("reading", 0)).toBeLessThan(progressPercent("writing", 100));
+    expect(progressPercent("writing", 900)).toBeLessThan(progressPercent("checking", 0));
+  });
+
+  it("never claims to be finished while still writing", () => {
+    // A bar that sits at 100% for twenty seconds reads as a hang.
+    expect(progressPercent("writing", 100_000)).toBeLessThanOrEqual(90);
+  });
+
+  it("grows with how much has been written", () => {
+    expect(progressPercent("writing", 600)).toBeGreaterThan(
+      progressPercent("writing", 100),
+    );
+  });
+
+  it("shows something for an unknown or absent stage", () => {
+    expect(progressPercent(null, 0)).toBeGreaterThan(0);
+    expect(progressPercent("something-new", 0)).toBeGreaterThan(0);
   });
 });

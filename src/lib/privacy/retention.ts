@@ -2,6 +2,7 @@ import { and, eq, gt, inArray, lt, notInArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import {
   contractReviews,
+  rateLimitBuckets,
   conversations,
   feedback,
   referrals,
@@ -24,15 +25,26 @@ export const RETENTION_BATCH_SIZE = 500;
  */
 export const MAX_BATCHES_PER_RUN = 40;
 
+/**
+ * The retention window actually in force, clamped to the promised maximum.
+ *
+ * Exported so the session cookie can be given the same lifetime as the data it
+ * scopes — a cookie that outlives the rows it points at is a tracking
+ * identifier with nothing left to identify.
+ */
+export function retentionDays(
+  days = Number(process.env.DATA_RETENTION_DAYS ?? DEFAULT_RETENTION_DAYS),
+): number {
+  return Number.isFinite(days) && days > 0
+    ? Math.max(1, Math.min(MAX_RETENTION_DAYS, Math.floor(days)))
+    : DEFAULT_RETENTION_DAYS;
+}
+
 export function retentionCutoff(
   now = new Date(),
   days = Number(process.env.DATA_RETENTION_DAYS ?? DEFAULT_RETENTION_DAYS),
 ): Date {
-  const safeDays =
-    Number.isFinite(days) && days > 0
-      ? Math.max(1, Math.min(MAX_RETENTION_DAYS, Math.floor(days)))
-      : DEFAULT_RETENTION_DAYS;
-  return new Date(now.getTime() - safeDays * 24 * 60 * 60 * 1000);
+  return new Date(now.getTime() - retentionDays(days) * 24 * 60 * 60 * 1000);
 }
 
 /** Runs one deleteBatch at a time until it drains or the run budget is spent. */
@@ -136,13 +148,42 @@ export async function deleteExpiredWorkerData(
     return deleted.length;
   });
 
+  // Second-tier rate-limit counters. These hold no worker data — the key is an
+  // HMAC and the row is a count — but they are written on every request while
+  // Upstash is unreachable, and nothing else ever removes them. Left alone they
+  // grow without bound.
+  //
+  // Swept on a much shorter horizon than the retention window: a fixed-window
+  // bucket is meaningless once its window has passed, so anything older than an
+  // hour is dead weight.
+  const staleBuckets = await drainBatches(budget, async () => {
+    const rows = await database
+      .select({ key: rateLimitBuckets.key, windowStart: rateLimitBuckets.windowStart })
+      .from(rateLimitBuckets)
+      .where(lt(rateLimitBuckets.windowStart, new Date(now.getTime() - 3_600_000)))
+      .limit(RETENTION_BATCH_SIZE);
+    if (rows.length === 0) return 0;
+    const deleted = await database
+      .delete(rateLimitBuckets)
+      .where(
+        inArray(
+          rateLimitBuckets.windowStart,
+          rows.map(({ windowStart }) => windowStart),
+        ),
+      )
+      .returning({ key: rateLimitBuckets.key });
+    return deleted.length;
+  });
+
   return {
     cutoff,
     conversations: expiredConversations.deleted,
     contractReviews: expiredContracts.deleted,
+    rateLimitBuckets: staleBuckets.deleted,
     complete:
       oldFeedback.drained &&
       expiredConversations.drained &&
-      expiredContracts.drained,
+      expiredContracts.drained &&
+      staleBuckets.drained,
   };
 }

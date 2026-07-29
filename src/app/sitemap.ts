@@ -12,7 +12,14 @@ import { routing } from "@/i18n/routing";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://migraaid.sg";
 
 /** The public (crawlable) route pathnames, locale prefix excluded. */
-const PUBLIC_PATHNAMES = ["", "/chat", "/contract", "/emergency"] as const;
+const PUBLIC_PATHNAMES = [
+  "",
+  "/chat",
+  "/contract",
+  "/emergency",
+  "/privacy",
+  "/terms",
+] as const;
 
 /** Builds the hreflang alternates (all locales + x-default) for one route. */
 function languageAlternates(pathname: string): Record<string, string> {

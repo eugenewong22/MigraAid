@@ -5,7 +5,12 @@ test("the home emergency link reaches callable contacts and navigates back", asy
   page,
 }) => {
   await page.goto("/en");
-  await page.getByRole("link", { name: en.home.emergencyCta }).click();
+  // Scoped to <main>: the footer now carries its own emergency link on every
+  // page, so an unscoped role lookup matches two elements.
+  await page
+    .getByRole("main")
+    .getByRole("link", { name: en.home.emergencyCta })
+    .click();
 
   await expect(page).toHaveURL(/\/en\/emergency$/);
   await expect(
