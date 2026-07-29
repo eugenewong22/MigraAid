@@ -70,7 +70,10 @@ jobs:
           VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
         run: |
           if [ -z "$OPENAI_API_KEY" ] && [ -z "$VOYAGE_API_KEY" ]; then
-            echo "::error::The eval gate needs OPENAI_API_KEY (and optionally VOYAGE_API_KEY) repository secrets."
+            echo "::error title=Missing repository secret::This gate needs OPENAI_API_KEY (optionally VOYAGE_API_KEY) to embed and generate."
+            echo "Add it at: Settings -> Secrets and variables -> Actions -> New repository secret" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Until then this gate has never run, so answer quality is unverified." >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 

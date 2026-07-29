@@ -168,6 +168,31 @@ MIGRAAID_ALLOW_REMOTE_WRITE=1 pnpm ingest            # re-embed and publish
 `content:restore` only touches items whose `source_key` is repository-managed,
 so anything archived by hand through the CMS stays archived.
 
+## Repository secrets
+
+CI gates that call a provider cannot run without these, and they fail rather
+than skipping — a skipped job shows a green check, which would claim the gate
+passed when it never ran.
+
+Set at **Settings → Secrets and variables → Actions**:
+
+| Secret | Used by |
+|---|---|
+| `OPENAI_API_KEY` | `eval.yml`, `retrieval.yml` — embedding and generation |
+| `VOYAGE_API_KEY` | optional; only if the embedder is set to Voyage |
+
+Repository **variables** (not secrets) pin the vector space CI ingests into.
+They must match production, or the eval measures a different index than the one
+workers hit:
+
+| Variable | Value |
+|---|---|
+| `EMBEDDING_PROVIDER` | `openai` |
+| `EMBEDDING_MODEL` | `text-embedding-3-small` |
+
+**Until `OPENAI_API_KEY` exists, the weekly Eval has never actually run** and
+answer quality is unverified by CI.
+
 ## Routine
 
 | When | What |
