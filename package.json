@@ -34,7 +34,7 @@
     "drizzle-orm": "^0.45.2",
     "next": "16.2.12",
     "next-intl": "^4.13.2",
-    "openai": "^6.46.0",
+    "openai": "^7.5.0",
     "postgres": "^3.4.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
